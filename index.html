@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BU-Buddy</title>
+    <title>BU-Buddy | QG du Groupe</title>
     
-    <!-- Meta tags pour le mode Application (PWA) -->
+    <!-- PWA / Mode Application Mobile -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="BU-Buddy">
@@ -18,297 +18,267 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            -webkit-tap-highlight-color: transparent;
-            overscroll-behavior-y: contain; /* Empêche le pull-to-refresh accidentel */
-        }
-        .prose h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.75rem; color: #1e293b; }
-        .prose p { margin-bottom: 0.5rem; color: #475569; }
-        .prose ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; overscroll-behavior-y: contain; }
         .tab-active { color: #4f46e5; border-bottom: 3px solid #4f46e5; }
-        .safe-area-bottom { padding-bottom: env(safe-area-inset-bottom); }
+        .prose h1 { font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 flex flex-col min-h-screen select-none">
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col select-none">
 
     <!-- Header -->
-    <header class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 pt-[env(safe-area-inset-top)]">
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 pt-[env(safe-area-inset-top)]">
         <div class="max-w-2xl mx-auto px-5 py-4 flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <div class="bg-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-200">
-                    <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                <div class="bg-indigo-600 p-2 rounded-xl text-white shadow-lg">
+                    <i data-lucide="zap" class="w-5 h-5 fill-current"></i>
                 </div>
-                <h1 class="text-lg font-extrabold tracking-tight">BU-BUDDY</h1>
+                <h1 class="text-lg font-extrabold tracking-tight italic">BU-BUDDY</h1>
             </div>
             <div id="sync-status" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 rounded-full">
-                <div class="w-1.5 h-1.5 bg-slate-400 rounded-full" id="status-dot"></div>
+                <div class="w-1.5 h-1.5 bg-red-400 rounded-full" id="status-dot"></div>
                 <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest" id="status-text">Hors-ligne</span>
             </div>
         </div>
     </header>
 
-    <main class="flex-1 max-w-2xl mx-auto w-full p-4 pb-32">
-        
-        <!-- Onglets Navigation Haute -->
+    <!-- Écran d'erreur si Firebase n'est pas configuré -->
+    <div id="error-screen" class="hidden flex-1 flex flex-col items-center justify-center p-8 text-center space-y-6">
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl border border-red-100 max-w-sm">
+            <div class="bg-red-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="database" class="w-8 h-8 text-red-500"></i>
+            </div>
+            <h2 class="text-xl font-black text-slate-800 mb-2">Moteur manquant !</h2>
+            <p class="text-sm text-slate-500 leading-relaxed mb-6">
+                L'application est sur GitHub, mais elle n'est pas reliée à une base de données. Les boutons ne peuvent pas fonctionner sans ça.
+            </p>
+            <div class="text-left bg-slate-50 p-4 rounded-2xl text-[10px] font-mono text-slate-600 overflow-x-auto mb-6">
+                1. Va sur console.firebase.google.com<br>
+                2. Crée un projet Web<br>
+                3. Colle tes clés à la ligne 125 du code
+            </div>
+            <a href="https://console.firebase.google.com" target="_blank" class="block w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg shadow-indigo-100 uppercase">
+                Ouvrir Firebase
+            </a>
+        </div>
+    </div>
+
+    <!-- Interface Application -->
+    <main id="app-main" class="flex-1 max-w-2xl mx-auto w-full p-4 pb-32">
         <nav class="flex border-b border-slate-200 mb-6 sticky top-[73px] bg-slate-50/90 backdrop-blur-sm z-40 px-2">
-            <button onclick="switchTab('planning')" id="tab-planning-btn" class="flex-1 py-3 text-xs font-black uppercase tracking-widest tab-active">Planning</button>
-            <button onclick="switchTab('docs')" id="tab-docs-btn" class="flex-1 py-3 text-xs font-black uppercase tracking-widest text-slate-400">Docs</button>
-            <button onclick="switchTab('notes')" id="tab-notes-btn" class="flex-1 py-3 text-xs font-black uppercase tracking-widest text-slate-400">Notes MD</button>
+            <button onclick="window.setTab('plan', this)" class="nav-btn flex-1 py-3 text-[10px] font-black uppercase tracking-widest tab-active">Planning</button>
+            <button onclick="window.setTab('docs', this)" class="nav-btn flex-1 py-3 text-[10px] font-black uppercase tracking-widest text-slate-400">Cours</button>
+            <button onclick="window.setTab('notes', this)" class="nav-btn flex-1 py-3 text-[10px] font-black uppercase tracking-widest text-slate-400">Notes</button>
         </nav>
 
-        <!-- Vue : PLANNING -->
-        <div id="view-planning" class="view-content space-y-5">
-            <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100">
-                <h3 class="text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-4">Prochaine séance</h3>
-                <div class="space-y-3">
-                    <input type="text" id="ev-title" placeholder="Matière..." class="w-full p-4 bg-slate-50 rounded-2xl text-sm outline-none border-none focus:ring-2 ring-indigo-500/20">
-                    <div class="flex gap-2">
-                        <input type="date" id="ev-date" class="flex-1 p-4 bg-slate-50 rounded-2xl text-sm outline-none border-none">
-                        <input type="time" id="ev-time" class="w-28 p-4 bg-slate-50 rounded-2xl text-sm outline-none border-none">
-                    </div>
-                    <button onclick="addEvent()" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg shadow-indigo-100 active:scale-[0.98] transition-all">PROGRAMMER</button>
+        <!-- Planning -->
+        <div id="view-plan" class="view space-y-4">
+            <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-3">
+                <input type="text" id="ev-title" placeholder="Matière..." class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none ring-indigo-500 focus:ring-2">
+                <div class="flex gap-2">
+                    <input type="date" id="ev-date" class="flex-1 p-4 bg-slate-50 rounded-2xl text-sm border-none">
+                    <input type="time" id="ev-time" class="w-24 p-4 bg-slate-50 rounded-2xl text-sm border-none">
                 </div>
+                <button onclick="window.addSession()" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95 transition-all">AJOUTER</button>
             </div>
             <div id="events-list" class="space-y-3"></div>
         </div>
 
-        <!-- Vue : DOCUMENTS -->
-        <div id="view-docs" class="view-content hidden space-y-4">
-            <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100">
-                <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Ajouter un lien partagé</h3>
-                <div class="space-y-3">
-                    <input type="text" id="doc-name" placeholder="Nom du document..." class="w-full p-4 bg-slate-50 rounded-2xl text-sm outline-none border-none">
-                    <input type="text" id="doc-url" placeholder="Lien URL..." class="w-full p-4 bg-slate-50 rounded-2xl text-sm outline-none border-none">
-                    <button onclick="addDoc()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold text-sm">PARTAGER</button>
-                </div>
+        <!-- Documents -->
+        <div id="view-docs" class="view hidden space-y-4">
+            <div class="bg-white p-5 rounded-3xl border border-slate-100 space-y-3">
+                <input type="text" id="doc-name" placeholder="Titre du cours" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none">
+                <input type="text" id="doc-url" placeholder="Lien Drive/PDF" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none">
+                <button onclick="window.addDocument()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold text-sm">PARTAGER</button>
             </div>
             <div id="docs-list" class="grid gap-3"></div>
         </div>
 
-        <!-- Vue : NOTES -->
-        <div id="view-notes" class="view-content hidden space-y-4">
-            <div id="note-selection" class="space-y-4">
-                <button onclick="createNote()" class="w-full p-6 bg-white border-2 border-dashed border-indigo-200 rounded-[2rem] text-indigo-600 font-extrabold flex items-center justify-center gap-3 active:bg-indigo-50 transition-colors">
-                    <i data-lucide="file-plus"></i> NOUVELLE FICHE
-                </button>
-                <div id="notes-grid" class="grid gap-3"></div>
-            </div>
+        <!-- Notes -->
+        <div id="view-notes" class="view hidden space-y-4">
+            <button onclick="window.newNote()" class="w-full p-6 bg-white border-2 border-dashed border-indigo-200 rounded-[2rem] text-indigo-600 font-extrabold flex items-center justify-center gap-2 active:bg-indigo-50 transition-colors">
+                NOUVELLE FICHE
+            </button>
+            <div id="notes-grid" class="grid gap-3"></div>
+        </div>
+    </main>
 
-            <div id="note-editor" class="hidden fixed inset-0 bg-white z-[60] flex flex-col pt-[env(safe-area-inset-top)]">
-                <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                    <button onclick="closeEditor()" class="p-2 text-slate-500"><i data-lucide="x"></i></button>
-                    <div class="flex bg-slate-200 p-1 rounded-xl">
-                        <button onclick="togglePreview(false)" id="btn-edit" class="px-4 py-1.5 text-[10px] font-bold rounded-lg bg-white shadow-sm transition-all uppercase">Éditer</button>
-                        <button onclick="togglePreview(true)" id="btn-preview" class="px-4 py-1.5 text-[10px] font-bold rounded-lg text-slate-500 transition-all uppercase">Aperçu</button>
-                    </div>
-                </div>
-                <input type="text" id="note-title" placeholder="Titre de la fiche..." class="p-6 text-xl font-extrabold outline-none border-b border-slate-50">
-                <textarea id="note-body" class="flex-1 p-6 text-sm outline-none resize-none font-medium leading-relaxed text-slate-700" placeholder="Écris en Markdown ici..."></textarea>
-                <div id="note-preview" class="hidden flex-1 p-6 overflow-y-auto prose max-w-none"></div>
-                <div class="p-4 text-center text-[10px] font-bold text-slate-300 uppercase tracking-widest border-t border-slate-50 safe-area-bottom">Synchronisation en direct</div>
+    <!-- Éditeur Modal -->
+    <div id="editor-modal" class="hidden fixed inset-0 bg-white z-[100] flex flex-col pt-10">
+        <div class="p-4 border-b flex justify-between items-center bg-slate-50">
+            <button onclick="window.closeEditor()" class="text-[10px] font-black text-slate-400 p-2">RETOUR</button>
+            <div class="flex bg-slate-200 p-1 rounded-xl">
+                <button onclick="window.viewMd(false)" id="btn-edit" class="px-4 py-1.5 text-[9px] font-bold rounded-lg bg-white shadow-sm uppercase tracking-tighter">Éditer</button>
+                <button onclick="window.viewMd(true)" id="btn-preview" class="px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500 uppercase tracking-tighter">Aperçu</button>
             </div>
         </div>
-
-    </main>
+        <input type="text" id="nt-title" placeholder="Titre..." class="p-6 text-xl font-bold border-none outline-none">
+        <textarea id="nt-body" class="flex-1 p-6 text-sm outline-none resize-none font-medium leading-relaxed" placeholder="Markdown..."></textarea>
+        <div id="nt-preview" class="hidden flex-1 p-6 overflow-y-auto prose max-w-none"></div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, doc, addDoc, setDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        const firebaseConfig = JSON.parse(__firebase_config);
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'bu-buddy-pwa-v1';
+        // ======================================================
+        // 🔑 CONFIGURATION FIREBASE (REMPLACE ICI POUR GITHUB)
+        // ======================================================
+        let config = null;
+        try { config = JSON.parse(__firebase_config); } catch(e) {
+            config = {
+                apiKey: "REMPLACE_PAR_TA_CLE",
+                authDomain: "TON_PROJET.firebaseapp.com",
+                projectId: "TON_PROJET",
+                storageBucket: "TON_PROJET.appspot.com",
+                messagingSenderId: "TON_ID",
+                appId: "TON_APP_ID"
+            };
+        }
 
-        let activeNoteId = null;
-        let isSyncStarted = false;
+        // Vérification si config remplie
+        if (!config || !config.apiKey || config.apiKey === "REMPLACE_PAR_TA_CLE") {
+            document.getElementById('error-screen').classList.remove('hidden');
+            document.getElementById('app-main').classList.add('hidden');
+            lucide.createIcons();
+        } else {
+            const app = initializeApp(config);
+            const db = getFirestore(app);
+            const auth = getAuth(app);
+            const gid = typeof __app_id !== 'undefined' ? __app_id : 'bu-buddy-final';
 
-        // Firebase Auth initialization (Rule 3)
-        const initAuth = async () => {
-            try {
+            // Auth Rule 3
+            const login = async () => {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
                     await signInAnonymously(auth);
                 }
-            } catch (error) {
-                console.error("Auth error:", error);
-                document.getElementById('status-text').innerText = "Erreur Connexion";
-            }
-        };
+            };
 
-        onAuthStateChanged(auth, u => {
-            if(u && !isSyncStarted) {
-                isSyncStarted = true;
-                document.getElementById('status-dot').className = "w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse";
-                document.getElementById('status-text').innerText = "Synchro Live";
-                startAppSync();
-            }
-        });
-
-        initAuth();
-
-        function startAppSync() {
-            // Guard every operation with auth check
-            if (!auth.currentUser) return;
-
-            // Sync Planning
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'events'), (s) => {
-                const list = document.getElementById('events-list');
-                list.innerHTML = "";
-                const data = s.docs.map(d => ({id: d.id, ...d.data()})).sort((a,b) => (a.date + a.time).localeCompare(b.date + b.time));
-                data.forEach(ev => {
-                    const card = document.createElement('div');
-                    card.className = "bg-white p-4 rounded-3xl flex justify-between items-center shadow-sm border border-slate-50";
-                    card.innerHTML = `
-                        <div class="flex gap-4 items-center">
-                            <div class="bg-indigo-50 text-indigo-700 w-12 h-12 rounded-2xl flex flex-col items-center justify-center font-black">
-                                <span class="text-[8px] uppercase">${new Date(ev.date).toLocaleDateString('fr', {weekday: 'short'})}</span>
-                                <span class="text-base leading-none">${new Date(ev.date).getDate()}</span>
-                            </div>
-                            <div>
-                                <h4 class="font-extrabold text-slate-800 text-sm uppercase">${ev.title}</h4>
-                                <div class="text-[10px] font-bold text-slate-400 mt-0.5">${ev.time} • BU</div>
-                            </div>
-                        </div>
-                        <button onclick="window.del('events', '${ev.id}')" class="text-slate-200 p-2"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
-                    `;
-                    list.appendChild(card);
-                });
-                lucide.createIcons();
-            }, (err) => console.error("Events sync error:", err));
-
-            // Sync Docs
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), (s) => {
-                const list = document.getElementById('docs-list');
-                list.innerHTML = "";
-                s.docs.forEach(d => {
-                    const lk = d.data();
-                    const card = document.createElement('div');
-                    card.className = "bg-white p-5 rounded-3xl flex justify-between items-center shadow-sm border border-slate-50";
-                    card.innerHTML = `
-                        <div class="truncate flex-1 mr-4">
-                            <h4 class="font-extrabold text-slate-800 text-sm truncate uppercase tracking-tighter">${lk.name}</h4>
-                            <a href="${lk.url}" target="_blank" class="text-indigo-600 text-[10px] font-black flex items-center gap-1 mt-1 underline">OUVRIR LE COURS</a>
-                        </div>
-                        <button onclick="window.del('docs', '${d.id}')" class="text-slate-200"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                    `;
-                    list.appendChild(card);
-                });
-                lucide.createIcons();
-            }, (err) => console.error("Docs sync error:", err));
-
-            // Sync Notes List
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'notes'), (s) => {
-                const grid = document.getElementById('notes-grid');
-                grid.innerHTML = "";
-                s.docs.forEach(d => {
-                    const n = d.data();
-                    const card = document.createElement('div');
-                    card.className = "bg-white p-5 rounded-3xl flex justify-between items-center shadow-sm border border-slate-100 active:bg-slate-50";
-                    card.innerHTML = `
-                        <div onclick="window.openEditor('${d.id}')" class="flex-1">
-                            <h4 class="font-extrabold text-slate-800 text-sm">${n.title || "Note sans titre"}</h4>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1 italic">Modifier ensemble...</p>
-                        </div>
-                        <button onclick="window.del('notes', '${d.id}')" class="text-slate-200 ml-4"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                    `;
-                    grid.appendChild(card);
-                });
-                lucide.createIcons();
-            }, (err) => console.error("Notes list sync error:", err));
-        }
-
-        // Action Handlers
-        window.addEvent = async () => {
-            if (!auth.currentUser) return;
-            const title = document.getElementById('ev-title').value;
-            const date = document.getElementById('ev-date').value;
-            const time = document.getElementById('ev-time').value;
-            if(title && date && time) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'events'), { title, date, time });
-            document.getElementById('ev-title').value = "";
-        };
-
-        window.addDoc = async () => {
-            if (!auth.currentUser) return;
-            const name = document.getElementById('doc-name').value;
-            const url = document.getElementById('doc-url').value;
-            if(name && url) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), { name, url });
-            document.getElementById('doc-name').value = ""; document.getElementById('doc-url').value = "";
-        };
-
-        window.createNote = async () => {
-            if (!auth.currentUser) return;
-            const ref = await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'notes'), { title: "", content: "" });
-            window.openEditor(ref.id);
-        };
-
-        window.openEditor = (id) => {
-            if (!auth.currentUser) return;
-            activeNoteId = id;
-            document.getElementById('note-editor').classList.remove('hidden');
-            const unsub = onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'notes', id), (d) => {
-                if(d.exists() && activeNoteId === id) {
-                    const data = d.data();
-                    if(document.activeElement !== document.getElementById('note-title')) document.getElementById('note-title').value = data.title;
-                    if(document.activeElement !== document.getElementById('note-body')) {
-                        document.getElementById('note-body').value = data.content;
-                        document.getElementById('note-preview').innerHTML = marked.parse(data.content || "");
-                    }
+            onAuthStateChanged(auth, u => {
+                if(u) {
+                    document.getElementById('status-dot').className = "w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse";
+                    document.getElementById('status-text').innerText = "Synchro Live";
+                    startSync(db, gid);
                 }
-            }, (err) => console.error("Note editor sync error:", err));
-            window.currentNoteUnsub = unsub;
-        };
+            });
+            login();
 
-        window.closeEditor = () => {
-            if(window.currentNoteUnsub) window.currentNoteUnsub();
-            activeNoteId = null;
-            document.getElementById('note-editor').classList.add('hidden');
-        };
+            // Handlers
+            window.addSession = async () => {
+                if (!auth.currentUser) return;
+                const t = document.getElementById('ev-title').value;
+                const d = document.getElementById('ev-date').value;
+                const h = document.getElementById('ev-time').value;
+                if(t && d) await addDoc(collection(db, 'artifacts', gid, 'public', 'data', 'planning'), {t, d, h});
+                document.getElementById('ev-title').value = "";
+            };
 
-        const saveNote = () => {
-            if(!activeNoteId || !auth.currentUser) return;
-            setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'notes', activeNoteId), {
-                title: document.getElementById('note-title').value,
-                content: document.getElementById('note-body').value
-            }, { merge: true });
-        };
+            window.addDocument = async () => {
+                if (!auth.currentUser) return;
+                const n = document.getElementById('doc-name').value;
+                const u = document.getElementById('doc-url').value;
+                if(n && u) await addDoc(collection(db, 'artifacts', gid, 'public', 'data', 'docs'), {n, u});
+                document.getElementById('doc-name').value = ""; document.getElementById('doc-url').value = "";
+            };
 
-        document.getElementById('note-title').oninput = saveNote;
-        document.getElementById('note-body').oninput = (e) => {
-            saveNote();
-            document.getElementById('note-preview').innerHTML = marked.parse(e.target.value);
-        };
+            window.newNote = async () => {
+                if (!auth.currentUser) return;
+                const r = await addDoc(collection(db, 'artifacts', gid, 'public', 'data', 'notes'), {title: "", content: ""});
+                window.openNote(r.id);
+            };
 
-        window.del = (col, id) => { 
-            if(!auth.currentUser) return;
-            if(confirm("Supprimer définitivement ?")) deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', col, id)); 
-        };
+            let curId = null;
+            window.openNote = (id) => {
+                curId = id;
+                document.getElementById('editor-modal').classList.remove('hidden');
+                onSnapshot(doc(db, 'artifacts', gid, 'public', 'data', 'notes', id), d => {
+                    if(d.exists() && curId === id) {
+                        const val = d.data();
+                        if(document.activeElement !== document.getElementById('nt-title')) document.getElementById('nt-title').value = val.title || "";
+                        if(document.activeElement !== document.getElementById('nt-body')) {
+                            document.getElementById('nt-body').value = val.content || "";
+                            document.getElementById('nt-preview').innerHTML = marked.parse(val.content || "");
+                        }
+                    }
+                });
+            };
 
+            window.closeNote = () => { curId = null; document.getElementById('editor-modal').classList.add('hidden'); };
+            window.del = async (c, i) => { if(confirm("Supprimer ?")) await deleteDoc(doc(db, 'artifacts', gid, 'public', 'data', c, i)); };
+
+            const save = () => {
+                if(!curId || !auth.currentUser) return;
+                setDoc(doc(db, 'artifacts', gid, 'public', 'data', 'notes', curId), {
+                    title: document.getElementById('nt-title').value,
+                    content: document.getElementById('nt-body').value
+                }, {merge: true});
+            };
+            document.getElementById('nt-title').oninput = save;
+            document.getElementById('nt-body').oninput = e => { save(); document.getElementById('nt-preview').innerHTML = marked.parse(e.target.value); };
+
+            function startSync(db, gid) {
+                // Rule 1 paths
+                onSnapshot(collection(db, 'artifacts', gid, 'public', 'data', 'planning'), s => {
+                    const l = document.getElementById('events-list'); l.innerHTML = "";
+                    s.docs.map(d=>({id:d.id, ...d.data()})).sort((a,b)=>(a.d+a.h).localeCompare(b.d+b.h)).forEach(ev => {
+                        const d = document.createElement('div');
+                        d.className = "bg-white p-4 rounded-2xl flex justify-between items-center border border-slate-100 shadow-sm";
+                        d.innerHTML = `<div class="flex gap-4 items-center">
+                            <div class="bg-indigo-50 text-indigo-700 w-10 h-10 rounded-xl flex flex-col items-center justify-center font-black text-[10px]">
+                                <span>${new Date(ev.d).getDate()}</span>
+                            </div>
+                            <div><div class="font-bold text-xs uppercase tracking-tight">${ev.t}</div><div class="text-[9px] text-slate-400 font-bold">${ev.h} • BU</div></div>
+                        </div><button onclick="window.del('planning', '${ev.id}')" class="text-slate-200"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
+                        l.appendChild(d);
+                    });
+                    lucide.createIcons();
+                });
+
+                onSnapshot(collection(db, 'artifacts', gid, 'public', 'data', 'docs'), s => {
+                    const l = document.getElementById('docs-list'); l.innerHTML = "";
+                    s.docs.forEach(d => {
+                        const lk = d.data();
+                        const div = document.createElement('div');
+                        div.className = "bg-white p-4 rounded-2xl border flex justify-between items-center shadow-sm";
+                        div.innerHTML = `<div class="truncate flex-1 mr-4"><div class="font-bold text-xs uppercase truncate leading-tight">${lk.n}</div>
+                        <a href="${lk.u}" target="_blank" class="text-indigo-600 text-[9px] font-black underline italic">Ouvrir le doc</a></div>
+                        <button onclick="window.del('docs', '${d.id}')" class="text-slate-200"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
+                        l.appendChild(div);
+                    });
+                    lucide.createIcons();
+                });
+
+                onSnapshot(collection(db, 'artifacts', gid, 'public', 'data', 'notes'), s => {
+                    const g = document.getElementById('notes-grid'); g.innerHTML = "";
+                    s.docs.forEach(d => {
+                        const div = document.createElement('div');
+                        div.className = "bg-white p-4 rounded-2xl border flex justify-between items-center shadow-sm active:bg-slate-50";
+                        div.innerHTML = `<div onclick="window.openNote('${d.id}')" class="flex-1 font-bold text-sm cursor-pointer uppercase tracking-tighter truncate pr-4">${d.data().title || "Note sans titre"}</div>
+                        <button onclick="window.del('notes', '${d.id}')" class="text-slate-200 ml-4"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
+                        g.appendChild(div);
+                    });
+                    lucide.createIcons();
+                });
+            }
+        }
     </script>
 
     <script>
-        function switchTab(tab) {
-            document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
-            document.getElementById('view-' + tab).classList.remove('hidden');
-            document.querySelectorAll('nav button').forEach(b => {
-                b.classList.remove('tab-active', 'text-indigo-600');
-                b.classList.add('text-slate-400');
-            });
-            document.getElementById('tab-' + tab + '-btn').classList.add('tab-active', 'text-indigo-600');
+        window.setTab = (id, btn) => {
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            document.getElementById('view-' + id).classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('tab-active', 'text-indigo-600'));
+            btn.classList.add('tab-active', 'text-indigo-600');
             lucide.createIcons();
-        }
-
-        function togglePreview(show) {
-            document.getElementById('note-body').classList.toggle('hidden', show);
-            document.getElementById('note-preview').classList.toggle('hidden', !show);
-            document.getElementById('btn-edit').className = show ? "px-4 py-1.5 text-[10px] font-bold rounded-lg text-slate-500 transition-all uppercase" : "px-4 py-1.5 text-[10px] font-bold rounded-lg bg-white shadow-sm transition-all uppercase";
-            document.getElementById('btn-preview').className = !show ? "px-4 py-1.5 text-[10px] font-bold rounded-lg text-slate-500 transition-all uppercase" : "px-4 py-1.5 text-[10px] font-bold rounded-lg bg-white shadow-sm transition-all uppercase";
-        }
-
+        };
+        window.viewMd = (show) => {
+            document.getElementById('nt-body').classList.toggle('hidden', show);
+            document.getElementById('nt-preview').classList.toggle('hidden', !show);
+            document.getElementById('btn-edit').className = show ? "px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500 uppercase tracking-tighter" : "px-4 py-1.5 text-[9px] font-bold rounded-lg bg-white shadow-sm uppercase tracking-tighter";
+            document.getElementById('btn-preview').className = !show ? "px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500 uppercase tracking-tighter" : "px-4 py-1.5 text-[9px] font-bold rounded-lg bg-white shadow-sm uppercase tracking-tighter";
+        };
         window.onload = () => lucide.createIcons();
     </script>
 </body>
