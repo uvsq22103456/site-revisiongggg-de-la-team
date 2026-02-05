@@ -28,8 +28,6 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
         .grade-input:focus { background: white; border-color: #4f46e5; }
-        
-        /* Checkbox personnalisée pour les assignations */
         .assign-check:checked + label { background-color: #4f46e5; color: white; border-color: #4f46e5; }
     </style>
 </head>
@@ -113,7 +111,7 @@
 
         <!-- VUE PROJETS -->
         <div id="view-projets" class="view-content hidden space-y-4">
-            <div class="bg-white p-5 rounded-3xl border border-slate-100 space-y-4">
+            <div class="bg-white p-5 rounded-3xl border border-slate-100 space-y-4 shadow-sm">
                 <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1 text-center">Nouveau Ticket Projet</h3>
                 <input type="text" id="in-proj-name" placeholder="Nom du projet" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-emerald-500">
                 <input type="text" id="in-proj-desc" placeholder="Objectif" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-emerald-500">
@@ -121,36 +119,19 @@
                 <div class="space-y-2">
                     <p class="text-[9px] font-black text-slate-300 uppercase px-1">Assigner la Team :</p>
                     <div class="flex flex-wrap gap-2" id="assign-selector">
-                        <div class="relative">
-                            <input type="checkbox" id="user-Matthieu" value="Matthieu" class="assign-check hidden">
-                            <label for="user-Matthieu" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">MAB</label>
-                        </div>
-                        <div class="relative">
-                            <input type="checkbox" id="user-Antoine" value="Antoine" class="assign-check hidden">
-                            <label for="user-Antoine" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">MC</label>
-                        </div>
-                        <div class="relative">
-                            <input type="checkbox" id="user-Vincent" value="Vincent" class="assign-check hidden">
-                            <label for="user-Vincent" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">VG</label>
-                        </div>
-                        <div class="relative">
-                            <input type="checkbox" id="user-Samia" value="Samia" class="assign-check hidden">
-                            <label for="user-Samia" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">SA</label>
-                        </div>
-                        <div class="relative">
-                            <input type="checkbox" id="user-Sofian" value="Sofian" class="assign-check hidden">
-                            <label for="user-Sofian" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">SSH</label>
-                        </div>
+                        <div class="relative"><input type="checkbox" id="user-Matthieu" value="Matthieu" class="assign-check hidden"><label for="user-Matthieu" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">MAB</label></div>
+                        <div class="relative"><input type="checkbox" id="user-Antoine" value="Antoine" class="assign-check hidden"><label for="user-Antoine" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">MC</label></div>
+                        <div class="relative"><input type="checkbox" id="user-Vincent" value="Vincent" class="assign-check hidden"><label for="user-Vincent" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">VG</label></div>
+                        <div class="relative"><input type="checkbox" id="user-Samia" value="Samia" class="assign-check hidden"><label for="user-Samia" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">SA</label></div>
+                        <div class="relative"><input type="checkbox" id="user-Sofian" value="Sofian" class="assign-check hidden"><label for="user-Sofian" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">SSH</label></div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 gap-2">
-                    <select id="in-proj-status" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold border-none appearance-none text-slate-600">
-                        <option value="À FAIRE">📝 À FAIRE</option>
-                        <option value="EN COURS">🚀 EN COURS</option>
-                        <option value="TERMINÉ">✅ TERMINÉ</option>
-                    </select>
-                </div>
+                <select id="in-proj-status" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold border-none appearance-none text-slate-600">
+                    <option value="À FAIRE">📝 À FAIRE</option>
+                    <option value="EN COURS">🚀 EN COURS</option>
+                    <option value="TERMINÉ">✅ TERMINÉ</option>
+                </select>
                 <button onclick="window.addProject()" class="w-full bg-emerald-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95">LANCER LE TICKET</button>
             </div>
             <div id="list-projets" class="grid gap-3"></div>
@@ -166,7 +147,6 @@
 
         <!-- VUE MOYENNES -->
         <div id="view-grades" class="view-content hidden space-y-6">
-            <!-- Sélecteur de Profil -->
             <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center font-black text-xs" id="user-avatar">?</div>
@@ -186,31 +166,33 @@
             </div>
 
             <div id="grade-dashboard" class="hidden space-y-6">
-                <!-- Recap Général -->
+                <!-- Info Importante -->
+                <div class="bg-amber-50 border border-amber-100 p-4 rounded-2xl flex gap-3 items-start">
+                    <i data-lucide="info" class="w-4 h-4 text-amber-500 shrink-0 mt-0.5"></i>
+                    <p class="text-[10px] text-amber-700 font-semibold leading-relaxed">Les 4 blocs ne se compensent pas. L'UE Alternance est non compensante.</p>
+                </div>
+
+                <!-- Recap Global -->
                 <div class="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-xl flex justify-between items-center relative overflow-hidden">
                     <div class="relative z-10">
-                        <h2 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Moyenne Générale</h2>
+                        <h2 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Note de l'Année</h2>
                         <div id="total-gpa" class="text-4xl font-black">--</div>
-                        <div id="total-status" class="text-[9px] mt-2 font-bold px-2 py-1 bg-white/10 rounded-lg inline-block uppercase">En attente de notes</div>
+                        <div id="total-status" class="text-[9px] mt-2 font-bold px-2 py-1 bg-white/10 rounded-lg inline-block uppercase">Calcul...</div>
                     </div>
                     <i data-lucide="graduation-cap" class="w-20 h-20 text-white/5 absolute -right-4 -bottom-4 rotate-12"></i>
                 </div>
 
-                <div id="list-blocs-template" class="space-y-6">
-                    <!-- Les blocs seront générés ici dynamiquement -->
-                </div>
+                <div id="list-blocs-template" class="space-y-6"></div>
             </div>
 
             <div id="grade-empty" class="py-20 text-center space-y-4">
-                <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-300">
-                    <i data-lucide="user-check"></i>
-                </div>
-                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Sélectionne ton nom pour gérer tes notes crousty</p>
+                <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-300"><i data-lucide="user-check"></i></div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Sélectionne ton nom pour gérer tes notes</p>
             </div>
         </div>
     </main>
 
-    <!-- Modal Éditeur Notes -->
+    <!-- Modal Éditeur -->
     <div id="editor-modal" class="hidden fixed inset-0 bg-white z-[110] flex flex-col pt-[env(safe-area-inset-top)]">
         <div class="p-4 border-b flex justify-between items-center bg-slate-50">
             <button onclick="window.closeNote()" class="text-[10px] font-black text-slate-400 p-2 uppercase">Fermer</button>
@@ -220,7 +202,7 @@
             </div>
         </div>
         <input type="text" id="nt-title" placeholder="Titre crousty..." class="p-6 text-xl font-bold border-none outline-none">
-        <textarea id="nt-body" class="flex-1 p-6 text-sm outline-none resize-none font-medium leading-relaxed" placeholder="Écris ici en Markdown..."></textarea>
+        <textarea id="nt-body" class="flex-1 p-6 text-sm outline-none resize-none font-medium leading-relaxed" placeholder="Écris ici..."></textarea>
         <div id="nt-preview" class="hidden flex-1 p-6 overflow-y-auto prose max-w-none"></div>
     </div>
 
@@ -243,34 +225,43 @@
         const auth = getAuth(app);
         const appId = 'bu-buddy-v-crousty';
 
+        // PROGRAMME M2 PR1232 RÉVISÉ (4 BLOCS)
         const PROGRAM = [
             {
                 bloc: "Savoirs spécialisés en statistique (BC00004225)",
+                ectsSeuil: 18,
                 items: [
                     { name: "Statistique bayésienne", ects: 3 },
                     { name: "Statistique non paramétrique", ects: 5 },
-                    { name: "Apprentissage profond & IA générative", ects: 3 },
                     { name: "Projet Master", ects: 3 },
                     { name: "Anglais", ects: 3 },
                     { name: "Techniques de prévision", ects: 4 }
                 ]
             },
             {
-                bloc: "Spécialisation Actuariat / Marketing (BC00004226/27)",
+                bloc: "Spécialisation en Actuariat (BC00004226)",
+                ectsSeuil: 13,
                 items: [
                     { name: "Assurance vie", ects: 5 },
                     { name: "Assurance non vie", ects: 5 },
-                    { name: "Analyse des risques", ects: 3 },
+                    { name: "Analyse des risques", ects: 3 }
+                ]
+            },
+            {
+                bloc: "Spécialisation en Etude de Marché (BC00004227)",
+                ectsSeuil: 14,
+                items: [
                     { name: "Méthodes de régression avancées", ects: 4 },
                     { name: "Apprentissage non supervisé", ects: 4 },
-                    { name: "Applications marketing", ects: 3 }
+                    { name: "Applications marketing", ects: 3 },
+                    { name: "Machine learning et incertitude", ects: 3 }
                 ]
             },
             {
                 bloc: "Mise en situation professionnelle (BC00004228)",
+                ectsSeuil: 15,
                 items: [
-                    { name: "Alternance / Stage", ects: 15 },
-                    { name: "Machine Learning & Incertitude", ects: 3 }
+                    { name: "Alternance", ects: 15 }
                 ]
             }
         ];
@@ -295,9 +286,6 @@
                 document.getElementById('grade-empty').classList.add('hidden');
                 document.getElementById('user-avatar').innerText = currentGradeUser.charAt(0);
                 loadUserGrades();
-            } else {
-                document.getElementById('grade-dashboard').classList.add('hidden');
-                document.getElementById('grade-empty').classList.remove('hidden');
             }
         };
 
@@ -306,9 +294,7 @@
                 userNotes = {};
                 s.docs.forEach(d => {
                     const data = d.data();
-                    if(data.user === currentGradeUser) {
-                        userNotes[data.subject] = { id: d.id, note: data.note };
-                    }
+                    if(data.user === currentGradeUser) userNotes[data.subject] = { id: d.id, note: data.note };
                 });
                 renderGradeBlocks();
             });
@@ -321,11 +307,7 @@
             if(existing) {
                 await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_grades', existing.id), { note }, { merge: true });
             } else {
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'user_grades'), {
-                    user: currentGradeUser,
-                    subject: subject,
-                    note: note
-                });
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'user_grades'), { user: currentGradeUser, subject, note });
             }
         };
 
@@ -333,57 +315,56 @@
             const container = document.getElementById('list-blocs-template');
             container.innerHTML = "";
             let totalWeighted = 0; let totalEcts = 0;
+
             PROGRAM.forEach(bloc => {
                 let blocWeighted = 0; let blocEcts = 0;
-                const div = document.createElement('div');
-                div.className = "bg-white rounded-[2rem] border border-slate-100 p-6 shadow-sm";
                 let itemsHtml = bloc.items.map(item => {
                     const saved = userNotes[item.name];
                     const val = saved ? saved.note : "";
                     if(saved) { blocWeighted += (saved.note * item.ects); blocEcts += item.ects; }
                     return `<div class="flex justify-between items-center py-3 border-b border-slate-50 last:border-none">
-                            <div class="flex-1">
-                                <div class="text-[11px] font-bold text-slate-700 uppercase leading-tight">${item.name}</div>
-                                <div class="text-[9px] text-slate-400 font-black">COEFF ${item.ects} ECTS</div>
-                            </div>
-                            <input type="number" step="0.1" value="${val}" onchange="window.updateGrade('${item.name}', this.value)" class="grade-input w-16 p-2 bg-slate-50 border-none rounded-xl text-center text-xs font-black outline-none transition-all">
-                        </div>`;
+                        <div class="flex-1">
+                            <div class="text-[11px] font-bold text-slate-700 uppercase leading-tight">${item.name}</div>
+                            <div class="text-[9px] text-slate-400 font-black">${item.ects} ECTS</div>
+                        </div>
+                        <input type="number" step="0.1" value="${val}" onchange="window.updateGrade('${item.name}', this.value)" class="grade-input w-16 p-2 bg-slate-50 border-none rounded-xl text-center text-xs font-black outline-none transition-all">
+                    </div>`;
                 }).join('');
+
                 const blocAvg = blocEcts > 0 ? (blocWeighted / blocEcts).toFixed(2) : "--";
                 if(blocEcts > 0) { totalWeighted += blocWeighted; totalEcts += blocEcts; }
-                const statusColor = blocAvg !== "--" ? (parseFloat(blocAvg) >= 10 ? 'text-emerald-500' : 'text-rose-500') : 'text-slate-300';
-                div.innerHTML = `<div class="flex justify-between items-start mb-4"><h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest max-w-[70%]">${bloc.bloc}</h3><div class="text-right"><div class="text-lg font-black ${statusColor}">${blocAvg}</div><div class="text-[8px] font-bold text-slate-300 uppercase">Moyenne Bloc</div></div></div><div class="space-y-1">${itemsHtml}</div>`;
+
+                const div = document.createElement('div');
+                div.className = "bg-white rounded-[2rem] border border-slate-100 p-6 shadow-sm";
+                div.innerHTML = `<div class="flex justify-between items-start mb-4">
+                        <div class="max-w-[70%]"><h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">${bloc.bloc}</h3></div>
+                        <div class="text-right">
+                            <div class="text-lg font-black ${blocAvg >= 10 ? 'text-emerald-500' : 'text-rose-500'}">${blocAvg}</div>
+                            <div class="text-[8px] font-bold text-slate-300 uppercase">Bloc Moy.</div>
+                        </div>
+                    </div><div class="space-y-1">${itemsHtml}</div>`;
                 container.appendChild(div);
             });
+
             const totalGpa = totalEcts > 0 ? (totalWeighted / totalEcts).toFixed(2) : "--";
             document.getElementById('total-gpa').innerText = totalGpa;
-            const totalStatus = document.getElementById('total-status');
+            const status = document.getElementById('total-status');
             if(totalGpa !== "--") {
-                const gpa = parseFloat(totalGpa);
-                totalStatus.innerText = gpa >= 10 ? "Admis (Validé sah)" : "Ajourné (C'est chaud t'es sah?)";
-                totalStatus.className = `text-[9px] mt-2 font-bold px-2 py-1 rounded-lg inline-block uppercase ${gpa >= 10 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`;
+                const ok = parseFloat(totalGpa) >= 10;
+                status.innerText = ok ? "Admis (Validé ti est un tiiigre)" : "Ajourné (Courage go dead les rattrapages !)";
+                status.className = `text-[9px] mt-2 font-bold px-2 py-1 rounded-lg inline-block uppercase ${ok ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`;
             }
         }
 
-        // --- PROJETS ---
+        // --- PROJETS & TICKETS ---
         window.addProject = async () => {
             const name = document.getElementById('in-proj-name').value;
             const desc = document.getElementById('in-proj-desc').value;
             const status = document.getElementById('in-proj-status').value;
-            
-            // Récupération de tous les membres cochés
-            const assignees = [];
-            document.querySelectorAll('.assign-check:checked').forEach(cb => {
-                assignees.push(cb.value);
-            });
-
+            const assignees = Array.from(document.querySelectorAll('.assign-check:checked')).map(cb => cb.value);
             if(name) {
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), { 
-                    name, desc, status, assignees, date: new Date().toISOString() 
-                });
-                // Reset formulaire
-                document.getElementById('in-proj-name').value = "";
-                document.getElementById('in-proj-desc').value = "";
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), { name, desc, status, assignees, date: new Date().toISOString() });
+                document.getElementById('in-proj-name').value = ""; document.getElementById('in-proj-desc').value = "";
                 document.querySelectorAll('.assign-check').forEach(cb => cb.checked = false);
             }
         };
@@ -394,7 +375,7 @@
             await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', id), { status: next }, { merge: true });
         };
 
-        // --- RESTE (PLANNING, NOTES) ---
+        // --- NOTES & PLANNING ---
         window.addSession = async () => {
             const subject = document.getElementById('in-title').value;
             const date = document.getElementById('in-date').value;
@@ -423,6 +404,7 @@
                 }
             });
         };
+
         window.closeNote = () => { currentId = null; document.getElementById('editor-modal').classList.add('hidden'); };
         window.del = async (c, i) => { if(confirm("T'es un ouf tu veux S=supprimer définitivement t'es sah?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', c, i)); };
 
@@ -453,32 +435,12 @@
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), s => {
                 const list = document.getElementById('list-projets'); list.innerHTML = "";
                 s.docs.forEach(d => {
-                    const p = d.data();
-                    const status = p.status || 'À FAIRE';
-                    const assignees = p.assignees || [];
+                    const p = d.data(); const status = p.status || 'À FAIRE'; const assignees = p.assignees || [];
                     const colors = { 'À FAIRE': 'bg-slate-100 text-slate-600', 'EN COURS': 'bg-indigo-100 text-indigo-700', 'TERMINÉ': 'bg-emerald-100 text-emerald-700' };
-                    
-                    // Génération des cercles d'initiales
-                    const initialCircles = assignees.map(name => {
-                        return `<div class="w-7 h-7 bg-slate-900 text-white rounded-full flex items-center justify-center text-[10px] font-black uppercase ring-2 ring-white -ml-2 first:ml-0" title="${name}">${name.charAt(0)}</div>`;
-                    }).join('');
-
+                    const initialCircles = assignees.map(name => `<div class="w-7 h-7 bg-slate-900 text-white rounded-full flex items-center justify-center text-[10px] font-black uppercase ring-2 ring-white -ml-2 first:ml-0">${name.charAt(0)}</div>`).join('');
                     const div = document.createElement('div'); div.className = "bg-white p-5 rounded-3xl border border-slate-100 shadow-sm";
-                    div.innerHTML = `
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex items-center gap-3">
-                                <div class="flex">
-                                    ${initialCircles || '<div class="w-7 h-7 bg-slate-100 text-slate-300 rounded-full flex items-center justify-center text-[10px] font-black">?</div>'}
-                                </div>
-                                <div class="font-black text-sm uppercase text-slate-800">${p.name}</div>
-                            </div>
-                            <button onclick="window.del('projects', '${d.id}')" class="text-slate-200"><i data-lucide="x-circle" class="w-4 h-4"></i></button>
-                        </div>
-                        <p class="text-[10px] text-slate-400 font-bold mb-4">${assignees.length > 0 ? 'Team : ' + assignees.join(', ') : 'Libre (Personne t\'es sah?)'}</p>
-                        <div class="flex justify-between items-center">
-                            <button onclick="window.cycleProjectStatus('${d.id}', '${status}')" class="px-3 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest ${colors[status]} active:scale-95 transition-transform">${status}</button>
-                            <div class="text-[8px] font-bold text-slate-200 uppercase">${new Date(p.date).toLocaleDateString()}</div>
-                        </div>`;
+                    div.innerHTML = `<div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="flex">${initialCircles || '?'}</div><div class="font-black text-sm uppercase text-slate-800">${p.name}</div></div><button onclick="window.del('projects', '${d.id}')" class="text-slate-200"><i data-lucide="x-circle" class="w-4 h-4"></i></button></div>
+                        <p class="text-[10px] text-slate-400 font-bold mb-4">${assignees.join(', ') || 'Libre'}</p><div class="flex justify-between items-center"><button onclick="window.cycleProjectStatus('${d.id}', '${status}')" class="px-3 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest ${colors[status]} active:scale-95 transition-transform">${status}</button><div class="text-[8px] font-bold text-slate-200 uppercase">${new Date(p.date).toLocaleDateString()}</div></div>`;
                     list.appendChild(div);
                 });
                 lucide.createIcons();
@@ -489,32 +451,28 @@
                 s.docs.forEach(d => {
                     const data = d.data();
                     const div = document.createElement('div'); div.className = "bg-white p-5 rounded-3xl border border-slate-100 flex justify-between items-center shadow-sm active:bg-slate-50";
-                    div.innerHTML = `<div onclick="window.openNote('${d.id}')" class="flex-1 cursor-pointer pr-4 overflow-hidden"><div class="font-bold text-sm uppercase mb-1 text-slate-800">${data.title || "FICHE SANS TITRE"}</div><div class="text-[10px] text-slate-400 font-medium line-clamp-2">${data.content || "..." }</div></div>
-                        <button onclick="window.del('notes', '${d.id}')" class="text-slate-200 ml-4"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
+                    div.innerHTML = `<div onclick="window.openNote('${d.id}')" class="flex-1 cursor-pointer pr-4 overflow-hidden"><div class="font-bold text-sm uppercase mb-1 text-slate-800">${data.title || "FICHE SANS TITRE"}</div><div class="text-[10px] text-slate-400 font-medium line-clamp-2">${data.content || "..." }</div></div><button onclick="window.del('notes', '${d.id}')" class="text-slate-200 ml-4"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
                     list.appendChild(div);
                 });
                 lucide.createIcons();
             });
         }
-    </script>
 
-    <script>
         window.setView = (id, btn) => {
             document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
             document.getElementById('view-' + id).classList.remove('hidden');
-            document.querySelectorAll('.nav-btn').forEach(b => {
-                b.classList.remove('tab-active', 'text-indigo-600');
-                b.classList.add('text-slate-400');
-            });
+            document.querySelectorAll('.nav-btn').forEach(b => { b.classList.remove('tab-active', 'text-indigo-600'); b.classList.add('text-slate-400'); });
             btn.classList.add('tab-active', 'text-indigo-600');
             lucide.createIcons();
         };
+
         window.toggleMd = (show) => {
             document.getElementById('nt-body').classList.toggle('hidden', show);
             document.getElementById('nt-preview').classList.toggle('hidden', !show);
             document.getElementById('btn-edit').className = show ? "px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500" : "px-4 py-1.5 text-[9px] font-bold rounded-lg bg-white shadow-sm";
             document.getElementById('btn-view').className = !show ? "px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500" : "px-4 py-1.5 text-[9px] font-bold rounded-lg bg-white shadow-sm";
         };
+
         window.onload = () => lucide.createIcons();
     </script>
 </body>
