@@ -104,15 +104,30 @@
             <div id="list-planning" class="space-y-3"></div>
         </div>
 
-        <!-- VUE COURS -->
+        <!-- VUE COURS (GROUPÉ PAR DOSSIERS) -->
         <div id="view-docs" class="view-content hidden space-y-4">
-            <div class="bg-white p-5 rounded-3xl border border-slate-100 space-y-3">
-                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1">Partager un Cours</h3>
-                <input type="text" id="in-doc" placeholder="Nom du cours" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-indigo-500 transition-all">
-                <input type="text" id="in-url" placeholder="Lien URL (Drive, etc)" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-indigo-500 transition-all">
+            <div class="bg-white p-5 rounded-3xl border border-slate-100 space-y-3 shadow-sm">
+                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1">Ajouter un cours au Drive</h3>
+                <input type="text" id="in-doc" placeholder="Nom du cours (ex: TD1 Bayésien)" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-indigo-500 transition-all">
+                <input type="text" id="in-url" placeholder="Lien URL (Google Drive, etc.)" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-indigo-500 transition-all">
+                
+                <div class="space-y-1">
+                    <p class="text-[9px] font-black text-slate-300 uppercase px-1">Choisir le dossier :</p>
+                    <select id="in-doc-folder" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold border-none appearance-none text-slate-600 outline-none focus:ring-2 ring-indigo-500">
+                        <option value="Statistique & Savoirs">📁 Savoirs Spécialisés</option>
+                        <option value="Actuariat">📁 Actuariat</option>
+                        <option value="Etude de Marché">📁 Étude de Marché</option>
+                        <option value="Alternance">📁 Alternance / Entreprise</option>
+                        <option value="Autres">📁 Divers / Général</option>
+                    </select>
+                </div>
+
                 <button onclick="window.addLink()" class="w-full bg-indigo-900 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95 transition-all">PARTAGER LE LIEN</button>
             </div>
-            <div id="list-docs" class="grid gap-3"></div>
+            
+            <div id="list-docs" class="space-y-6">
+                <!-- Les dossiers de cours s'afficheront ici -->
+            </div>
         </div>
 
         <!-- VUE PROJETS -->
@@ -127,7 +142,7 @@
                     <div class="flex flex-wrap gap-2" id="assign-selector">
                         <div class="relative"><input type="checkbox" id="user-Matthieu" value="Matthieu" class="assign-check hidden"><label for="user-Matthieu" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">Antoine</label></div>
                         <div class="relative"><input type="checkbox" id="user-Antoine" value="Antoine" class="assign-check hidden"><label for="user-Antoine" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">Matthieu</label></div>
-                        <div class="relative"><input type="checkbox" id="user-Vincent" value="Vincent" class="assign-check hidden"><label for="user-Vincent" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">Vince</label></div>
+                        <div class="relative"><input type="checkbox" id="user-Vincent" value="Vincent" class="assign-check hidden"><label for="user-Vincent" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">Vincent</label></div>
                         <div class="relative"><input type="checkbox" id="user-Samia" value="Samia" class="assign-check hidden"><label for="user-Samia" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">Samia</label></div>
                         <div class="relative"><input type="checkbox" id="user-Sofian" value="Sofian" class="assign-check hidden"><label for="user-Sofian" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">Sofian</label></div>
                     </div>
@@ -153,7 +168,6 @@
 
         <!-- VUE MOYENNES -->
         <div id="view-grades" class="view-content hidden space-y-6">
-            <!-- Sélecteur de Profil -->
             <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center font-black text-xs" id="user-avatar">?</div>
@@ -173,16 +187,14 @@
             </div>
 
             <div id="grade-dashboard" class="hidden space-y-6">
-                <!-- Recap Global -->
                 <div class="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-xl flex justify-between items-center relative overflow-hidden">
                     <div class="relative z-10">
-                        <h2 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Note de l'Année</h2>
+                        <h2 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Moyenne de l'Année</h2>
                         <div id="total-gpa" class="text-4xl font-black">--</div>
                         <div id="total-status" class="text-[9px] mt-2 font-bold px-2 py-1 bg-white/10 rounded-lg inline-block uppercase tracking-wider">Calcul en cours...</div>
                     </div>
                     <i data-lucide="graduation-cap" class="w-20 h-20 text-white/5 absolute -right-4 -bottom-4 rotate-12"></i>
                 </div>
-
                 <div id="list-blocs-template" class="space-y-6"></div>
             </div>
 
@@ -209,7 +221,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, doc, addDoc, setDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, addDoc, setDoc, onSnapshot, deleteDoc, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         const firebaseConfig = {
@@ -229,7 +241,6 @@
         const PROGRAM = [
             {
                 bloc: "Savoirs spécialisés en statistique (BC00004225)",
-                ectsSeuil: 18,
                 items: [
                     { name: "Statistique bayésienne", ects: 3 },
                     { name: "Statistique non paramétrique", ects: 5 },
@@ -240,7 +251,6 @@
             },
             {
                 bloc: "Spécialisation en Actuariat (BC00004226)",
-                ectsSeuil: 13,
                 items: [
                     { name: "Assurance vie", ects: 5 },
                     { name: "Assurance non vie", ects: 5 },
@@ -249,7 +259,6 @@
             },
             {
                 bloc: "Spécialisation en Etude de Marché (BC00004227)",
-                ectsSeuil: 14,
                 items: [
                     { name: "Méthodes de régression avancées", ects: 4 },
                     { name: "Apprentissage non supervisé", ects: 4 },
@@ -259,7 +268,6 @@
             },
             {
                 bloc: "Mise en situation professionnelle (BC00004228)",
-                ectsSeuil: 15,
                 items: [
                     { name: "Alternance", ects: 15 }
                 ]
@@ -275,12 +283,17 @@
             }
         });
 
-        // ACTIONS : COURS / DOCS
+        // ACTIONS : COURS / DOCS (AVEC DOSSIER)
         window.addLink = async () => {
             const name = document.getElementById('in-doc').value;
             const url = document.getElementById('in-url').value;
+            const folder = document.getElementById('in-doc-folder').value;
             if(name && url) {
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), { name, url });
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), { 
+                    name, 
+                    url, 
+                    folder: folder || "Autres" 
+                });
                 document.getElementById('in-doc').value = "";
                 document.getElementById('in-url').value = "";
             }
@@ -312,7 +325,12 @@
         }
 
         window.updateGrade = async (subject, val) => {
-            const note = parseFloat(val);
+            if (val === "") {
+                 const existing = userNotes[subject];
+                 if (existing) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_grades', existing.id));
+                 return;
+            }
+            const note = parseFloat(val.replace(',', '.'));
             if(isNaN(note)) return;
             const existing = userNotes[subject];
             if(existing) {
@@ -322,48 +340,57 @@
             }
         };
 
+        function truncateToTwoDecimals(num) {
+            if (isNaN(num) || num === null) return "--";
+            return (Math.floor((num + 0.00000000001) * 100) / 100).toFixed(2);
+        }
+
         function renderGradeBlocks() {
             const container = document.getElementById('list-blocs-template');
             container.innerHTML = "";
-            let totalWeighted = 0; let totalEcts = 0;
+            let globalWeightedSum = 0; let globalEctsSum = 0; let allBlocksValid = true;
             PROGRAM.forEach(bloc => {
-                let blocWeighted = 0; let blocEcts = 0;
+                let blocWeightedSum = 0; let blocEctsSum = 0;
                 let itemsHtml = bloc.items.map(item => {
                     const saved = userNotes[item.name];
                     const val = saved ? saved.note : "";
-                    if(saved) { blocWeighted += (saved.note * item.ects); blocEcts += item.ects; }
+                    if(saved) { 
+                        blocWeightedSum += (saved.note * item.ects); blocEctsSum += item.ects; 
+                        globalWeightedSum += (saved.note * item.ects); globalEctsSum += item.ects;
+                    }
                     return `<div class="flex justify-between items-center py-3 border-b border-slate-50 last:border-none">
                         <div class="flex-1">
                             <div class="text-[11px] font-bold text-slate-700 uppercase leading-tight">${item.name}</div>
                             <div class="text-[9px] text-slate-400 font-black">${item.ects} ECTS</div>
                         </div>
-                        <input type="number" step="0.1" value="${val}" onchange="window.updateGrade('${item.name}', this.value)" class="grade-input w-16 p-2 bg-slate-50 border-none rounded-xl text-center text-xs font-black outline-none transition-all">
+                        <input type="text" inputmode="decimal" value="${val}" onchange="window.updateGrade('${item.name}', this.value)" class="grade-input w-16 p-2 bg-slate-50 border-none rounded-xl text-center text-xs font-black outline-none transition-all">
                     </div>`;
                 }).join('');
-                const blocAvg = blocEcts > 0 ? (blocWeighted / blocEcts).toFixed(2) : "--";
-                if(blocEcts > 0) { totalWeighted += blocWeighted; totalEcts += blocEcts; }
+                const avgRaw = blocEctsSum > 0 ? (blocWeightedSum / blocEctsSum) : null;
+                const blocAvgDisplay = avgRaw !== null ? truncateToTwoDecimals(avgRaw) : "--";
+                if (avgRaw !== null && avgRaw < 10) allBlocksValid = false;
                 const div = document.createElement('div');
                 div.className = "bg-white rounded-[2rem] border border-slate-100 p-6 shadow-sm";
                 div.innerHTML = `<div class="flex justify-between items-start mb-4">
                         <div class="max-w-[70%]"><h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">${bloc.bloc}</h3></div>
-                        <div class="text-right">
-                            <div class="text-lg font-black ${blocAvg >= 10 ? 'text-emerald-500' : 'text-rose-500'}">${blocAvg}</div>
-                            <div class="text-[8px] font-bold text-slate-300 uppercase">Bloc Moy.</div>
-                        </div>
+                        <div class="text-right"><div class="text-lg font-black ${avgRaw >= 10 ? 'text-emerald-500' : 'text-rose-500'}">${blocAvgDisplay}</div><div class="text-[8px] font-bold text-slate-300 uppercase">Bloc Moy.</div></div>
                     </div><div class="space-y-1">${itemsHtml}</div>`;
                 container.appendChild(div);
             });
-            const totalGpa = totalEcts > 0 ? (totalWeighted / totalEcts).toFixed(2) : "--";
+            const globalAvgRaw = globalEctsSum > 0 ? (globalWeightedSum / globalEctsSum) : null;
+            const totalGpa = globalAvgRaw !== null ? truncateToTwoDecimals(globalAvgRaw) : "--";
             document.getElementById('total-gpa').innerText = totalGpa;
             const status = document.getElementById('total-status');
-            if(totalGpa !== "--") {
-                const ok = parseFloat(totalGpa) >= 10;
-                status.innerText = ok ? "Admis (Validé ti est un tiiigre)" : "Ajourné (Courage go dead les rattrapages !)";
-                status.className = `text-[9px] mt-2 font-bold px-2 py-1 rounded-lg inline-block uppercase ${ok ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`;
+            if(globalAvgRaw !== null) {
+                const gpaVal = parseFloat(totalGpa);
+                const isAdmitted = gpaVal >= 10 && allBlocksValid;
+                if (isAdmitted) { status.innerText = "Admis (Validé ti est un tiiigre)"; status.className = "text-[9px] mt-2 font-bold px-2 py-1 rounded-lg inline-block uppercase bg-emerald-500/10 text-emerald-500";
+                } else if (!allBlocksValid && globalAvgRaw >= 10) { status.innerText = "Moyenne OK mais Bloc éliminatoire !"; status.className = "text-[9px] mt-2 font-bold px-2 py-1 rounded-lg inline-block uppercase bg-amber-500/10 text-amber-500";
+                } else { status.innerText = "Ajourné (Courage go dead les rattrapages !)"; status.className = "text-[9px] mt-2 font-bold px-2 py-1 rounded-lg inline-block uppercase bg-rose-500/10 text-rose-500"; }
             }
         }
 
-        // --- PROJETS & TICKETS ---
+        // --- PROJETS ---
         window.addProject = async () => {
             const name = document.getElementById('in-proj-name').value;
             const desc = document.getElementById('in-proj-desc').value;
@@ -382,7 +409,7 @@
             await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', id), { status: next }, { merge: true });
         };
 
-        // --- NOTES & PLANNING ---
+        // --- PLANNING & NOTES ---
         window.addSession = async () => {
             const subject = document.getElementById('in-title').value;
             const date = document.getElementById('in-date').value;
@@ -439,20 +466,40 @@
                 lucide.createIcons();
             });
 
-            // COURS / DOCS (RESTAURÉ)
+            // COURS / DOCS (GROUPÉ PAR DOSSIERS)
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), s => {
-                const list = document.getElementById('list-docs'); list.innerHTML = "";
+                const list = document.getElementById('list-docs'); 
+                list.innerHTML = "";
+                
+                const groups = {};
                 s.docs.forEach(d => {
-                    const docData = d.data();
-                    const div = document.createElement('div'); 
-                    div.className = "bg-white p-4 rounded-2xl border flex justify-between items-center shadow-sm";
-                    div.innerHTML = `
-                        <div class="truncate flex-1 mr-4">
-                            <div class="font-bold text-xs uppercase truncate">${docData.name}</div>
-                            <a href="${docData.url}" target="_blank" class="text-indigo-600 text-[9px] font-black underline italic">VOIR LE COURS</a>
+                    const data = d.data();
+                    const folder = data.folder || "Autres";
+                    if(!groups[folder]) groups[folder] = [];
+                    groups[folder].push({id: d.id, ...data});
+                });
+
+                Object.keys(groups).sort().forEach(folderName => {
+                    const groupDiv = document.createElement('div');
+                    groupDiv.className = "space-y-2";
+                    
+                    const header = `<div class="flex items-center gap-2 px-2 mb-2">
+                        <div class="w-1.5 h-1.5 bg-indigo-300 rounded-full"></div>
+                        <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">${folderName}</h4>
+                    </div>`;
+                    
+                    let linksHtml = groups[folderName].map(item => `
+                        <div class="bg-white p-4 rounded-2xl border border-slate-100 flex justify-between items-center shadow-sm mb-2">
+                            <div class="truncate flex-1 mr-4">
+                                <div class="font-bold text-xs uppercase truncate text-slate-700">${item.name}</div>
+                                <a href="${item.url}" target="_blank" class="text-indigo-600 text-[9px] font-black underline italic">VOIR LE COURS</a>
+                            </div>
+                            <button onclick="window.del('docs', '${item.id}')" class="text-slate-200 hover:text-red-400 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div>
-                        <button onclick="window.del('docs', '${d.id}')" class="text-slate-200"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
-                    list.appendChild(div);
+                    `).join('');
+
+                    groupDiv.innerHTML = header + linksHtml;
+                    list.appendChild(groupDiv);
                 });
                 lucide.createIcons();
             });
