@@ -28,6 +28,9 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
         .grade-input:focus { background: white; border-color: #4f46e5; }
+        
+        /* Checkbox personnalisée pour les assignations */
+        .assign-check:checked + label { background-color: #4f46e5; color: white; border-color: #4f46e5; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
@@ -93,7 +96,7 @@
         <div id="view-planning" class="view-content hidden space-y-4">
             <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-3">
                 <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1">Nouvelle Révision</h3>
-                <input type="text" id="in-title" placeholder="Matière (ex: BioCell)" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none ring-indigo-500 focus:ring-2">
+                <input type="text" id="in-title" placeholder="Matière" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none ring-indigo-500 focus:ring-2">
                 <div class="flex gap-2">
                     <input type="date" id="in-date" class="flex-1 p-4 bg-slate-50 rounded-2xl text-sm border-none">
                     <input type="time" id="in-time" class="w-24 p-4 bg-slate-50 rounded-2xl text-sm border-none">
@@ -110,23 +113,42 @@
 
         <!-- VUE PROJETS -->
         <div id="view-projets" class="view-content hidden space-y-4">
-            <div class="bg-white p-5 rounded-3xl border border-slate-100 space-y-3">
+            <div class="bg-white p-5 rounded-3xl border border-slate-100 space-y-4">
                 <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1 text-center">Nouveau Ticket Projet</h3>
                 <input type="text" id="in-proj-name" placeholder="Nom du projet" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-emerald-500">
                 <input type="text" id="in-proj-desc" placeholder="Objectif" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-emerald-500">
-                <div class="grid grid-cols-2 gap-2">
-                    <select id="in-proj-status" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold border-none appearance-none text-slate-600">
+                
+                <div class="space-y-2">
+                    <p class="text-[9px] font-black text-slate-300 uppercase px-1">Assigner la Team :</p>
+                    <div class="flex flex-wrap gap-2" id="assign-selector">
+                        <div class="relative">
+                            <input type="checkbox" id="user-Matthieu" value="Matthieu" class="assign-check hidden">
+                            <label for="user-Matthieu" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">MAB</label>
+                        </div>
+                        <div class="relative">
+                            <input type="checkbox" id="user-Antoine" value="Antoine" class="assign-check hidden">
+                            <label for="user-Antoine" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">MC</label>
+                        </div>
+                        <div class="relative">
+                            <input type="checkbox" id="user-Vincent" value="Vincent" class="assign-check hidden">
+                            <label for="user-Vincent" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">VG</label>
+                        </div>
+                        <div class="relative">
+                            <input type="checkbox" id="user-Samia" value="Samia" class="assign-check hidden">
+                            <label for="user-Samia" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">SA</label>
+                        </div>
+                        <div class="relative">
+                            <input type="checkbox" id="user-Sofian" value="Sofian" class="assign-check hidden">
+                            <label for="user-Sofian" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">SSH</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-2">
+                    <select id="in-proj-status" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold border-none appearance-none text-slate-600">
                         <option value="À FAIRE">📝 À FAIRE</option>
                         <option value="EN COURS">🚀 EN COURS</option>
                         <option value="TERMINÉ">✅ TERMINÉ</option>
-                    </select>
-                    <select id="in-proj-assign" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold border-none appearance-none text-slate-600">
-                        <option value="">👤 NON ASSIGNÉ</option>
-                        <option value="Matthieu">Matthieu</option>
-                        <option value="Antoine">Antoine</option>
-                        <option value="Vincent">Vincent</option>
-                        <option value="Samia">Samia</option>
-                        <option value="Sofian">Sofian</option>
                     </select>
                 </div>
                 <button onclick="window.addProject()" class="w-full bg-emerald-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95">LANCER LE TICKET</button>
@@ -221,7 +243,6 @@
         const auth = getAuth(app);
         const appId = 'bu-buddy-v-crousty';
 
-        // PROGRAMME M2 PR1232 (PDF)
         const PROGRAM = [
             {
                 bloc: "Savoirs spécialisés en statistique (BC00004225)",
@@ -281,7 +302,6 @@
         };
 
         async function loadUserGrades() {
-            // On écoute les notes de l'utilisateur spécifique
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'user_grades'), s => {
                 userNotes = {};
                 s.docs.forEach(d => {
@@ -297,7 +317,6 @@
         window.updateGrade = async (subject, val) => {
             const note = parseFloat(val);
             if(isNaN(note)) return;
-            
             const existing = userNotes[subject];
             if(existing) {
                 await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_grades', existing.id), { note }, { merge: true });
@@ -313,94 +332,75 @@
         function renderGradeBlocks() {
             const container = document.getElementById('list-blocs-template');
             container.innerHTML = "";
-            
-            let totalWeighted = 0;
-            let totalEcts = 0;
-
+            let totalWeighted = 0; let totalEcts = 0;
             PROGRAM.forEach(bloc => {
-                let blocWeighted = 0;
-                let blocEcts = 0;
-                let blocFilledCount = 0;
-
+                let blocWeighted = 0; let blocEcts = 0;
                 const div = document.createElement('div');
                 div.className = "bg-white rounded-[2rem] border border-slate-100 p-6 shadow-sm";
-                
                 let itemsHtml = bloc.items.map(item => {
                     const saved = userNotes[item.name];
                     const val = saved ? saved.note : "";
-                    if(saved) {
-                        blocWeighted += (saved.note * item.ects);
-                        blocEcts += item.ects;
-                        blocFilledCount++;
-                    }
-                    return `
-                        <div class="flex justify-between items-center py-3 border-b border-slate-50 last:border-none">
+                    if(saved) { blocWeighted += (saved.note * item.ects); blocEcts += item.ects; }
+                    return `<div class="flex justify-between items-center py-3 border-b border-slate-50 last:border-none">
                             <div class="flex-1">
                                 <div class="text-[11px] font-bold text-slate-700 uppercase leading-tight">${item.name}</div>
                                 <div class="text-[9px] text-slate-400 font-black">COEFF ${item.ects} ECTS</div>
                             </div>
-                            <input type="number" step="0.1" min="0" max="20" placeholder="-- / 20" 
-                                value="${val}"
-                                onchange="window.updateGrade('${item.name}', this.value)"
-                                class="grade-input w-16 p-2 bg-slate-50 border-none rounded-xl text-center text-xs font-black outline-none transition-all">
-                        </div>
-                    `;
+                            <input type="number" step="0.1" value="${val}" onchange="window.updateGrade('${item.name}', this.value)" class="grade-input w-16 p-2 bg-slate-50 border-none rounded-xl text-center text-xs font-black outline-none transition-all">
+                        </div>`;
                 }).join('');
-
                 const blocAvg = blocEcts > 0 ? (blocWeighted / blocEcts).toFixed(2) : "--";
-                if(blocEcts > 0) {
-                    totalWeighted += blocWeighted;
-                    totalEcts += blocEcts;
-                }
-
+                if(blocEcts > 0) { totalWeighted += blocWeighted; totalEcts += blocEcts; }
                 const statusColor = blocAvg !== "--" ? (parseFloat(blocAvg) >= 10 ? 'text-emerald-500' : 'text-rose-500') : 'text-slate-300';
-
-                div.innerHTML = `
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest max-w-[70%]">${bloc.bloc}</h3>
-                        <div class="text-right">
-                            <div class="text-lg font-black ${statusColor}">${blocAvg}</div>
-                            <div class="text-[8px] font-bold text-slate-300 uppercase">Moyenne Bloc</div>
-                        </div>
-                    </div>
-                    <div class="space-y-1">${itemsHtml}</div>
-                `;
+                div.innerHTML = `<div class="flex justify-between items-start mb-4"><h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest max-w-[70%]">${bloc.bloc}</h3><div class="text-right"><div class="text-lg font-black ${statusColor}">${blocAvg}</div><div class="text-[8px] font-bold text-slate-300 uppercase">Moyenne Bloc</div></div></div><div class="space-y-1">${itemsHtml}</div>`;
                 container.appendChild(div);
             });
-
             const totalGpa = totalEcts > 0 ? (totalWeighted / totalEcts).toFixed(2) : "--";
             document.getElementById('total-gpa').innerText = totalGpa;
-            
             const totalStatus = document.getElementById('total-status');
             if(totalGpa !== "--") {
                 const gpa = parseFloat(totalGpa);
-                totalStatus.innerText = gpa >= 10 ? "Admis (Validé ti est un tigreee)" : "Ajourné (go dead les rattrapages)";
+                totalStatus.innerText = gpa >= 10 ? "Admis (Validé sah)" : "Ajourné (C'est chaud t'es sah?)";
                 totalStatus.className = `text-[9px] mt-2 font-bold px-2 py-1 rounded-lg inline-block uppercase ${gpa >= 10 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`;
             }
         }
 
-        // --- RESTE DU CODE (LOGIQUE EXISTANTE) ---
-        window.addSession = async () => {
-            const subject = document.getElementById('in-title').value;
-            const date = document.getElementById('in-date').value;
-            const time = document.getElementById('in-time').value;
-            if(subject && date) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'planning'), {subject, date, time});
-            document.getElementById('in-title').value = "";
-        };
-
+        // --- PROJETS ---
         window.addProject = async () => {
             const name = document.getElementById('in-proj-name').value;
             const desc = document.getElementById('in-proj-desc').value;
             const status = document.getElementById('in-proj-status').value;
-            const assignee = document.getElementById('in-proj-assign').value;
-            if(name) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), { name, desc, status, assignee, date: new Date().toISOString() });
-            ['in-proj-name', 'in-proj-desc'].forEach(i => document.getElementById(i).value = "");
+            
+            // Récupération de tous les membres cochés
+            const assignees = [];
+            document.querySelectorAll('.assign-check:checked').forEach(cb => {
+                assignees.push(cb.value);
+            });
+
+            if(name) {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), { 
+                    name, desc, status, assignees, date: new Date().toISOString() 
+                });
+                // Reset formulaire
+                document.getElementById('in-proj-name').value = "";
+                document.getElementById('in-proj-desc').value = "";
+                document.querySelectorAll('.assign-check').forEach(cb => cb.checked = false);
+            }
         };
 
         window.cycleProjectStatus = async (id, current) => {
             const flow = ['À FAIRE', 'EN COURS', 'TERMINÉ'];
             const next = flow[(flow.indexOf(current) + 1) % flow.length];
             await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', id), { status: next }, { merge: true });
+        };
+
+        // --- RESTE (PLANNING, NOTES) ---
+        window.addSession = async () => {
+            const subject = document.getElementById('in-title').value;
+            const date = document.getElementById('in-date').value;
+            const time = document.getElementById('in-time').value;
+            if(subject && date) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'planning'), {subject, date, time});
+            document.getElementById('in-title').value = "";
         };
 
         window.createNote = async () => {
@@ -437,7 +437,6 @@
         document.getElementById('nt-body').oninput = e => { save(); document.getElementById('nt-preview').innerHTML = marked.parse(e.target.value); };
 
         function initSync() {
-            // Planning Sync
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'planning'), s => {
                 const list = document.getElementById('list-planning'); list.innerHTML = "";
                 s.docs.map(d=>({id:d.id, ...d.data()})).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).forEach(ev => {
@@ -451,25 +450,32 @@
                 lucide.createIcons();
             });
 
-            // Projets Sync
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), s => {
                 const list = document.getElementById('list-projets'); list.innerHTML = "";
                 s.docs.forEach(d => {
                     const p = d.data();
                     const status = p.status || 'À FAIRE';
+                    const assignees = p.assignees || [];
                     const colors = { 'À FAIRE': 'bg-slate-100 text-slate-600', 'EN COURS': 'bg-indigo-100 text-indigo-700', 'TERMINÉ': 'bg-emerald-100 text-emerald-700' };
-                    const initial = p.assignee ? p.assignee.charAt(0) : '?';
+                    
+                    // Génération des cercles d'initiales
+                    const initialCircles = assignees.map(name => {
+                        return `<div class="w-7 h-7 bg-slate-900 text-white rounded-full flex items-center justify-center text-[10px] font-black uppercase ring-2 ring-white -ml-2 first:ml-0" title="${name}">${name.charAt(0)}</div>`;
+                    }).join('');
+
                     const div = document.createElement('div'); div.className = "bg-white p-5 rounded-3xl border border-slate-100 shadow-sm";
                     div.innerHTML = `
-                        <div class="flex justify-between items-start mb-2">
-                            <div class="flex items-center gap-2">
-                                <div class="w-7 h-7 bg-slate-900 text-white rounded-full flex items-center justify-center text-[10px] font-black uppercase ring-2 ring-slate-100" title="${p.assignee || 'Non assigné'}">${initial}</div>
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="flex">
+                                    ${initialCircles || '<div class="w-7 h-7 bg-slate-100 text-slate-300 rounded-full flex items-center justify-center text-[10px] font-black">?</div>'}
+                                </div>
                                 <div class="font-black text-sm uppercase text-slate-800">${p.name}</div>
                             </div>
                             <button onclick="window.del('projects', '${d.id}')" class="text-slate-200"><i data-lucide="x-circle" class="w-4 h-4"></i></button>
                         </div>
-                        <p class="text-[10px] text-slate-400 font-bold px-9 mb-3">${p.assignee ? 'Assigné à '+p.assignee : 'Libre'}</p>
-                        <div class="flex justify-between items-center pl-9">
+                        <p class="text-[10px] text-slate-400 font-bold mb-4">${assignees.length > 0 ? 'Team : ' + assignees.join(', ') : 'Libre (Personne t\'es sah?)'}</p>
+                        <div class="flex justify-between items-center">
                             <button onclick="window.cycleProjectStatus('${d.id}', '${status}')" class="px-3 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest ${colors[status]} active:scale-95 transition-transform">${status}</button>
                             <div class="text-[8px] font-bold text-slate-200 uppercase">${new Date(p.date).toLocaleDateString()}</div>
                         </div>`;
@@ -478,7 +484,6 @@
                 lucide.createIcons();
             });
 
-            // Notes Sync
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'notes'), s => {
                 const list = document.getElementById('list-notes'); list.innerHTML = "";
                 s.docs.forEach(d => {
