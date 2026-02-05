@@ -24,6 +24,14 @@
         .view-content { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .crousty-card { background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); }
+        
+        /* Classe pour limiter l'aperçu à 2 lignes */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;  
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
@@ -106,7 +114,7 @@
             <div id="list-planning" class="space-y-3"></div>
         </div>
 
-        <!-- VUE COURS (DOCS) -->
+        <!-- VUE COURS -->
         <div id="view-docs" class="view-content hidden space-y-4">
             <div class="bg-white p-5 rounded-3xl border border-slate-100 space-y-3">
                 <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1">Partager un Cours</h3>
@@ -121,7 +129,7 @@
         <div id="view-projets" class="view-content hidden space-y-4">
             <div class="bg-white p-5 rounded-3xl border border-slate-100 space-y-3">
                 <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1">Nouveau Projet Groupe</h3>
-                <input type="text" id="in-proj-name" placeholder="Nom du projet (ex:Cours Tillilier)" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none">
+                <input type="text" id="in-proj-name" placeholder="Nom du projet" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none">
                 <input type="text" id="in-proj-desc" placeholder="Objectif ou tâche" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none">
                 <button onclick="window.addProject()" class="w-full bg-emerald-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95">CRÉER LE PROJET</button>
             </div>
@@ -156,15 +164,14 @@
         import { getFirestore, collection, doc, addDoc, setDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // CONFIGURATION SAMIA 
+        // CONFIGURATION FIREBASE
         const firebaseConfig = {
           apiKey: "AIzaSyBIHjJKZj_Bqw1XjHfJo4X3GWrA6GNLU8I",
           authDomain: "bu-buddy-4bafe.firebaseapp.com",
           projectId: "bu-buddy-4bafe",
           storageBucket: "bu-buddy-4bafe.firebasestorage.app",
           messagingSenderId: "1083707246516",
-          appId: "1:1083707246516:web:c6c78c199c7eb9323554e1",
-          measurementId: "G-P0HPQ7EGBY"
+          appId: "1:1083707246516:web:c6c78c199c7eb9323554e1"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -182,7 +189,6 @@
             }
         });
 
-        // Handlers Firestore
         window.addSession = async () => {
             const subject = document.getElementById('in-title').value;
             const date = document.getElementById('in-date').value;
@@ -227,6 +233,8 @@
         };
 
         window.closeNote = () => { currentId = null; document.getElementById('editor-modal').classList.add('hidden'); };
+        
+        // Message personnalisé pour la suppression
         window.del = async (c, i) => { if(confirm("T'es un ouf tu veux S=supprimer définitivement t'es sah?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', c, i)); };
 
         const save = () => {
@@ -246,9 +254,7 @@
                 s.docs.map(d=>({id:d.id, ...d.data()})).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).forEach(ev => {
                     const div = document.createElement('div'); div.className = "bg-white p-4 rounded-2xl flex justify-between items-center border border-slate-100 shadow-sm";
                     div.innerHTML = `<div class="flex gap-4 items-center">
-                        <div class="bg-indigo-50 text-indigo-700 w-10 h-10 rounded-xl flex flex-col items-center justify-center font-black text-[10px]">
-                            <span>${new Date(ev.date).getDate()}</span>
-                        </div>
+                        <div class="bg-indigo-50 text-indigo-700 w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs"><span>${new Date(ev.date).getDate()}</span></div>
                         <div><div class="font-bold text-xs uppercase">${ev.subject}</div><div class="text-[9px] text-slate-400 font-bold">${ev.time}</div></div>
                     </div><button onclick="window.del('planning', '${ev.id}')" class="text-slate-200"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
                     list.appendChild(div);
@@ -286,13 +292,26 @@
                 lucide.createIcons();
             });
 
-            // Notes Sync
+            // Notes Sync avec Aperçu et Style Restauré
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'notes'), s => {
                 const list = document.getElementById('list-notes'); list.innerHTML = "";
                 s.docs.forEach(d => {
-                    const div = document.createElement('div'); div.className = "bg-white p-5 rounded-3xl border border-slate-100 flex justify-between items-center shadow-sm active:bg-slate-50";
-                    div.innerHTML = `<div onclick="window.openNote('${d.id}')" class="flex-1 font-bold text-sm cursor-pointer uppercase tracking-tighter truncate pr-4">${d.data().title || "FICHE SANS TITRE"}</div>
-                    <button onclick="window.del('notes', '${d.id}')" class="text-slate-200 ml-4"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
+                    const data = d.data();
+                    const div = document.createElement('div'); 
+                    div.className = "bg-white p-5 rounded-3xl border border-slate-100 flex justify-between items-center shadow-sm active:bg-slate-50 transition-colors";
+                    div.innerHTML = `
+                        <div onclick="window.openNote('${d.id}')" class="flex-1 cursor-pointer pr-4 overflow-hidden">
+                            <div class="font-bold text-sm uppercase tracking-tighter truncate mb-1 text-slate-800">
+                                ${data.title || "FICHE SANS TITRE"}
+                            </div>
+                            <div class="text-[10px] text-slate-400 font-medium line-clamp-2 leading-relaxed">
+                                ${data.content || "Aucun contenu crousty..."}
+                            </div>
+                        </div>
+                        <button onclick="window.del('notes', '${d.id}')" class="text-slate-200 ml-4 shrink-0 hover:text-red-400 transition-colors">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    `;
                     list.appendChild(div);
                 });
                 lucide.createIcons();
