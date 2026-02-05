@@ -32,6 +32,9 @@
         .bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 4px; }
         .bar-bg { width: 100%; background: rgba(255,255,255,0.05); border-radius: 4px 4px 0 0; height: 100%; position: relative; display: flex; align-items: flex-end; overflow: hidden; }
         .bar-fill { width: 100%; border-radius: 2px 2px 0 0; transition: height 1s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        /* Boutons de réglage timer */
+        .timer-opt-active { background-color: #4f46e5 !important; color: white !important; border-color: #4f46e5 !important; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
@@ -66,7 +69,7 @@
         
         <!-- VUE ACCUEIL -->
         <div id="view-home" class="view-content space-y-6">
-            <!-- COUNTDOWN -->
+            <!-- COUNTDOWN CC -->
             <div id="countdown-banner" class="bg-slate-900 rounded-[2rem] p-6 text-white flex items-center justify-between overflow-hidden relative cursor-pointer active:scale-[0.98] transition-all shadow-xl">
                 <div class="relative z-10">
                     <p class="text-[10px] font-black uppercase text-indigo-400 tracking-widest mb-1 flex items-center gap-1.5">
@@ -89,7 +92,7 @@
                     <div class="bg-white text-indigo-600 p-2 rounded-xl"><i data-lucide="timer"></i></div>
                     <div>
                         <div class="text-xs font-black uppercase">Timer de concentration</div>
-                        <div class="text-[10px] opacity-70 font-bold">Méthode Pomodoro</div>
+                        <div class="text-[10px] opacity-70 font-bold">Mode Pomodoro réglable</div>
                     </div>
                 </button>
             </div>
@@ -120,13 +123,13 @@
             <div id="list-planning" class="space-y-4"></div>
         </div>
 
-        <!-- VUE COURS (AVEC NOUVEAUX DOSSIERS) -->
+        <!-- VUE COURS -->
         <div id="view-docs" class="view-content hidden space-y-4">
             <div class="bg-white p-5 rounded-3xl border border-slate-100 space-y-3 shadow-sm">
                 <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1 text-center">Ajouter un cours</h3>
                 <input type="text" id="in-doc" placeholder="Nom du cours" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-indigo-500">
                 <input type="text" id="in-url" placeholder="Lien Drive" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-indigo-500">
-                <select id="in-doc-folder" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold border-none appearance-none text-slate-600">
+                <select id="in-doc-folder" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold border-none appearance-none">
                     <option value="Agnes">📁 Agnes</option>
                     <option value="Gildas">📁 Gildas</option>
                     <option value="Tillier">📁 Tillier</option>
@@ -236,15 +239,30 @@
         </div>
     </div>
 
-    <!-- TIMER MODAL -->
+    <!-- TIMER MODAL (RÉGLABLE) -->
     <div id="timer-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[150] flex items-center justify-center p-6">
         <div class="bg-white w-full max-w-sm rounded-[3rem] p-8 text-center space-y-8 shadow-2xl">
             <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Timer Focus</h3>
+            
+            <!-- AFFICHAGE TEMPS -->
             <div id="timer-display" class="text-7xl font-black text-indigo-600 tracking-tighter">25:00</div>
+            
+            <!-- RÉGLAGE DU TEMPS -->
+            <div class="space-y-3">
+                <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest">Définit ton temps (min) :</p>
+                <div class="flex justify-center gap-2">
+                    <button class="timer-opt px-3 py-2 bg-slate-50 rounded-xl text-[10px] font-black border border-slate-100 transition-all" data-mins="15">15</button>
+                    <button class="timer-opt timer-opt-active px-3 py-2 bg-slate-50 rounded-xl text-[10px] font-black border border-slate-100 transition-all" data-mins="25">25</button>
+                    <button class="timer-opt px-3 py-2 bg-slate-50 rounded-xl text-[10px] font-black border border-slate-100 transition-all" data-mins="45">45</button>
+                    <button class="timer-opt px-3 py-2 bg-slate-50 rounded-xl text-[10px] font-black border border-slate-100 transition-all" data-mins="60">60</button>
+                </div>
+            </div>
+
             <div class="flex gap-4 justify-center">
                 <button id="btn-timer-play" class="bg-indigo-600 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-all"><i data-lucide="play"></i></button>
                 <button id="btn-timer-reset" class="bg-slate-100 text-slate-400 w-16 h-16 rounded-full flex items-center justify-center active:scale-90 transition-all"><i data-lucide="rotate-ccw"></i></button>
             </div>
+            
             <button id="btn-timer-close" class="text-[10px] font-black uppercase text-slate-300 tracking-widest pt-4">Fermer</button>
         </div>
     </div>
@@ -293,6 +311,7 @@
         let currentNoteId = null;
         let currentGradeUser = ""; 
         let userNotes = {};
+        let setMinutes = 25;
         let timerSeconds = 25 * 60;
         let timerInterval = null;
 
@@ -346,19 +365,32 @@
             if(val) { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'exams'), { date: val }); document.getElementById('date-modal').classList.add('hidden'); }
         });
 
-        // --- TIMER FOCUS ---
+        // --- TIMER FOCUS (RÉGLABLE) ---
         const updateTimerDisplay = () => {
             const m = Math.floor(timerSeconds / 60); const s = timerSeconds % 60;
             document.getElementById('timer-display').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
         };
+        
+        // Sélection du temps
+        document.querySelectorAll('.timer-opt').forEach(btn => {
+            btn.onclick = () => {
+                if(timerInterval) return; // Empêcher changement si ça tourne
+                document.querySelectorAll('.timer-opt').forEach(b => b.classList.remove('timer-opt-active'));
+                btn.classList.add('timer-opt-active');
+                setMinutes = parseInt(btn.dataset.mins);
+                timerSeconds = setMinutes * 60;
+                updateTimerDisplay();
+            };
+        });
+
         document.getElementById('btn-timer-open-main').onclick = () => document.getElementById('timer-modal').classList.remove('hidden');
         document.getElementById('btn-timer-close').onclick = () => document.getElementById('timer-modal').classList.add('hidden');
         document.getElementById('btn-timer-play').onclick = () => {
             if(timerInterval) { clearInterval(timerInterval); timerInterval = null; document.getElementById('btn-timer-play').innerHTML = '<i data-lucide="play"></i>'; }
-            else { timerInterval = setInterval(() => { if(timerSeconds <= 0) { clearInterval(timerInterval); timerInterval = null; return; } timerSeconds--; updateTimerDisplay(); }, 1000); document.getElementById('btn-timer-play').innerHTML = '<i data-lucide="pause"></i>'; }
+            else { timerInterval = setInterval(() => { if(timerSeconds <= 0) { clearInterval(timerInterval); timerInterval = null; alert("Boulot fini sah !"); return; } timerSeconds--; updateTimerDisplay(); }, 1000); document.getElementById('btn-timer-play').innerHTML = '<i data-lucide="pause"></i>'; }
             lucide.createIcons();
         };
-        document.getElementById('btn-timer-reset').onclick = () => { timerSeconds = 25 * 60; updateTimerDisplay(); if(timerInterval) { clearInterval(timerInterval); timerInterval = null; document.getElementById('btn-timer-play').innerHTML = '<i data-lucide="play"></i>'; lucide.createIcons(); } };
+        document.getElementById('btn-timer-reset').onclick = () => { timerSeconds = setMinutes * 60; updateTimerDisplay(); if(timerInterval) { clearInterval(timerInterval); timerInterval = null; document.getElementById('btn-timer-play').innerHTML = '<i data-lucide="play"></i>'; lucide.createIcons(); } };
 
         // --- MOYENNES (TRONCATURE + MESSAGES PERSO) ---
         const truncate2 = (num) => { if(isNaN(num) || num === null) return "--"; return (Math.floor((num + 1e-11) * 100) / 100).toFixed(2); };
@@ -390,8 +422,8 @@
                 
                 // CHART BARS
                 const barHeight = avg !== null ? (avg / 20) * 100 : 0;
-                const barColor = avg >= 10 ? 'bg-indigo-500' : (avg === null ? 'bg-white/10' : 'bg-rose-500');
-                chart.innerHTML += `<div class="bar-wrapper group relative"><div class="absolute -top-7 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-white text-slate-900 text-[9px] font-black px-1.5 py-0.5 rounded transition-opacity pointer-events-none z-20">${avg !== null ? truncate2(avg) : '--'}</div><div class="bar-bg"><div class="bar-fill ${barColor}" style="height: ${barHeight}%"></div></div><div class="text-[6px] font-black text-slate-500 uppercase truncate w-full text-center mt-1">${bloc.short}</div></div>`;
+                const barColorClass = avg >= 10 ? 'bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.3)]' : (avg === null ? 'bg-white/10' : 'bg-rose-500');
+                chart.innerHTML += `<div class="bar-wrapper group relative"><div class="absolute -top-7 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-white text-slate-900 text-[9px] font-black px-1.5 py-0.5 rounded transition-opacity pointer-events-none z-20">${avg !== null ? truncate2(avg) : '--'}</div><div class="bar-bg"><div class="bar-fill ${barColorClass}" style="height: ${barHeight}%"></div></div><div class="text-[6px] font-black text-slate-500 uppercase truncate w-full text-center mt-1">${bloc.short}</div></div>`;
 
                 const div = document.createElement('div'); div.className = "bg-white rounded-3xl border border-slate-100 p-6 shadow-sm";
                 div.innerHTML = `<div class="flex justify-between items-start mb-4"><h3 class="text-[9px] font-black text-slate-300 uppercase tracking-widest max-w-[60%]">${bloc.bloc}</h3><div class="text-right text-lg font-black ${avg >= 10 ? 'text-indigo-600' : 'text-rose-500'}">${avg !== null ? truncate2(avg) : "--"}</div></div><div class="space-y-1">${html}</div>`;
@@ -434,9 +466,9 @@
         };
 
         document.getElementById('btn-submit-project').onclick = async () => {
-            const n = document.getElementById('in-proj-name').value; const d = document.getElementById('in-proj-desc').value; const s = document.getElementById('in-proj-status').value;
+            const n = document.getElementById('in-proj-name').value; const desc = document.getElementById('in-proj-desc').value; const stat = document.getElementById('in-proj-status').value;
             const ass = Array.from(document.querySelectorAll('.assign-check:checked')).map(cb => cb.value);
-            if(n) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), { name: n, desc: d, status: s, assignees: ass, date: new Date().toISOString() }); document.getElementById('in-proj-name').value = ""; document.querySelectorAll('.assign-check').forEach(cb => cb.checked = false); }
+            if(n) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), { name: n, desc: desc, status: stat, assignees: ass, date: new Date().toISOString() }); document.getElementById('in-proj-name').value = ""; document.querySelectorAll('.assign-check').forEach(cb => cb.checked = false); }
         };
 
         document.getElementById('btn-submit-link').onclick = async () => {
