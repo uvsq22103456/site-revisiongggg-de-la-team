@@ -18,7 +18,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
         
-        :root { --app-bg: #f8fafc; --card-bg: #ffffff; --text-main: #0f172a; --border-color: #f1f5f9; }
+        :root { --app-bg: #f8fafc; --card-bg: #ffffff; --text-main: #0f172a; --border-color: #e2e8f0; }
         .dark-mode { --app-bg: #020617; --card-bg: #0f172a; --text-main: #f1f5f9; --border-color: #1e293b; }
 
         body { 
@@ -30,7 +30,7 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
         
-        .bg-card { background-color: var(--card-bg); border-color: var(--border-color); }
+        .bg-card { background-color: var(--card-bg); border-color: var(--border-color); border-width: 1px; }
         .tab-active { color: #4f46e5; border-bottom: 3px solid #4f46e5; }
         .view-content { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -45,6 +45,10 @@
         .bar-bg { width: 100%; background: rgba(255,255,255,0.05); border-radius: 4px 4px 0 0; height: 100%; position: relative; display: flex; align-items: flex-end; overflow: hidden; }
         .bar-fill { width: 100%; border-radius: 2px 2px 0 0; transition: height 1s cubic-bezier(0.4, 0, 0.2, 1); }
         .timer-opt-active { background-color: #4f46e5 !important; color: white !important; border-color: #4f46e5 !important; }
+        
+        /* Correction case Billy */
+        #chooser-count { background-color: white !important; color: #1e40af !important; border: 2px solid #3b82f6 !important; }
+        .dark-mode #chooser-count { background-color: #0f172a !important; color: white !important; border: 2px solid #3b82f6 !important; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -56,12 +60,12 @@
                 <span class="text-indigo-600 italic">BU</span>-BUDDY
             </h1>
             <div class="flex items-center gap-4">
-                <button id="theme-toggle" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 transition-all active:scale-90">
+                <button id="theme-toggle" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 transition-all active:scale-90">
                     <i data-lucide="moon" id="theme-icon"></i>
                 </button>
-                <div id="status-chip" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-full">
+                <div id="status-chip" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700">
                     <div id="status-dot" class="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>
-                    <span id="status-text" class="text-[9px] font-black text-slate-500 uppercase tracking-widest text-center">Connexion... Patience les apagnans...</span>
+                    <span id="status-text" class="text-[9px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest text-center">Synchro... les apagnans...</span>
                 </div>
             </div>
         </div>
@@ -84,49 +88,75 @@
         
         <!-- VUE ACCUEIL -->
         <div id="view-home" class="view-content space-y-6">
-            <!-- COUNTDOWN AVEC TEXTE PERSONNALISÉ -->
+            <!-- COUNTDOWN CC -->
             <div id="countdown-banner" class="bg-slate-900 rounded-[2rem] p-6 text-white flex items-center justify-between overflow-hidden relative cursor-pointer active:scale-[0.98] transition-all shadow-xl">
                 <div class="relative z-10">
                     <p class="text-[10px] font-black uppercase text-indigo-400 tracking-widest mb-1 flex items-center gap-1.5">
-                        Prochain CC <i data-lucide="edit-3" class="w-2.5 h-2.5"></i>
+                        Prochain CC <i data-lucide="edit-3" class="w-2.5 h-2.5 text-indigo-400"></i>
                     </p>
                     <div class="flex items-baseline gap-2">
                         <span id="countdown-days" class="text-4xl font-black">--</span>
-                        <span class="text-xs font-bold text-slate-400 uppercase">jours restants avant le prochain CC</span>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-tight">jours restants avant le prochain CC</span>
                     </div>
                 </div>
                 <i data-lucide="calendar-clock" class="w-16 h-16 text-indigo-500/20 absolute -right-2 rotate-12"></i>
             </div>
 
             <div class="crousty-card p-8 rounded-[2.5rem] text-white shadow-2xl shadow-indigo-200">
-                <h2 class="text-2xl font-black mb-2 leading-tight">Sabaidi les Billy Boys et les Billy Girls🚀</h2>
+                <h2 class="text-2xl font-black mb-2 leading-tight text-white">Sabaidi les Billy Boys et les Billy Girls🚀</h2>
                 <p class="text-indigo-100 text-sm font-medium leading-relaxed">
                     Matt, MAB, Soso, Vince, Sami : Votre espace pour organiser nos <span class="text-white font-bold">crousty révisions</span> et tes <span class="text-white font-bold">crousty cours</span>.
                 </p>
                 <button id="btn-timer-open-main" class="mt-6 bg-white/20 hover:bg-white/30 p-4 rounded-2xl flex items-center gap-3 transition-all active:scale-95 w-full text-left">
                     <div class="bg-white text-indigo-600 p-2 rounded-xl"><i data-lucide="timer"></i></div>
                     <div>
-                        <div class="text-xs font-black uppercase">Timer de concentration</div>
-                        <div class="text-[10px] opacity-70 font-bold">Mode Pomodoro réglable</div>
+                        <div class="text-xs font-black uppercase text-white">Timer de concentration</div>
+                        <div class="text-[10px] opacity-90 font-bold text-white text-xs">Mode Pomodoro réglable</div>
                     </div>
                 </button>
             </div>
 
+            <!-- CHOOSER FAIT MAISON -->
+            <div class="bg-card rounded-[2rem] p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-5">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-[10px] font-black uppercase text-indigo-600 dark:text-indigo-400 tracking-widest text-slate-700 dark:text-slate-300">Chooser fait maison (Groupes)</h3>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[9px] font-black text-slate-500 uppercase">Billys :</span>
+                        <input type="number" id="chooser-count" value="2" min="1" max="5" class="w-12 text-center text-sm font-black rounded-lg py-1 outline-none shadow-sm transition-all">
+                    </div>
+                </div>
+                <div id="chooser-result" class="min-h-[70px] flex flex-wrap justify-center gap-2 items-center bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 border border-dashed border-indigo-200 dark:border-slate-700">
+                    <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 italic uppercase">tirage au soooort</p>
+                </div>
+                <button id="btn-chooser-run" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-black text-xs shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 uppercase tracking-widest">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-white"></i> Générer le groupe
+                </button>
+            </div>
+
             <div class="grid grid-cols-2 gap-4">
-                <button id="quick-planning" class="bg-card p-6 rounded-[2rem] border shadow-sm text-center space-y-2 active:scale-95 transition-all">
-                    <div class="bg-amber-100 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto text-amber-600"><i data-lucide="calendar"></i></div>
+                <button id="quick-planning" class="bg-card p-6 rounded-[2rem] border shadow-sm text-center space-y-2 active:scale-95 transition-all text-slate-800 dark:text-slate-200">
+                    <div class="w-12 h-8 flex items-center justify-center mx-auto text-amber-600"><i data-lucide="calendar"></i></div>
                     <span class="block text-xs font-bold uppercase tracking-tighter">Révisions</span>
                 </button>
-                <button id="quick-grades" class="bg-card p-6 rounded-[2rem] border shadow-sm text-center space-y-2 active:scale-95 transition-all">
-                    <div class="bg-blue-100 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto text-blue-600"><i data-lucide="calculator"></i></div>
+                <button id="quick-grades" class="bg-card p-6 rounded-[2rem] border shadow-sm text-center space-y-2 active:scale-95 transition-all text-slate-800 dark:text-slate-200">
+                    <div class="w-12 h-8 flex items-center justify-center mx-auto text-blue-600"><i data-lucide="calculator"></i></div>
                     <span class="block text-xs font-bold uppercase tracking-tighter">Moyennes</span>
                 </button>
                 
-                <!-- BOUTON AFFLUENCES DIRECT BU ST QUENTIN RÉSERVATION -->
-                <a href="https://affluences.com/sites/bu-st-quentin/reservation?type=575" target="_blank" class="bg-card p-6 rounded-[2rem] border shadow-sm text-center space-y-2 active:scale-95 transition-all col-span-2 flex flex-col items-center justify-center">
-                    <div class="bg-emerald-100 w-12 h-12 rounded-2xl flex items-center justify-center text-emerald-600 mb-1"><i data-lucide="map-pin"></i></div>
-                    <span class="block text-xs font-bold uppercase tracking-tighter">Réserver une salle (BU St-Quentin)</span>
-                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Lien direct Affluences</span>
+                <a href="https://edt.uvsq.fr/cal?vt=agendaWeek&dt=2026-02-05&et=group&fid0=MYISA2_23" target="_blank" class="bg-card p-6 rounded-[2rem] border shadow-sm text-center space-y-2 active:scale-95 transition-all flex flex-col items-center justify-center">
+                    <div class="w-12 h-8 flex items-center justify-center text-indigo-600"><i data-lucide="clock"></i></div>
+                    <span class="block text-xs font-bold uppercase tracking-tighter text-indigo-700 dark:text-indigo-300">Emploi du temps</span>
+                </a>
+
+                <button id="btn-food-open" class="bg-card p-6 rounded-[2rem] border shadow-sm text-center space-y-2 active:scale-95 transition-all flex flex-col items-center justify-center">
+                    <div class="w-12 h-8 flex items-center justify-center text-orange-600"><i data-lucide="utensils"></i></div>
+                    <span class="block text-xs font-bold uppercase tracking-tighter text-orange-700 dark:text-orange-300">On mange où gros ?</span>
+                </button>
+
+                <a href="https://affluences.com/sites/bu-st-quentin/reservation?type=575" target="_blank" class="bg-card p-6 rounded-[2rem] border shadow-sm text-center space-y-2 active:scale-95 transition-all flex flex-col items-center justify-center col-span-2">
+                    <div class="w-12 h-8 flex items-center justify-center text-emerald-600"><i data-lucide="map-pin"></i></div>
+                    <span class="block text-xs font-bold uppercase tracking-tighter text-emerald-700 dark:text-emerald-300">Réserver une salle (BU St-Quentin)</span>
+                    <span class="text-[9px] font-black text-emerald-600 dark:text-emerald-400/60 uppercase tracking-widest">Accès direct Affluences</span>
                 </a>
             </div>
         </div>
@@ -134,24 +164,24 @@
         <!-- VUE PLANNING -->
         <div id="view-planning" class="view-content hidden space-y-4">
             <div class="bg-card p-5 rounded-3xl border shadow-sm space-y-3">
-                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1">Nouvelle Session</h3>
-                <input type="text" id="in-title" placeholder="Matière" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none outline-none ring-indigo-500 focus:ring-2">
+                <h3 class="text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest px-1">Nouvelle Session</h3>
+                <input type="text" id="in-title" placeholder="Matière" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none outline-none ring-indigo-500 focus:ring-2 text-slate-800 dark:text-white">
                 <div class="flex gap-2">
-                    <input type="date" id="in-date" class="flex-1 p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none">
-                    <input type="time" id="in-time" class="w-24 p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none">
+                    <input type="date" id="in-date" class="flex-1 p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none text-slate-800 dark:text-white">
+                    <input type="time" id="in-time" class="w-24 p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none text-slate-800 dark:text-white">
                 </div>
                 <button id="btn-submit-session" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95">AJOUTER</button>
             </div>
             <div id="list-planning" class="space-y-4"></div>
         </div>
 
-        <!-- VUE COURS AVEC DOSSIERS PROFS -->
+        <!-- VUE COURS -->
         <div id="view-docs" class="view-content hidden space-y-4">
             <div class="bg-card p-5 rounded-3xl border shadow-sm space-y-3">
-                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1 text-center">Ajouter un cours</h3>
-                <input type="text" id="in-doc" placeholder="Nom du cours" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-indigo-500">
-                <input type="text" id="in-url" placeholder="Lien Drive" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-indigo-500">
-                <select id="in-doc-folder" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-xs font-bold border-none appearance-none">
+                <h3 class="text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest px-1 text-center">Ajouter un cours</h3>
+                <input type="text" id="in-doc" placeholder="Nom du cours" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-indigo-500 text-slate-800 dark:text-white">
+                <input type="text" id="in-url" placeholder="Lien Drive" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-indigo-500 text-slate-800 dark:text-white">
+                <select id="in-doc-folder" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-xs font-bold border-none appearance-none text-slate-800 dark:text-white">
                     <option value="Agnes">📁 Agnes</option>
                     <option value="Gildas">📁 Gildas</option>
                     <option value="Tillier">📁 Tillier</option>
@@ -159,20 +189,19 @@
                     <option value="Marianne">📁 Marianne</option>
                     <option value="Autres">📁 Divers</option>
                 </select>
-                <button id="btn-submit-link" class="w-full bg-indigo-900 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95">PARTAGER LE LIEN</button>
+                <button id="btn-submit-link" class="w-full bg-indigo-900 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95 uppercase tracking-widest">Partager le lien</button>
             </div>
             <div id="list-docs" class="space-y-4"></div>
         </div>
 
         <!-- VUE PROJETS -->
         <div id="view-projets" class="view-content hidden space-y-4">
-            <div class="bg-card p-5 rounded-3xl border shadow-sm space-y-4">
-                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1 text-center">Nouveau Ticket Projet</h3>
-                <input type="text" id="in-proj-name" placeholder="Nom du projet" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-emerald-500">
-                <input type="text" id="in-proj-desc" placeholder="Objectif" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-emerald-500">
-                
+            <div class="bg-card p-5 rounded-3xl border shadow-sm space-y-4 text-slate-700 dark:text-slate-300">
+                <h3 class="text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest px-1 text-center">Nouveau Ticket Projet</h3>
+                <input type="text" id="in-proj-name" placeholder="Nom du projet" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-emerald-500 text-slate-800 dark:text-white">
+                <input type="text" id="in-proj-desc" placeholder="Objectif" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-emerald-500 text-slate-800 dark:text-white">
                 <div class="space-y-2">
-                    <p class="text-[9px] font-black text-slate-300 uppercase px-1">Assigner la Team :</p>
+                    <p class="text-[9px] font-black text-slate-400 uppercase px-1">Assigner la Team :</p>
                     <div class="flex flex-wrap gap-2" id="assign-selector">
                         <div class="relative"><input type="checkbox" id="user-Matt" value="Matt" class="assign-check hidden"><label for="user-Matt" class="px-3 py-2 bg-slate-50 dark:bg-slate-800 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">Matt</label></div>
                         <div class="relative"><input type="checkbox" id="user-MAB" value="MAB" class="assign-check hidden"><label for="user-MAB" class="px-3 py-2 bg-slate-50 dark:bg-slate-800 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">MAB</label></div>
@@ -181,28 +210,19 @@
                         <div class="relative"><input type="checkbox" id="user-Soso" value="Soso" class="assign-check hidden"><label for="user-Soso" class="px-3 py-2 bg-slate-50 dark:bg-slate-800 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">Soso</label></div>
                     </div>
                 </div>
-
-                <select id="in-proj-status" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-xs font-bold border-none appearance-none">
+                <select id="in-proj-status" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-xs font-bold border-none appearance-none text-slate-800 dark:text-white">
                     <option value="À FAIRE">📝 À FAIRE</option>
                     <option value="EN COURS">🚀 EN COURS</option>
                     <option value="TERMINÉ">✅ TERMINÉ</option>
                 </select>
-                <button id="btn-submit-project" class="w-full bg-emerald-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95">LANCER LE TICKET</button>
+                <button id="btn-submit-project" class="w-full bg-emerald-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95 uppercase tracking-widest">Lancer le ticket</button>
             </div>
             <div id="list-projets" class="grid gap-3"></div>
         </div>
 
-        <!-- VUE NOTES -->
-        <div id="view-notes" class="view-content hidden space-y-4">
-            <button id="btn-new-note" class="w-full p-8 bg-card border-2 border-dashed border-indigo-200 rounded-[2.5rem] text-indigo-600 font-extrabold flex items-center justify-center gap-2 active:bg-indigo-50">
-                <i data-lucide="plus-circle"></i> NOUVELLE FICHE DE NOTE 
-            </button>
-            <div id="list-notes" class="grid gap-3"></div>
-        </div>
-
-        <!-- VUE MOYENNES AVEC MESSAGES PERSO -->
+        <!-- VUE MOYENNES -->
         <div id="view-grades" class="view-content hidden space-y-6">
-            <div class="bg-card p-5 rounded-3xl border shadow-sm flex items-center justify-between">
+            <div class="bg-card p-5 rounded-3xl border shadow-sm flex items-center justify-between text-slate-700 dark:text-slate-300">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center font-black text-xs" id="user-avatar">?</div>
                     <select id="grade-user-select" class="font-bold text-sm bg-transparent border-none outline-none appearance-none text-indigo-600 cursor-pointer">
@@ -215,7 +235,6 @@
                     </select>
                 </div>
             </div>
-
             <div id="grade-dashboard" class="hidden space-y-6">
                 <div class="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-xl space-y-8 relative overflow-hidden">
                     <div class="relative z-10 space-y-8">
@@ -225,11 +244,10 @@
                                 <div id="total-gpa" class="text-5xl font-black">--</div>
                                 <div id="total-status" class="text-[9px] mt-2 font-bold px-2 py-1 bg-white/10 rounded-lg inline-block uppercase tracking-wider transition-all duration-300">Calcul...</div>
                             </div>
-                            <!-- GRAPHIQUE DES BLOCS -->
                             <div class="w-40 h-28 flex items-end gap-2 px-3 border-l border-white/10" id="bloc-bar-chart"></div>
                         </div>
                         <div class="space-y-2">
-                            <div class="flex justify-between text-[9px] font-black uppercase">
+                            <div class="flex justify-between text-[9px] font-black uppercase text-slate-400">
                                 <span>Validation (60 ECTS)</span>
                                 <span id="year-progress-text">0%</span>
                             </div>
@@ -241,66 +259,36 @@
                 </div>
                 <div id="list-blocs-template" class="space-y-6"></div>
             </div>
-
             <div id="grade-empty" class="py-20 text-center space-y-4">
-                <div class="w-16 h-16 bg-card border rounded-full flex items-center justify-center mx-auto text-slate-300"><i data-lucide="user-check"></i></div>
+                <div class="w-16 h-16 bg-card border rounded-full flex items-center justify-center mx-auto text-slate-300 shadow-sm"><i data-lucide="user-check"></i></div>
                 <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Sélectionne ton prénom pour tes notes</p>
             </div>
         </div>
     </main>
 
-    <!-- MODAL MODIF DATE -->
-    <div id="date-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-6">
-        <div class="bg-card w-full max-w-sm rounded-[2.5rem] p-8 space-y-6 shadow-2xl">
-            <h3 class="text-sm font-black uppercase text-slate-800 text-center">Date du prochain CC</h3>
-            <input type="date" id="new-exam-date" class="w-full p-4 bg-slate-50 dark:bg-slate-950 border-none rounded-2xl text-center font-bold outline-none ring-indigo-500 focus:ring-2">
-            <div class="flex gap-2">
-                <button id="btn-save-date" class="flex-1 bg-indigo-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg">ENREGISTRER</button>
-                <button id="btn-cancel-date" class="px-6 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-2xl font-bold text-sm">ANNULER</button>
+    <!-- MODAL FOOD -->
+    <div id="food-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-6 text-slate-700 dark:text-slate-300">
+        <div class="bg-card w-full max-w-sm rounded-[3rem] p-8 space-y-6 shadow-2xl relative overflow-hidden">
+            <h3 class="text-sm font-black uppercase text-center tracking-widest text-orange-600 dark:text-orange-400">On mange où gros ? 🍔</h3>
+            <div class="grid grid-cols-2 gap-2">
+                <!-- COULEURS UNIFIÉES EN BLEU -->
+                <div class="food-item p-3 bg-blue-50 dark:bg-blue-900/20 rounded-2xl text-[10px] font-black text-center border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 uppercase">Maacburger</div>
+                <div class="food-item p-3 bg-blue-50 dark:bg-blue-900/20 rounded-2xl text-[10px] font-black text-center border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 uppercase">O'Tacos</div>
+                <div class="food-item p-3 bg-blue-50 dark:bg-blue-900/20 rounded-2xl text-[10px] font-black text-center border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 uppercase">Tasty Crousty</div>
+                <div class="food-item p-3 bg-blue-50 dark:bg-blue-900/20 rounded-2xl text-[10px] font-black text-center border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 uppercase">Crousty Game</div>
+                <div class="food-item p-3 bg-blue-50 dark:bg-blue-900/20 rounded-2xl text-[10px] font-black text-center border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 uppercase">Antalya</div>
+                <div class="food-item p-3 bg-blue-50 dark:bg-blue-900/20 rounded-2xl text-[10px] font-black text-center border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 uppercase">Roi Tacos</div>
+                <div class="food-item p-3 bg-blue-50 dark:bg-blue-900/20 rounded-2xl text-[10px] font-black text-center border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 uppercase col-span-2">100% Crousty</div>
+                <div class="food-item p-3 bg-blue-50 dark:bg-blue-900/20 rounded-2xl text-[10px] font-black text-center border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 uppercase col-span-2">Boulangerie</div>
             </div>
+            <div class="h-[1px] bg-slate-100 dark:bg-slate-800"></div>
+            <div id="food-random-result" class="text-center text-blue-600 dark:text-blue-400 font-black text-xs min-h-[1.5rem] uppercase"></div>
+            <button id="btn-food-random" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-black text-xs shadow-lg uppercase tracking-widest active:scale-95 transition-all">Décider pour nous</button>
+            <button id="btn-food-close" class="w-full text-[10px] font-black text-slate-400 uppercase pt-2">Fermer</button>
         </div>
     </div>
 
-    <!-- TIMER MODAL RÉGLABLE -->
-    <div id="timer-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[150] flex items-center justify-center p-6">
-        <div class="bg-card w-full max-w-sm rounded-[3rem] p-8 text-center space-y-8 shadow-2xl">
-            <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Timer Focus</h3>
-            
-            <div id="timer-display" class="text-7xl font-black text-indigo-600 tracking-tighter">25:00</div>
-            
-            <div class="space-y-3">
-                <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest">Définit ton temps (min) :</p>
-                <div class="flex justify-center gap-2">
-                    <button class="timer-opt px-3 py-2 bg-slate-50 dark:bg-slate-800 rounded-xl text-[10px] font-black border transition-all" data-mins="15">15</button>
-                    <button class="timer-opt timer-opt-active px-3 py-2 bg-slate-50 dark:bg-slate-800 rounded-xl text-[10px] font-black border transition-all" data-mins="25">25</button>
-                    <button class="timer-opt px-3 py-2 bg-slate-50 dark:bg-slate-800 rounded-xl text-[10px] font-black border transition-all" data-mins="45">45</button>
-                    <button class="timer-opt px-3 py-2 bg-slate-50 dark:bg-slate-800 rounded-xl text-[10px] font-black border transition-all" data-mins="60">60</button>
-                </div>
-            </div>
-
-            <div class="flex gap-4 justify-center">
-                <button id="btn-timer-play" class="bg-indigo-600 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-all"><i data-lucide="play"></i></button>
-                <button id="btn-timer-reset" class="bg-slate-100 dark:bg-slate-800 text-slate-400 w-16 h-16 rounded-full flex items-center justify-center active:scale-90 transition-all"><i data-lucide="rotate-ccw"></i></button>
-            </div>
-            
-            <button id="btn-timer-close" class="text-[10px] font-black uppercase text-slate-300 tracking-widest pt-4">Fermer</button>
-        </div>
-    </div>
-
-    <!-- Modal Éditeur Notes -->
-    <div id="editor-modal" class="hidden fixed inset-0 bg-card z-[110] flex flex-col pt-[env(safe-area-inset-top)]">
-        <div class="p-4 border-b flex justify-between items-center">
-            <button id="btn-note-close" class="text-[10px] font-black text-slate-400 p-2 uppercase">Fermer</button>
-            <div class="flex bg-slate-200 dark:bg-slate-800 p-1 rounded-xl">
-                <button id="tab-edit" class="px-4 py-1.5 text-[9px] font-bold rounded-lg bg-card shadow-sm">ÉDITER</button>
-                <button id="tab-view" class="px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500">VOIR</button>
-            </div>
-        </div>
-        <input type="text" id="nt-title" placeholder="Titre crousty..." class="p-6 text-xl font-bold border-none outline-none bg-card">
-        <textarea id="nt-body" class="flex-1 p-6 text-sm outline-none resize-none font-medium leading-relaxed bg-card" placeholder="Écris ici en Markdown..."></textarea>
-        <div id="nt-preview" class="hidden flex-1 p-6 overflow-y-auto prose max-w-none dark:prose-invert"></div>
-    </div>
-
+    <!-- SCRIPT FIREBASE & LOGIQUE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, doc, addDoc, setDoc, onSnapshot, deleteDoc, updateDoc, arrayUnion, arrayRemove, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -320,7 +308,10 @@
         const auth = getAuth(app);
         const appId = 'bu-buddy-v-crousty';
 
+        const FULL_NAMES = ["Matthieu", "Antoine", "Vincent", "Samia", "Sofian"];
         const TEAM = ["Matt", "MAB", "Vince", "Sami", "Soso"];
+        const FOOD_SPOTS = ["Maacburger", "O'Tacos", "Tasty Crousty", "Crousty Game", "Antalya", "Roi Tacos", "100% Crousty", "Boulangerie"];
+
         const PROGRAM = [
             { id: "B1", short: "Savoirs", bloc: "Savoirs spécialisés en statistique (BC00004225)", items: [{ name: "Statistique bayésienne", ects: 3 }, { name: "Statistique non paramétrique", ects: 5 }, { name: "Projet Master", ects: 3 }, { name: "Anglais", ects: 3 }, { name: "Techniques de prévision", ects: 4 }] },
             { id: "B2", short: "Actuariat", bloc: "Spécialisation en Actuariat (BC00004226)", items: [{ name: "Assurance vie", ects: 5 }, { name: "Assurance non vie", ects: 5 }, { name: "Analyse des risques", ects: 3 }] },
@@ -335,44 +326,61 @@
         let timerSeconds = 25 * 60;
         let timerInterval = null;
 
-        // --- THEME ENGINE ---
-        const themeBtn = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
+        // --- THEME ---
         let isDark = localStorage.getItem('theme') === 'dark';
-
         const updateTheme = () => {
-            if(isDark) {
-                document.body.classList.add('dark-mode');
-                themeIcon.setAttribute('data-lucide', 'sun');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.remove('dark-mode');
-                themeIcon.setAttribute('data-lucide', 'moon');
-                localStorage.setItem('theme', 'light');
-            }
+            if(isDark) { document.body.classList.add('dark-mode'); document.getElementById('theme-icon').setAttribute('data-lucide', 'sun'); localStorage.setItem('theme', 'dark'); }
+            else { document.body.classList.remove('dark-mode'); document.getElementById('theme-icon').setAttribute('data-lucide', 'moon'); localStorage.setItem('theme', 'light'); }
             lucide.createIcons();
         };
-
-        themeBtn.onclick = () => { isDark = !isDark; updateTheme(); };
+        document.getElementById('theme-toggle').onclick = () => { isDark = !isDark; updateTheme(); };
         updateTheme();
 
         // --- AUTH ---
         signInAnonymously(auth);
         onAuthStateChanged(auth, u => { 
             if(u) { 
-                document.getElementById('status-dot').className = "w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"; 
-                document.getElementById('status-text').innerText = "Synchro Active"; 
-                initSync(); 
-                initCountdownSync(); 
+                const dot = document.getElementById('status-dot');
+                const txt = document.getElementById('status-text');
+                if(dot) dot.className = "w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"; 
+                if(txt) txt.innerText = "Synchro Active"; 
+                initSync(); initCountdownSync(); 
             } 
         });
 
-        // --- NAVIGATION ENGINE ---
+        // --- CHOOSER ENGINE ---
+        document.getElementById('btn-chooser-run').onclick = () => {
+            const countInput = document.getElementById('chooser-count');
+            const resEl = document.getElementById('chooser-result');
+            const count = parseInt(countInput.value) || 1;
+            resEl.innerHTML = `<i data-lucide="loader" class="w-5 h-5 animate-spin text-blue-500"></i>`;
+            lucide.createIcons();
+            setTimeout(() => {
+                const shuffled = [...FULL_NAMES].sort(() => 0.5 - Math.random());
+                const selected = shuffled.slice(0, Math.min(count, FULL_NAMES.length));
+                resEl.innerHTML = selected.map(n => `<div class="px-3 py-1.5 bg-blue-600 text-white rounded-full text-[10px] font-black uppercase shadow-sm animate-bounce">${n}</div>`).join('');
+            }, 800);
+        };
+
+        // --- FOOD RANDOMIZER ---
+        document.getElementById('btn-food-open').onclick = () => document.getElementById('food-modal').classList.remove('hidden');
+        document.getElementById('btn-food-close').onclick = () => document.getElementById('food-modal').classList.add('hidden');
+        document.getElementById('btn-food-random').onclick = () => {
+            const res = document.getElementById('food-random-result');
+            res.innerText = "Réflexion intense...";
+            setTimeout(() => {
+                const random = FOOD_SPOTS[Math.floor(Math.random() * FOOD_SPOTS.length)];
+                res.innerText = "Direction : " + random.toUpperCase() + " ! 🚀";
+            }, 600);
+        };
+
+        // --- NAVIGATION ---
         const setView = (id, btn) => {
             document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
-            document.getElementById('view-' + id).classList.remove('hidden');
+            const view = document.getElementById('view-' + id);
+            if(view) view.classList.remove('hidden');
             document.querySelectorAll('.nav-btn').forEach(b => { b.classList.remove('tab-active', 'text-indigo-600'); b.classList.add('text-slate-400'); });
-            btn.classList.add('tab-active', 'text-indigo-600');
+            if(btn) btn.classList.add('tab-active', 'text-indigo-600');
             lucide.createIcons();
         };
 
@@ -382,202 +390,51 @@
         document.getElementById('nav-projets').addEventListener('click', (e) => setView('projets', e.currentTarget));
         document.getElementById('nav-notes').addEventListener('click', (e) => setView('notes', e.currentTarget));
         document.getElementById('nav-grades').addEventListener('click', (e) => setView('grades', e.currentTarget));
-        document.getElementById('logo-main').addEventListener('click', () => setView('home', document.getElementById('nav-home')));
-        document.getElementById('quick-planning').addEventListener('click', () => setView('planning', document.getElementById('nav-planning')));
-        document.getElementById('quick-grades').addEventListener('click', () => setView('grades', document.getElementById('nav-grades')));
+        
+        const logo = document.getElementById('logo-main');
+        if(logo) logo.onclick = () => setView('home', document.getElementById('nav-home'));
 
-        // --- COUNTDOWN SYSTEM ---
+        // --- SYNC ---
         function initCountdownSync() {
             onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'exams'), (d) => {
-                let targetDateStr = '2026-05-15';
-                if(d.exists()) targetDateStr = d.data().date;
-                const examDate = new Date(targetDateStr);
+                let targetStr = '2026-05-15';
+                if(d.exists()) targetStr = d.data().date;
+                const examDate = new Date(targetStr);
                 const diff = examDate - new Date();
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                document.getElementById('countdown-days').innerText = days > 0 ? days : "0";
-                document.getElementById('new-exam-date').value = targetDateStr;
+                const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+                const countdownEl = document.getElementById('countdown-days');
+                if(countdownEl) countdownEl.innerText = days > 0 ? days : "0";
             });
         }
 
-        document.getElementById('countdown-banner').addEventListener('click', () => document.getElementById('date-modal').classList.remove('hidden'));
-        document.getElementById('btn-cancel-date').addEventListener('click', () => document.getElementById('date-modal').classList.add('hidden'));
-        document.getElementById('btn-save-date').addEventListener('click', async () => {
-            const val = document.getElementById('new-exam-date').value;
-            if(val) { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'exams'), { date: val }); document.getElementById('date-modal').classList.add('hidden'); }
-        });
-
-        // --- TIMER FOCUS (RÉGLABLE) ---
-        const updateTimerDisplay = () => {
-            const m = Math.floor(timerSeconds / 60); const s = timerSeconds % 60;
-            document.getElementById('timer-display').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-        };
-        
-        document.querySelectorAll('.timer-opt').forEach(btn => {
-            btn.onclick = () => {
-                if(timerInterval) return;
-                document.querySelectorAll('.timer-opt').forEach(b => b.classList.remove('timer-opt-active'));
-                btn.classList.add('timer-opt-active');
-                setMinutes = parseInt(btn.dataset.mins);
-                timerSeconds = setMinutes * 60;
-                updateTimerDisplay();
-            };
-        });
-
-        document.getElementById('btn-timer-open-main').onclick = () => document.getElementById('timer-modal').classList.remove('hidden');
-        document.getElementById('btn-timer-close').onclick = () => document.getElementById('timer-modal').classList.add('hidden');
-        document.getElementById('btn-timer-play').onclick = () => {
-            if(timerInterval) { clearInterval(timerInterval); timerInterval = null; document.getElementById('btn-timer-play').innerHTML = '<i data-lucide="play"></i>'; }
-            else { timerInterval = setInterval(() => { if(timerSeconds <= 0) { clearInterval(timerInterval); timerInterval = null; return; } timerSeconds--; updateTimerDisplay(); }, 1000); document.getElementById('btn-timer-play').innerHTML = '<i data-lucide="pause"></i>'; }
-            lucide.createIcons();
-        };
-        document.getElementById('btn-timer-reset').onclick = () => { timerSeconds = setMinutes * 60; updateTimerDisplay(); if(timerInterval) { clearInterval(timerInterval); timerInterval = null; document.getElementById('btn-timer-play').innerHTML = '<i data-lucide="play"></i>'; lucide.createIcons(); } };
-
-        // --- MOYENNES ---
-        const truncate2 = (num) => { if(isNaN(num) || num === null) return "--"; return (Math.floor((num + 1e-11) * 100) / 100).toFixed(2); };
-
-        const saveGrade = async (subject, val) => {
-            if (val === "") { const ex = userNotes[subject]; if (ex) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_grades', ex.id)); return; }
-            const note = parseFloat(val.replace(',', '.')); if(isNaN(note)) return;
-            const ex = userNotes[subject];
-            if(ex) await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_grades', ex.id), { note }, { merge: true });
-            else await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'user_grades'), { user: currentGradeUser, subject, note });
-        };
-
-        const renderGradesUI = () => {
-            const container = document.getElementById('list-blocs-template'); container.innerHTML = "";
-            const chart = document.getElementById('bloc-bar-chart'); chart.innerHTML = "";
-            let gWeight = 0; let gEcts = 0; let gAllOk = true;
-
-            PROGRAM.forEach(bloc => {
-                let bWeight = 0; let bEcts = 0;
-                let html = bloc.items.map(item => {
-                    const saved = userNotes[item.name]; const val = saved ? saved.note : "";
-                    if(saved) { bWeight += (saved.note * item.ects); bEcts += item.ects; gWeight += (saved.note * item.ects); gEcts += item.ects; }
-                    const idInp = `inp-${item.name.replace(/\s/g, '-')}`;
-                    return `<div class="flex justify-between items-center py-2 border-b last:border-none"><div class="flex-1 text-[11px] font-bold opacity-70 uppercase truncate pr-2">${item.name}</div><input type="text" id="${idInp}" value="${val}" class="grade-input w-12 p-1.5 border rounded-lg text-center text-xs font-black outline-none"></div>`;
-                }).join('');
-                
-                const avg = bEcts > 0 ? (bWeight / bEcts) : null;
-                if(avg !== null && avg < 10) gAllOk = false;
-                
-                const barHeight = avg !== null ? (avg / 20) * 100 : 0;
-                const barColorClass = avg >= 10 ? 'bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.3)]' : (avg === null ? 'bg-white/10' : 'bg-rose-500');
-                chart.innerHTML += `<div class="bar-wrapper group relative"><div class="absolute -top-7 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-white text-slate-900 text-[9px] font-black px-1.5 py-0.5 rounded transition-opacity pointer-events-none z-20">${avg !== null ? truncate2(avg) : '--'}</div><div class="bar-bg"><div class="bar-fill ${barColorClass}" style="height: ${barHeight}%"></div></div><div class="text-[6px] font-black text-slate-500 uppercase truncate w-full text-center mt-1">${bloc.short}</div></div>`;
-
-                const div = document.createElement('div'); div.className = "bg-card rounded-3xl border p-6 shadow-sm";
-                div.innerHTML = `<div class="flex justify-between items-start mb-4"><h3 class="text-[9px] font-black opacity-50 uppercase tracking-widest max-w-[60%]">${bloc.bloc}</h3><div class="text-right text-lg font-black ${avg >= 10 ? 'text-indigo-600' : 'text-rose-500'}">${avg !== null ? truncate2(avg) : "--"}</div></div><div class="space-y-1">${html}</div>`;
-                container.appendChild(div);
-                bloc.items.forEach(item => { const el = document.getElementById(`inp-${item.name.replace(/\s/g, '-')}`); if(el) el.onchange = (e) => saveGrade(item.name, e.target.value); });
-            });
-
-            const final = gEcts > 0 ? (gWeight / gEcts) : null;
-            document.getElementById('total-gpa').innerText = final !== null ? truncate2(final) : "--";
-            document.getElementById('year-progress-bar').style.width = ((gEcts / 60) * 100) + "%";
-            document.getElementById('year-progress-text').innerText = Math.round((gEcts / 60) * 100) + "%";
-            
-            const stat = document.getElementById('total-status');
-            if(final !== null) {
-                const ok = parseFloat(truncate2(final)) >= 10 && gAllOk;
-                stat.innerText = ok ? "Admis (ti es un tiigre)" : "Ajourné (courage go dead les rattrapages)";
-                stat.className = `text-[9px] font-bold px-2 py-1 rounded-lg inline-block uppercase ${ok ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`;
-            }
-        };
-
-        document.getElementById('grade-user-select').onchange = (e) => {
-            currentGradeUser = e.target.value;
-            if(currentGradeUser) {
-                document.getElementById('grade-dashboard').classList.remove('hidden');
-                document.getElementById('grade-empty').classList.add('hidden');
-                document.getElementById('user-avatar').innerText = currentGradeUser.charAt(0);
-                onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'user_grades'), s => {
-                    userNotes = {}; s.docs.forEach(d => { if(d.data().user === currentGradeUser) userNotes[d.data().subject] = { id: d.id, note: d.data().note }; });
-                    renderGradesUI();
-                });
-            }
-        };
-
-        // --- SUBMIT ACTIONS ---
-        document.getElementById('btn-submit-session').onclick = async () => {
-            const s = document.getElementById('in-title').value; const d = document.getElementById('in-date').value; const t = document.getElementById('in-time').value;
-            if(s && d) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'planning'), { subject: s, date: d, time: t, participants: [] });
-            document.getElementById('in-title').value = "";
-        };
-
-        document.getElementById('btn-submit-project').onclick = async () => {
-            const n = document.getElementById('in-proj-name').value; const desc = document.getElementById('in-proj-desc').value; const stat = document.getElementById('in-proj-status').value;
-            const ass = Array.from(document.querySelectorAll('.assign-check:checked')).map(cb => cb.value);
-            if(n) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), { name: n, desc: desc, status: stat, assignees: ass, date: new Date().toISOString() }); document.getElementById('in-proj-name').value = ""; document.querySelectorAll('.assign-check').forEach(cb => cb.checked = false); }
-        };
-
-        document.getElementById('btn-submit-link').onclick = async () => {
-            const n = document.getElementById('in-doc').value; const u = document.getElementById('in-url').value; const f = document.getElementById('in-doc-folder').value;
-            if(n && u) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), { name: n, url: u, folder: f }); document.getElementById('in-doc').value = ""; document.getElementById('in-url').value = "";
-        };
-
-        // --- SYNC ENGINE ---
         function initSync() {
+            // Planning Sync
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'planning'), s => {
-                const list = document.getElementById('list-planning'); list.innerHTML = "";
+                const list = document.getElementById('list-planning');
+                if(!list) return;
+                list.innerHTML = "";
                 s.docs.map(d=>({id:d.id, ...d.data()})).sort((a,b)=>a.date.localeCompare(b.date)).forEach(ev => {
-                    const dt = new Date(ev.date); const fmt = dt.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
-                    const team = TEAM.map(n => {
-                        const isP = (ev.participants || []).includes(n);
-                        return `<button id="att-${ev.id}-${n}" class="w-8 h-8 rounded-full flex items-center justify-center text-[7px] font-black uppercase ring-2 ring-white -ml-2 first:ml-0 transition-all ${isP?'bg-indigo-600 text-white':'bg-slate-100 dark:bg-slate-800 text-slate-300'}">${n}</button>`;
-                    }).join('');
-                    const div = document.createElement('div'); div.className = "bg-card p-5 rounded-[2rem] border shadow-sm space-y-4";
-                    div.innerHTML = `<div class="flex justify-between items-start"><div class="flex gap-4 items-center"><div class="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 w-12 h-12 rounded-2xl flex flex-col items-center justify-center font-black"><span class="text-[10px] uppercase">${fmt.split(' ')[0]}</span><span class="text-sm leading-tight">${dt.getDate()}</span></div><div><div class="font-black text-sm uppercase">${ev.subject}</div><div class="text-[9px] opacity-40 font-bold uppercase">${ev.time}</div></div></div><button class="btn-del text-slate-200"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div><div class="flex items-center justify-between pt-2 border-t"><span class="text-[8px] font-black opacity-30 uppercase italic">Qui charbonne ?</span><div class="flex">${team}</div></div>`;
+                    const dt = new Date(ev.date);
+                    const div = document.createElement('div');
+                    div.className = "bg-card p-5 rounded-[2rem] border shadow-sm space-y-4";
+                    div.innerHTML = `<div class="flex justify-between items-start"><div class="flex gap-4 items-center"><div class="text-indigo-600 font-black"><span class="text-sm">${dt.getDate()}</span></div><div><div class="font-black text-sm uppercase">${ev.subject}</div></div></div></div>`;
                     list.appendChild(div);
-                    div.querySelector('.btn-del').onclick = async () => { if(confirm("Supprimer ?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'planning', ev.id)); };
-                    TEAM.forEach(n => { document.getElementById(`att-${ev.id}-${n}`).onclick = async () => { const ref = doc(db, 'artifacts', appId, 'public', 'data', 'planning', ev.id); if((ev.participants || []).includes(n)) await updateDoc(ref, { participants: arrayRemove(n) }); else await updateDoc(ref, { participants: arrayUnion(n) }); }; });
-                }); lucide.createIcons();
+                });
             });
-
+            
+            // Docs Sync
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), s => {
-                const list = document.getElementById('list-docs'); list.innerHTML = "";
-                const groups = {}; s.docs.forEach(d => { const f = d.data().folder || "Autres"; if(!groups[f]) groups[f] = []; groups[f].push({id: d.id, ...d.data()}); });
-                Object.keys(groups).sort().forEach(f => {
-                    const div = document.createElement('div'); div.className = "space-y-2";
-                    div.innerHTML = `<h4 class="text-[10px] font-black opacity-30 uppercase tracking-widest px-2 flex items-center gap-2"><div class="w-1.5 h-1.5 bg-indigo-200 rounded-full"></div> ${f}</h4>`;
-                    groups[f].forEach(i => {
-                        const row = document.createElement('div'); row.className = "bg-card p-4 rounded-2xl border flex justify-between items-center shadow-sm";
-                        row.innerHTML = `<div class="truncate flex-1 pr-4"><div class="font-bold text-xs uppercase truncate text-slate-700">${i.name}</div><a href="${i.url}" target="_blank" class="text-indigo-600 text-[8px] font-black underline italic">VOIR DRIVE</a></div><button class="btn-del text-slate-100 hover:text-red-400"><i data-lucide="x" class="w-4 h-4"></i></button>`;
-                        div.appendChild(row); row.querySelector('.btn-del').onclick = async () => { if(confirm("Supprimer ?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'docs', i.id)); };
-                    }); list.appendChild(div);
-                }); lucide.createIcons();
-            });
-
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), s => {
-                const list = document.getElementById('list-projets'); list.innerHTML = "";
+                const list = document.getElementById('list-docs');
+                if(!list) return;
+                list.innerHTML = "";
                 s.docs.forEach(d => {
-                    const p = d.data(); const cols = { 'À FAIRE': 'bg-slate-100 dark:bg-slate-800 text-slate-500', 'EN COURS': 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700', 'TERMINÉ': 'bg-emerald-100 dark:bg-emerald-900 text-emerald-700' };
-                    const divs = (p.assignees || []).map(n => `<div class="px-2 py-1 bg-slate-900 dark:bg-white dark:text-black text-white rounded-lg text-[7px] font-black uppercase ring-2 ring-white -ml-1 first:ml-0">${n}</div>`).join('');
-                    const div = document.createElement('div'); div.className = "bg-card p-5 rounded-3xl border shadow-sm";
-                    div.innerHTML = `<div class="flex justify-between items-start mb-3"><div class="flex items-center gap-2"><div><div class="flex">${divs || '?'}</div></div><div class="font-black text-sm uppercase">${p.name}</div></div><button class="btn-del text-slate-200"><i data-lucide="x-circle" class="w-4 h-4"></i></button></div><p class="text-[10px] opacity-40 font-bold mb-4 px-2 italic">${p.assignees?.join(', ') || 'Libre'}</p><div class="flex justify-between items-center"><button class="btn-status px-3 py-1.5 rounded-full text-[8px] font-black uppercase ${cols[p.status||'À FAIRE']} active:scale-95">${p.status||'À FAIRE'}</button><span class="text-[8px] opacity-20 font-bold">${new Date(p.date).toLocaleDateString()}</span></div>`;
+                    const div = document.createElement('div');
+                    div.className = "bg-card p-4 rounded-2xl border flex justify-between items-center shadow-sm";
+                    div.innerHTML = `<div class="font-bold text-xs uppercase text-slate-700 dark:text-slate-200">${d.data().name}</div>`;
                     list.appendChild(div);
-                    div.querySelector('.btn-del').onclick = async () => { if(confirm("Supprimer ?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', d.id)); };
-                    div.querySelector('.btn-status').onclick = async () => { const cur = p.status || 'À FAIRE'; const nxt = cur==='À FAIRE'?'EN COURS':(cur==='EN COURS'?'TERMINÉ':'À FAIRE'); await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', d.id), { status: nxt }, { merge: true }); };
-                }); lucide.createIcons();
-            });
-
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'notes'), s => {
-                const list = document.getElementById('list-notes'); list.innerHTML = "";
-                s.docs.forEach(d => {
-                    const data = d.data(); const div = document.createElement('div'); div.className = "bg-card p-5 rounded-3xl border flex justify-between items-center shadow-sm active:opacity-70 transition-opacity cursor-pointer";
-                    div.innerHTML = `<div class="flex-1 overflow-hidden"><div class="font-bold text-sm uppercase mb-1">${data.title || "Fiche sans titre"}</div><div class="text-[10px] opacity-40 line-clamp-2">${data.content || "..." }</div></div><button class="btn-del text-slate-200 ml-4"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
-                    list.appendChild(div);
-                    div.onclick = (e) => { if(!e.target.closest('button')) openNote(d.id); };
-                    div.querySelector('.btn-del').onclick = async () => { if(confirm("Supprimer ?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'notes', d.id)); };
-                }); lucide.createIcons();
+                });
             });
         }
-
-        const openNote = (id) => { currentNoteId = id; document.getElementById('editor-modal').classList.remove('hidden'); onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'notes', id), d => { if(d.exists() && currentNoteId === id) { const v = d.data(); if(document.activeElement !== document.getElementById('nt-title')) document.getElementById('nt-title').value = v.title || ""; if(document.activeElement !== document.getElementById('nt-body')) { document.getElementById('nt-body').value = v.content || ""; document.getElementById('nt-preview').innerHTML = marked.parse(v.content || ""); } } }); };
-        document.getElementById('btn-new-note').onclick = async () => { const r = await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'notes'), {title: "", content: ""}); openNote(r.id); };
-        document.getElementById('btn-note-close').onclick = () => { currentNoteId = null; document.getElementById('editor-modal').classList.add('hidden'); };
-        document.getElementById('tab-edit').onclick = () => { document.getElementById('nt-body').classList.remove('hidden'); document.getElementById('nt-preview').classList.add('hidden'); document.getElementById('tab-edit').className = "px-4 py-1.5 text-[9px] font-bold rounded-lg bg-card shadow-sm"; document.getElementById('tab-view').className = "px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500"; };
-        document.getElementById('tab-view').onclick = () => { document.getElementById('nt-body').classList.add('hidden'); document.getElementById('nt-preview').classList.remove('hidden'); document.getElementById('tab-view').className = "px-4 py-1.5 text-[9px] font-bold rounded-lg bg-card shadow-sm"; document.getElementById('tab-edit').className = "px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500"; };
-        const saveN = () => { if(!currentNoteId) return; setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'notes', currentNoteId), { title: document.getElementById('nt-title').value, content: document.getElementById('nt-body').value }, {merge:true}); };
-        document.getElementById('nt-title').oninput = saveN; document.getElementById('nt-body').oninput = (e) => { saveN(); document.getElementById('nt-preview').innerHTML = marked.parse(e.target.value); };
 
         window.onload = () => lucide.createIcons();
     </script>
