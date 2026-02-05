@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BU-Buddy | Samia Group</title>
+    <title>BU-Buddy | Crousty Edition</title>
     
-    <!-- Mode App Mobile -->
+    <!-- Paramètres App Mobile -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="BU-Buddy">
@@ -22,7 +22,8 @@
         .tab-active { color: #4f46e5; border-bottom: 3px solid #4f46e5; }
         .prose h1 { font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem; }
         .view-content { animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .crousty-card { background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
@@ -30,7 +31,7 @@
     <!-- Header -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-50 pt-[env(safe-area-inset-top)] shadow-sm">
         <div class="max-w-xl mx-auto px-5 py-4 flex justify-between items-center">
-            <h1 class="text-lg font-extrabold tracking-tight flex items-center gap-2">
+            <h1 class="text-lg font-extrabold tracking-tight flex items-center gap-2" onclick="window.setView('home', document.querySelector('.nav-home'))">
                 <span class="text-indigo-600 italic">BU</span>-BUDDY
             </h1>
             <div id="status-chip" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 rounded-full">
@@ -40,49 +41,97 @@
         </div>
     </header>
 
-    <!-- Message d'erreur critique -->
-    <div id="auth-error-msg" class="hidden p-6 max-w-md mx-auto">
-        <div class="bg-red-50 border-2 border-red-100 p-5 rounded-2xl text-red-900 shadow-lg text-center">
-            <i data-lucide="shield-alert" class="w-10 h-10 text-red-500 mx-auto mb-3"></i>
-            <h2 class="font-bold mb-2">Erreur de restriction</h2>
-            <p class="text-xs leading-relaxed">
-                Samia, Firebase bloque la connexion. Vérifie bien que tu as activé la méthode <b>"Anonyme"</b> dans l'onglet <b>Authentication > Sign-in method</b> de ta console.
-            </p>
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-slate-200 sticky top-[61px] z-40 overflow-x-auto no-scrollbar">
+        <div class="max-w-xl mx-auto flex px-2 min-w-max">
+            <button onclick="window.setView('home', this)" class="nav-btn nav-home px-5 py-3 text-[10px] font-black uppercase tracking-widest tab-active">Accueil</button>
+            <button onclick="window.setView('planning', this)" class="nav-btn px-5 py-3 text-[10px] font-black uppercase tracking-widest text-slate-400">Révisions</button>
+            <button onclick="window.setView('docs', this)" class="nav-btn px-5 py-3 text-[10px] font-black uppercase tracking-widest text-slate-400">Cours</button>
+            <button onclick="window.setView('projets', this)" class="nav-btn px-5 py-3 text-[10px] font-black uppercase tracking-widest text-slate-400">Projets</button>
+            <button onclick="window.setView('notes', this)" class="nav-btn px-5 py-3 text-[10px] font-black uppercase tracking-widest text-slate-400">Notes</button>
         </div>
-    </div>
+    </nav>
 
-    <!-- Interface principale -->
-    <main id="app-view" class="flex-1 max-w-xl mx-auto w-full p-4 pb-32 opacity-50 pointer-events-none">
-        <nav class="flex border-b border-slate-200 mb-6 sticky top-[73px] bg-slate-50/90 backdrop-blur-sm z-40 px-2">
-            <button onclick="window.setView('planning', this)" class="nav-btn flex-1 py-3 text-[10px] font-black uppercase tracking-widest tab-active">Planning</button>
-            <button onclick="window.setView('docs', this)" class="nav-btn flex-1 py-3 text-[10px] font-black uppercase text-slate-400">Cours</button>
-            <button onclick="window.setView('notes', this)" class="nav-btn flex-1 py-3 text-[10px] font-black uppercase text-slate-400">Notes</button>
-        </nav>
+    <!-- Main Content -->
+    <main class="flex-1 max-w-xl mx-auto w-full p-4 pb-32">
+        
+        <!-- VUE ACCUEIL -->
+        <div id="view-home" class="view-content space-y-6">
+            <div class="crousty-card p-8 rounded-[2.5rem] text-white shadow-2xl shadow-indigo-200">
+                <h2 class="text-2xl font-black mb-2">Bienvenue dans BU-Buddy ! 🚀</h2>
+                <p class="text-indigo-100 text-sm font-medium leading-relaxed">
+                    Ton espace central pour piloter tes <span class="text-white font-bold">crousty révisions</span> et tes <span class="text-white font-bold">crousty cours</span> avec la team.
+                </p>
+            </div>
 
-        <div id="view-planning" class="tab-pane space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="window.setView('planning', document.querySelectorAll('.nav-btn')[1])" class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm text-center space-y-2 active:scale-95 transition-all">
+                    <div class="bg-amber-100 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto text-amber-600">
+                        <i data-lucide="calendar"></i>
+                    </div>
+                    <span class="block text-xs font-bold uppercase tracking-tighter">Révisions</span>
+                </button>
+                <button onclick="window.setView('docs', document.querySelectorAll('.nav-btn')[2])" class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm text-center space-y-2 active:scale-95 transition-all">
+                    <div class="bg-indigo-100 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto text-indigo-600">
+                        <i data-lucide="book-open"></i>
+                    </div>
+                    <span class="block text-xs font-bold uppercase tracking-tighter">Cours</span>
+                </button>
+                <button onclick="window.setView('projets', document.querySelectorAll('.nav-btn')[3])" class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm text-center space-y-2 active:scale-95 transition-all">
+                    <div class="bg-emerald-100 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto text-emerald-600">
+                        <i data-lucide="folder-kanban"></i>
+                    </div>
+                    <span class="block text-xs font-bold uppercase tracking-tighter">Projets</span>
+                </button>
+                <button onclick="window.setView('notes', document.querySelectorAll('.nav-btn')[4])" class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm text-center space-y-2 active:scale-95 transition-all">
+                    <div class="bg-rose-100 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto text-rose-600">
+                        <i data-lucide="file-text"></i>
+                    </div>
+                    <span class="block text-xs font-bold uppercase tracking-tighter">Notes</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- VUE PLANNING -->
+        <div id="view-planning" class="view-content hidden space-y-4">
             <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-3">
-                <input type="text" id="in-title" placeholder="Matière (ex: Droit)" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none ring-indigo-500 focus:ring-2">
+                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1">Nouvelle Révision</h3>
+                <input type="text" id="in-title" placeholder="Matière (ex: BioCell)" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none ring-indigo-500 focus:ring-2">
                 <div class="flex gap-2">
-                    <input type="date" id="in-date" class="flex-1 p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none">
-                    <input type="time" id="in-time" class="w-24 p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none">
+                    <input type="date" id="in-date" class="flex-1 p-4 bg-slate-50 rounded-2xl text-sm border-none">
+                    <input type="time" id="in-time" class="w-24 p-4 bg-slate-50 rounded-2xl text-sm border-none">
                 </div>
-                <button onclick="window.addSession()" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95 transition-all">AJOUTER AU GROUPE</button>
+                <button onclick="window.addSession()" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95">AJOUTER</button>
             </div>
             <div id="list-planning" class="space-y-3"></div>
         </div>
 
-        <div id="view-docs" class="tab-pane hidden space-y-4">
+        <!-- VUE COURS (DOCS) -->
+        <div id="view-docs" class="view-content hidden space-y-4">
             <div class="bg-white p-5 rounded-3xl border border-slate-100 space-y-3">
-                <input type="text" id="in-doc" placeholder="Nom du document" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none">
+                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1">Partager un Cours</h3>
+                <input type="text" id="in-doc" placeholder="Nom du cours" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none">
                 <input type="text" id="in-url" placeholder="Lien URL (Drive, etc)" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none">
-                <button onclick="window.addLink()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold text-sm">PARTAGER LE LIEN</button>
+                <button onclick="window.addLink()" class="w-full bg-indigo-900 text-white p-4 rounded-2xl font-bold text-sm">PARTAGER</button>
             </div>
             <div id="list-docs" class="grid gap-3"></div>
         </div>
 
-        <div id="view-notes" class="tab-pane hidden space-y-4">
-            <button onclick="window.createNote()" class="w-full p-6 bg-white border-2 border-dashed border-indigo-200 rounded-[2rem] text-indigo-600 font-extrabold flex items-center justify-center gap-2">
-                <i data-lucide="file-plus"></i> NOUVELLE FICHE
+        <!-- VUE PROJETS -->
+        <div id="view-projets" class="view-content hidden space-y-4">
+            <div class="bg-white p-5 rounded-3xl border border-slate-100 space-y-3">
+                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1">Nouveau Projet Groupe</h3>
+                <input type="text" id="in-proj-name" placeholder="Nom du projet (ex: Exposé Droit)" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none">
+                <input type="text" id="in-proj-desc" placeholder="Objectif ou tâche" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none">
+                <button onclick="window.addProject()" class="w-full bg-emerald-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95">CRÉER LE PROJET</button>
+            </div>
+            <div id="list-projets" class="grid gap-3"></div>
+        </div>
+
+        <!-- VUE NOTES -->
+        <div id="view-notes" class="view-content hidden space-y-4">
+            <button onclick="window.createNote()" class="w-full p-8 bg-white border-2 border-dashed border-indigo-200 rounded-[2.5rem] text-indigo-600 font-extrabold flex items-center justify-center gap-2 active:bg-indigo-50">
+                <i data-lucide="plus-circle"></i> NOUVELLE FICHE DE NOTE
             </button>
             <div id="list-notes" class="grid gap-3"></div>
         </div>
@@ -91,15 +140,15 @@
     <!-- Modal Éditeur -->
     <div id="editor-modal" class="hidden fixed inset-0 bg-white z-[110] flex flex-col pt-[env(safe-area-inset-top)]">
         <div class="p-4 border-b flex justify-between items-center bg-slate-50">
-            <button onclick="window.closeNote()" class="text-[10px] font-black text-slate-400 p-2 uppercase">RETOUR</button>
+            <button onclick="window.closeNote()" class="text-[10px] font-black text-slate-400 p-2 uppercase">Fermer</button>
             <div class="flex bg-slate-200 p-1 rounded-xl">
-                <button onclick="window.toggleMd(false)" id="btn-edit" class="px-4 py-1.5 text-[9px] font-bold rounded-lg bg-white shadow-sm uppercase">Éditer</button>
-                <button onclick="window.toggleMd(true)" id="btn-view" class="px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500 uppercase">Voir</button>
+                <button onclick="window.toggleMd(false)" id="btn-edit" class="px-4 py-1.5 text-[9px] font-bold rounded-lg bg-white shadow-sm">ÉDITER</button>
+                <button onclick="window.toggleMd(true)" id="btn-view" class="px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500">VOIR</button>
             </div>
         </div>
-        <input type="text" id="nt-title-input" placeholder="Titre de la fiche..." class="p-6 text-xl font-bold border-none outline-none">
-        <textarea id="nt-body-input" class="flex-1 p-6 text-sm outline-none resize-none font-medium leading-relaxed text-slate-700" placeholder="Écris ici en Markdown..."></textarea>
-        <div id="nt-preview-div" class="hidden flex-1 p-6 overflow-y-auto prose max-w-none text-sm"></div>
+        <input type="text" id="nt-title" placeholder="Titre crousty..." class="p-6 text-xl font-bold border-none outline-none">
+        <textarea id="nt-body" class="flex-1 p-6 text-sm outline-none resize-none font-medium leading-relaxed" placeholder="Écris ici en Markdown..."></textarea>
+        <div id="nt-preview" class="hidden flex-1 p-6 overflow-y-auto prose max-w-none"></div>
     </div>
 
     <script type="module">
@@ -107,7 +156,7 @@
         import { getFirestore, collection, doc, addDoc, setDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // CONFIGURATION SAMIA
+        // CONFIGURATION SAMIA 
         const firebaseConfig = {
           apiKey: "AIzaSyBIHjJKZj_Bqw1XjHfJo4X3GWrA6GNLU8I",
           authDomain: "bu-buddy-4bafe.firebaseapp.com",
@@ -121,35 +170,20 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        const appId = 'samia-group-vfinal-v2';
+        const appId = 'bu-buddy-v-crousty';
 
-        // Auth avec gestion d'erreur robuste
-        const login = async () => {
-            try {
-                const userCredential = await signInAnonymously(auth);
-                console.log("Connecté avec succès:", userCredential.user.uid);
-            } catch (e) {
-                console.error("Auth error details:", e);
-                document.getElementById('auth-error-msg').classList.remove('hidden');
-                document.getElementById('status-dot').className = "w-1.5 h-1.5 bg-red-500 rounded-full";
-                document.getElementById('status-text').innerText = "Erreur Auth";
-                lucide.createIcons();
-            }
-        };
-
+        // Auth
+        signInAnonymously(auth);
         onAuthStateChanged(auth, u => {
             if(u) {
                 document.getElementById('status-dot').className = "w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse";
-                document.getElementById('status-text').innerText = "Synchro Live";
-                document.getElementById('app-view').classList.remove('opacity-50', 'pointer-events-none');
+                document.getElementById('status-text').innerText = "Synchro Crousty";
                 initSync();
             }
         });
-        login();
 
-        // Handlers
+        // Handlers Firestore
         window.addSession = async () => {
-            if (!auth.currentUser) return;
             const subject = document.getElementById('in-title').value;
             const date = document.getElementById('in-date').value;
             const time = document.getElementById('in-time').value;
@@ -158,15 +192,20 @@
         };
 
         window.addLink = async () => {
-            if (!auth.currentUser) return;
             const name = document.getElementById('in-doc').value;
             const url = document.getElementById('in-url').value;
             if(name && url) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), {name, url});
             document.getElementById('in-doc').value = ""; document.getElementById('in-url').value = "";
         };
 
+        window.addProject = async () => {
+            const name = document.getElementById('in-proj-name').value;
+            const desc = document.getElementById('in-proj-desc').value;
+            if(name) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), {name, desc, date: new Date().toISOString()});
+            document.getElementById('in-proj-name').value = ""; document.getElementById('in-proj-desc').value = "";
+        };
+
         window.createNote = async () => {
-            if (!auth.currentUser) return;
             const r = await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'notes'), {title: "", content: ""});
             window.openNote(r.id);
         };
@@ -178,64 +217,83 @@
             onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'notes', id), d => {
                 if(d.exists() && currentId === id) {
                     const v = d.data();
-                    if(document.activeElement !== document.getElementById('nt-title-input')) document.getElementById('nt-title-input').value = v.title || "";
-                    if(document.activeElement !== document.getElementById('nt-body-input')) {
-                        document.getElementById('nt-body-input').value = v.content || "";
-                        document.getElementById('nt-preview-div').innerHTML = marked.parse(v.content || "");
+                    if(document.activeElement !== document.getElementById('nt-title')) document.getElementById('nt-title').value = v.title || "";
+                    if(document.activeElement !== document.getElementById('nt-body')) {
+                        document.getElementById('nt-body').value = v.content || "";
+                        document.getElementById('nt-preview').innerHTML = marked.parse(v.content || "");
                     }
                 }
             });
         };
 
         window.closeNote = () => { currentId = null; document.getElementById('editor-modal').classList.add('hidden'); };
-        window.del = async (c, i) => { if(confirm("Supprimer ?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', c, i)); };
+        window.del = async (c, i) => { if(confirm("Supprimer définitivement ?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', c, i)); };
 
         const save = () => {
-            if(!currentId || !auth.currentUser) return;
+            if(!currentId) return;
             setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'notes', currentId), {
-                title: document.getElementById('nt-title-input').value,
-                content: document.getElementById('nt-body-input').value
+                title: document.getElementById('nt-title').value,
+                content: document.getElementById('nt-body').value
             }, {merge: true});
         };
-        document.getElementById('nt-title-input').oninput = save;
-        document.getElementById('nt-body-input').oninput = e => { save(); document.getElementById('nt-preview-div').innerHTML = marked.parse(e.target.value); };
+        document.getElementById('nt-title').oninput = save;
+        document.getElementById('nt-body').oninput = e => { save(); document.getElementById('nt-preview').innerHTML = marked.parse(e.target.value); };
 
         function initSync() {
+            // Planning Sync
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'planning'), s => {
                 const list = document.getElementById('list-planning'); list.innerHTML = "";
                 s.docs.map(d=>({id:d.id, ...d.data()})).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).forEach(ev => {
                     const div = document.createElement('div'); div.className = "bg-white p-4 rounded-2xl flex justify-between items-center border border-slate-100 shadow-sm";
                     div.innerHTML = `<div class="flex gap-4 items-center">
                         <div class="bg-indigo-50 text-indigo-700 w-10 h-10 rounded-xl flex flex-col items-center justify-center font-black text-[10px]">
-                            <span>${new Date(ev.date).getDate() || '??'}</span>
+                            <span>${new Date(ev.date).getDate()}</span>
                         </div>
-                        <div><div class="font-bold text-xs uppercase">${ev.subject}</div><div class="text-[9px] text-slate-400 font-bold">${ev.time} • BU</div></div>
-                    </div><button onclick="window.del('planning', '${ev.id}')" class="text-slate-200 p-2"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
+                        <div><div class="font-bold text-xs uppercase">${ev.subject}</div><div class="text-[9px] text-slate-400 font-bold">${ev.time}</div></div>
+                    </div><button onclick="window.del('planning', '${ev.id}')" class="text-slate-200"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
                     list.appendChild(div);
                 });
                 lucide.createIcons();
             });
 
+            // Docs Sync
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), s => {
                 const list = document.getElementById('list-docs'); list.innerHTML = "";
                 s.docs.forEach(d => {
-                    const lk = d.data();
                     const div = document.createElement('div'); div.className = "bg-white p-4 rounded-2xl border flex justify-between items-center shadow-sm";
-                    div.innerHTML = `<div class="truncate flex-1 mr-4"><div class="font-bold text-xs uppercase truncate leading-tight">${lk.name}</div>
-                    <a href="${lk.url}" target="_blank" class="text-indigo-600 text-[9px] font-black underline italic">OUVRIR</a></div>
+                    div.innerHTML = `<div class="truncate flex-1 mr-4"><div class="font-bold text-xs uppercase truncate">${d.data().name}</div>
+                    <a href="${d.data().url}" target="_blank" class="text-indigo-600 text-[9px] font-black underline italic">VOIR LE COURS</a></div>
                     <button onclick="window.del('docs', '${d.id}')" class="text-slate-200"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
                     list.appendChild(div);
                 });
                 lucide.createIcons();
             });
 
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'notes'), s => {
-                const l = document.getElementById('list-notes'); l.innerHTML = "";
+            // Projets Sync
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), s => {
+                const list = document.getElementById('list-projets'); list.innerHTML = "";
                 s.docs.forEach(d => {
-                    const div = document.createElement('div'); div.className = "bg-white p-4 rounded-2xl border border-slate-100 flex justify-between items-center shadow-sm active:bg-slate-50 transition-colors";
-                    div.innerHTML = `<div onclick="window.openNote('${d.id}')" class="flex-1 font-bold text-sm cursor-pointer uppercase tracking-tighter truncate pr-4">${d.data().title || "Note sans titre"}</div>
+                    const p = d.data();
+                    const div = document.createElement('div'); div.className = "bg-white p-5 rounded-3xl border border-slate-100 shadow-sm";
+                    div.innerHTML = `<div class="flex justify-between items-start mb-2">
+                        <div class="font-black text-sm uppercase tracking-tight text-emerald-700">${p.name}</div>
+                        <button onclick="window.del('projects', '${d.id}')" class="text-slate-200"><i data-lucide="x-circle" class="w-4 h-4"></i></button>
+                    </div>
+                    <p class="text-[10px] text-slate-500 italic mb-1">${p.desc || "Pas de description"}</p>
+                    <div class="text-[8px] font-bold text-slate-300 uppercase">Créé le ${new Date(p.date).toLocaleDateString()}</div>`;
+                    list.appendChild(div);
+                });
+                lucide.createIcons();
+            });
+
+            // Notes Sync
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'notes'), s => {
+                const list = document.getElementById('list-notes'); list.innerHTML = "";
+                s.docs.forEach(d => {
+                    const div = document.createElement('div'); div.className = "bg-white p-5 rounded-3xl border border-slate-100 flex justify-between items-center shadow-sm active:bg-slate-50";
+                    div.innerHTML = `<div onclick="window.openNote('${d.id}')" class="flex-1 font-bold text-sm cursor-pointer uppercase tracking-tighter truncate pr-4">${d.data().title || "FICHE SANS TITRE"}</div>
                     <button onclick="window.del('notes', '${d.id}')" class="text-slate-200 ml-4"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
-                    l.appendChild(div);
+                    list.appendChild(div);
                 });
                 lucide.createIcons();
             });
@@ -244,19 +302,24 @@
 
     <script>
         window.setView = (id, btn) => {
-            document.querySelectorAll('.tab-pane').forEach(v => v.classList.add('hidden'));
+            document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
             document.getElementById('view-' + id).classList.remove('hidden');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('tab-active', 'text-indigo-600'));
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('tab-active', 'text-indigo-600');
+                b.classList.add('text-slate-400');
+            });
             btn.classList.add('tab-active', 'text-indigo-600');
             lucide.createIcons();
         };
         window.toggleMd = (show) => {
-            document.getElementById('nt-body-input').classList.toggle('hidden', show);
-            document.getElementById('nt-preview-div').classList.toggle('hidden', !show);
-            document.getElementById('btn-edit').className = show ? "px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500 uppercase" : "px-4 py-1.5 text-[9px] font-bold rounded-lg bg-white shadow-sm uppercase";
-            document.getElementById('btn-view').className = !show ? "px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500 uppercase" : "px-4 py-1.5 text-[9px] font-bold rounded-lg bg-white shadow-sm uppercase";
+            document.getElementById('nt-body').classList.toggle('hidden', show);
+            document.getElementById('nt-preview').classList.toggle('hidden', !show);
+            document.getElementById('btn-edit').className = show ? "px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500" : "px-4 py-1.5 text-[9px] font-bold rounded-lg bg-white shadow-sm";
+            document.getElementById('btn-view').className = !show ? "px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500" : "px-4 py-1.5 text-[9px] font-bold rounded-lg bg-white shadow-sm";
         };
         window.onload = () => lucide.createIcons();
     </script>
 </body>
 </html>
+
+
