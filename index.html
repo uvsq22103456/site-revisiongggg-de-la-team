@@ -24,14 +24,10 @@
         .view-content { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .crousty-card { background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); }
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* Classe pour limiter l'aperçu à 2 lignes */
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;  
-            overflow: hidden;
-        }
+        .grade-input:focus { background: white; border-color: #4f46e5; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
@@ -57,6 +53,7 @@
             <button onclick="window.setView('docs', this)" class="nav-btn px-5 py-3 text-[10px] font-black uppercase tracking-widest text-slate-400">Cours</button>
             <button onclick="window.setView('projets', this)" class="nav-btn px-5 py-3 text-[10px] font-black uppercase tracking-widest text-slate-400">Projets</button>
             <button onclick="window.setView('notes', this)" class="nav-btn px-5 py-3 text-[10px] font-black uppercase tracking-widest text-slate-400">Notes</button>
+            <button onclick="window.setView('grades', this)" class="nav-btn px-5 py-3 text-[10px] font-black uppercase tracking-widest text-slate-400">Moyennes</button>
         </div>
     </nav>
 
@@ -74,28 +71,20 @@
 
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="window.setView('planning', document.querySelectorAll('.nav-btn')[1])" class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm text-center space-y-2 active:scale-95 transition-all">
-                    <div class="bg-amber-100 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto text-amber-600">
-                        <i data-lucide="calendar"></i>
-                    </div>
+                    <div class="bg-amber-100 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto text-amber-600"><i data-lucide="calendar"></i></div>
                     <span class="block text-xs font-bold uppercase tracking-tighter">Révisions</span>
                 </button>
                 <button onclick="window.setView('docs', document.querySelectorAll('.nav-btn')[2])" class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm text-center space-y-2 active:scale-95 transition-all">
-                    <div class="bg-indigo-100 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto text-indigo-600">
-                        <i data-lucide="book-open"></i>
-                    </div>
+                    <div class="bg-indigo-100 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto text-indigo-600"><i data-lucide="book-open"></i></div>
                     <span class="block text-xs font-bold uppercase tracking-tighter">Cours</span>
                 </button>
                 <button onclick="window.setView('projets', document.querySelectorAll('.nav-btn')[3])" class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm text-center space-y-2 active:scale-95 transition-all">
-                    <div class="bg-emerald-100 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto text-emerald-600">
-                        <i data-lucide="folder-kanban"></i>
-                    </div>
+                    <div class="bg-emerald-100 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto text-emerald-600"><i data-lucide="folder-kanban"></i></div>
                     <span class="block text-xs font-bold uppercase tracking-tighter">Projets</span>
                 </button>
-                <button onclick="window.setView('notes', document.querySelectorAll('.nav-btn')[4])" class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm text-center space-y-2 active:scale-95 transition-all">
-                    <div class="bg-rose-100 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto text-rose-600">
-                        <i data-lucide="file-text"></i>
-                    </div>
-                    <span class="block text-xs font-bold uppercase tracking-tighter">Notes</span>
+                <button onclick="window.setView('grades', document.querySelectorAll('.nav-btn')[5])" class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm text-center space-y-2 active:scale-95 transition-all">
+                    <div class="bg-blue-100 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto text-blue-600"><i data-lucide="calculator"></i></div>
+                    <span class="block text-xs font-bold uppercase tracking-tighter">Moyennes</span>
                 </button>
             </div>
         </div>
@@ -116,22 +105,31 @@
 
         <!-- VUE COURS -->
         <div id="view-docs" class="view-content hidden space-y-4">
-            <div class="bg-white p-5 rounded-3xl border border-slate-100 space-y-3">
-                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1">Partager un Cours</h3>
-                <input type="text" id="in-doc" placeholder="Nom du cours" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none">
-                <input type="text" id="in-url" placeholder="Lien URL (Drive, etc)" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none">
-                <button onclick="window.addLink()" class="w-full bg-indigo-900 text-white p-4 rounded-2xl font-bold text-sm">PARTAGER</button>
-            </div>
             <div id="list-docs" class="grid gap-3"></div>
         </div>
 
         <!-- VUE PROJETS -->
         <div id="view-projets" class="view-content hidden space-y-4">
             <div class="bg-white p-5 rounded-3xl border border-slate-100 space-y-3">
-                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1">Nouveau Projet Groupe</h3>
-                <input type="text" id="in-proj-name" placeholder="Nom du projet" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none">
-                <input type="text" id="in-proj-desc" placeholder="Objectif ou tâche" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none">
-                <button onclick="window.addProject()" class="w-full bg-emerald-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95">CRÉER LE PROJET</button>
+                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1 text-center">Nouveau Ticket Projet</h3>
+                <input type="text" id="in-proj-name" placeholder="Nom du projet" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-emerald-500">
+                <input type="text" id="in-proj-desc" placeholder="Objectif" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-emerald-500">
+                <div class="grid grid-cols-2 gap-2">
+                    <select id="in-proj-status" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold border-none appearance-none text-slate-600">
+                        <option value="À FAIRE">📝 À FAIRE</option>
+                        <option value="EN COURS">🚀 EN COURS</option>
+                        <option value="TERMINÉ">✅ TERMINÉ</option>
+                    </select>
+                    <select id="in-proj-assign" class="p-4 bg-slate-50 rounded-2xl text-xs font-bold border-none appearance-none text-slate-600">
+                        <option value="">👤 NON ASSIGNÉ</option>
+                        <option value="Matthieu">Matthieu</option>
+                        <option value="Antoine">Antoine</option>
+                        <option value="Vincent">Vincent</option>
+                        <option value="Samia">Samia</option>
+                        <option value="Sofian">Sofian</option>
+                    </select>
+                </div>
+                <button onclick="window.addProject()" class="w-full bg-emerald-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95">LANCER LE TICKET</button>
             </div>
             <div id="list-projets" class="grid gap-3"></div>
         </div>
@@ -143,9 +141,54 @@
             </button>
             <div id="list-notes" class="grid gap-3"></div>
         </div>
+
+        <!-- VUE MOYENNES -->
+        <div id="view-grades" class="view-content hidden space-y-6">
+            <!-- Sélecteur de Profil -->
+            <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center font-black text-xs" id="user-avatar">?</div>
+                    <div>
+                        <div class="text-[10px] font-black uppercase text-slate-400">Profil Actuel</div>
+                        <select id="grade-user-select" class="font-bold text-sm bg-transparent border-none outline-none appearance-none text-indigo-600 cursor-pointer">
+                            <option value="">Choisir son nom...</option>
+                            <option value="Matthieu">Matthieu</option>
+                            <option value="Antoine">Antoine</option>
+                            <option value="Vincent">Vincent</option>
+                            <option value="Samia">Samia</option>
+                            <option value="Sofian">Sofian</option>
+                        </select>
+                    </div>
+                </div>
+                <i data-lucide="users" class="text-slate-200 w-5 h-5"></i>
+            </div>
+
+            <div id="grade-dashboard" class="hidden space-y-6">
+                <!-- Recap Général -->
+                <div class="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-xl flex justify-between items-center relative overflow-hidden">
+                    <div class="relative z-10">
+                        <h2 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Moyenne Générale</h2>
+                        <div id="total-gpa" class="text-4xl font-black">--</div>
+                        <div id="total-status" class="text-[9px] mt-2 font-bold px-2 py-1 bg-white/10 rounded-lg inline-block uppercase">En attente de notes</div>
+                    </div>
+                    <i data-lucide="graduation-cap" class="w-20 h-20 text-white/5 absolute -right-4 -bottom-4 rotate-12"></i>
+                </div>
+
+                <div id="list-blocs-template" class="space-y-6">
+                    <!-- Les blocs seront générés ici dynamiquement -->
+                </div>
+            </div>
+
+            <div id="grade-empty" class="py-20 text-center space-y-4">
+                <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-300">
+                    <i data-lucide="user-check"></i>
+                </div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Sélectionne ton nom pour gérer tes notes crousty</p>
+            </div>
+        </div>
     </main>
 
-    <!-- Modal Éditeur -->
+    <!-- Modal Éditeur Notes -->
     <div id="editor-modal" class="hidden fixed inset-0 bg-white z-[110] flex flex-col pt-[env(safe-area-inset-top)]">
         <div class="p-4 border-b flex justify-between items-center bg-slate-50">
             <button onclick="window.closeNote()" class="text-[10px] font-black text-slate-400 p-2 uppercase">Fermer</button>
@@ -164,7 +207,6 @@
         import { getFirestore, collection, doc, addDoc, setDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // CONFIGURATION FIREBASE
         const firebaseConfig = {
           apiKey: "AIzaSyBIHjJKZj_Bqw1XjHfJo4X3GWrA6GNLU8I",
           authDomain: "bu-buddy-4bafe.firebaseapp.com",
@@ -179,16 +221,165 @@
         const auth = getAuth(app);
         const appId = 'bu-buddy-v-crousty';
 
-        // Auth
+        // PROGRAMME M2 PR1232 (PDF)
+        const PROGRAM = [
+            {
+                bloc: "Savoirs spécialisés en statistique (BC00004225)",
+                items: [
+                    { name: "Statistique bayésienne", ects: 3 },
+                    { name: "Statistique non paramétrique", ects: 5 },
+                    { name: "Apprentissage profond & IA générative", ects: 3 },
+                    { name: "Projet Master", ects: 3 },
+                    { name: "Anglais", ects: 3 },
+                    { name: "Techniques de prévision", ects: 4 }
+                ]
+            },
+            {
+                bloc: "Spécialisation Actuariat / Marketing (BC00004226/27)",
+                items: [
+                    { name: "Assurance vie", ects: 5 },
+                    { name: "Assurance non vie", ects: 5 },
+                    { name: "Analyse des risques", ects: 3 },
+                    { name: "Méthodes de régression avancées", ects: 4 },
+                    { name: "Apprentissage non supervisé", ects: 4 },
+                    { name: "Applications marketing", ects: 3 }
+                ]
+            },
+            {
+                bloc: "Mise en situation professionnelle (BC00004228)",
+                items: [
+                    { name: "Alternance / Stage", ects: 15 },
+                    { name: "Machine Learning & Incertitude", ects: 3 }
+                ]
+            }
+        ];
+
         signInAnonymously(auth);
         onAuthStateChanged(auth, u => {
             if(u) {
                 document.getElementById('status-dot').className = "w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse";
-                document.getElementById('status-text').innerText = "Synchro Crousty";
+                document.getElementById('status-text').innerText = "Synchro Crousty Active";
                 initSync();
             }
         });
 
+        // GESTION PROFIL GRADES
+        let currentGradeUser = "";
+        let userNotes = {};
+
+        document.getElementById('grade-user-select').onchange = (e) => {
+            currentGradeUser = e.target.value;
+            if(currentGradeUser) {
+                document.getElementById('grade-dashboard').classList.remove('hidden');
+                document.getElementById('grade-empty').classList.add('hidden');
+                document.getElementById('user-avatar').innerText = currentGradeUser.charAt(0);
+                loadUserGrades();
+            } else {
+                document.getElementById('grade-dashboard').classList.add('hidden');
+                document.getElementById('grade-empty').classList.remove('hidden');
+            }
+        };
+
+        async function loadUserGrades() {
+            // On écoute les notes de l'utilisateur spécifique
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'user_grades'), s => {
+                userNotes = {};
+                s.docs.forEach(d => {
+                    const data = d.data();
+                    if(data.user === currentGradeUser) {
+                        userNotes[data.subject] = { id: d.id, note: data.note };
+                    }
+                });
+                renderGradeBlocks();
+            });
+        }
+
+        window.updateGrade = async (subject, val) => {
+            const note = parseFloat(val);
+            if(isNaN(note)) return;
+            
+            const existing = userNotes[subject];
+            if(existing) {
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_grades', existing.id), { note }, { merge: true });
+            } else {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'user_grades'), {
+                    user: currentGradeUser,
+                    subject: subject,
+                    note: note
+                });
+            }
+        };
+
+        function renderGradeBlocks() {
+            const container = document.getElementById('list-blocs-template');
+            container.innerHTML = "";
+            
+            let totalWeighted = 0;
+            let totalEcts = 0;
+
+            PROGRAM.forEach(bloc => {
+                let blocWeighted = 0;
+                let blocEcts = 0;
+                let blocFilledCount = 0;
+
+                const div = document.createElement('div');
+                div.className = "bg-white rounded-[2rem] border border-slate-100 p-6 shadow-sm";
+                
+                let itemsHtml = bloc.items.map(item => {
+                    const saved = userNotes[item.name];
+                    const val = saved ? saved.note : "";
+                    if(saved) {
+                        blocWeighted += (saved.note * item.ects);
+                        blocEcts += item.ects;
+                        blocFilledCount++;
+                    }
+                    return `
+                        <div class="flex justify-between items-center py-3 border-b border-slate-50 last:border-none">
+                            <div class="flex-1">
+                                <div class="text-[11px] font-bold text-slate-700 uppercase leading-tight">${item.name}</div>
+                                <div class="text-[9px] text-slate-400 font-black">COEFF ${item.ects} ECTS</div>
+                            </div>
+                            <input type="number" step="0.1" min="0" max="20" placeholder="-- / 20" 
+                                value="${val}"
+                                onchange="window.updateGrade('${item.name}', this.value)"
+                                class="grade-input w-16 p-2 bg-slate-50 border-none rounded-xl text-center text-xs font-black outline-none transition-all">
+                        </div>
+                    `;
+                }).join('');
+
+                const blocAvg = blocEcts > 0 ? (blocWeighted / blocEcts).toFixed(2) : "--";
+                if(blocEcts > 0) {
+                    totalWeighted += blocWeighted;
+                    totalEcts += blocEcts;
+                }
+
+                const statusColor = blocAvg !== "--" ? (parseFloat(blocAvg) >= 10 ? 'text-emerald-500' : 'text-rose-500') : 'text-slate-300';
+
+                div.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest max-w-[70%]">${bloc.bloc}</h3>
+                        <div class="text-right">
+                            <div class="text-lg font-black ${statusColor}">${blocAvg}</div>
+                            <div class="text-[8px] font-bold text-slate-300 uppercase">Moyenne Bloc</div>
+                        </div>
+                    </div>
+                    <div class="space-y-1">${itemsHtml}</div>
+                `;
+                container.appendChild(div);
+            });
+
+            const totalGpa = totalEcts > 0 ? (totalWeighted / totalEcts).toFixed(2) : "--";
+            document.getElementById('total-gpa').innerText = totalGpa;
+            
+            const totalStatus = document.getElementById('total-status');
+            if(totalGpa !== "--") {
+                const gpa = parseFloat(totalGpa);
+                totalStatus.innerText = gpa >= 10 ? "Admis (Validé sah)" : "Ajourné (C'est chaud t'es sah?)";
+                totalStatus.className = `text-[9px] mt-2 font-bold px-2 py-1 rounded-lg inline-block uppercase ${gpa >= 10 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`;
+            }
+        }
+
+        // --- RESTE DU CODE (LOGIQUE EXISTANTE) ---
         window.addSession = async () => {
             const subject = document.getElementById('in-title').value;
             const date = document.getElementById('in-date').value;
@@ -197,18 +388,19 @@
             document.getElementById('in-title').value = "";
         };
 
-        window.addLink = async () => {
-            const name = document.getElementById('in-doc').value;
-            const url = document.getElementById('in-url').value;
-            if(name && url) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), {name, url});
-            document.getElementById('in-doc').value = ""; document.getElementById('in-url').value = "";
-        };
-
         window.addProject = async () => {
             const name = document.getElementById('in-proj-name').value;
             const desc = document.getElementById('in-proj-desc').value;
-            if(name) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), {name, desc, date: new Date().toISOString()});
-            document.getElementById('in-proj-name').value = ""; document.getElementById('in-proj-desc').value = "";
+            const status = document.getElementById('in-proj-status').value;
+            const assignee = document.getElementById('in-proj-assign').value;
+            if(name) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), { name, desc, status, assignee, date: new Date().toISOString() });
+            ['in-proj-name', 'in-proj-desc'].forEach(i => document.getElementById(i).value = "");
+        };
+
+        window.cycleProjectStatus = async (id, current) => {
+            const flow = ['À FAIRE', 'EN COURS', 'TERMINÉ'];
+            const next = flow[(flow.indexOf(current) + 1) % flow.length];
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', id), { status: next }, { merge: true });
         };
 
         window.createNote = async () => {
@@ -231,10 +423,7 @@
                 }
             });
         };
-
         window.closeNote = () => { currentId = null; document.getElementById('editor-modal').classList.add('hidden'); };
-        
-        // Message personnalisé pour la suppression
         window.del = async (c, i) => { if(confirm("T'es un ouf tu veux S=supprimer définitivement t'es sah?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', c, i)); };
 
         const save = () => {
@@ -262,56 +451,41 @@
                 lucide.createIcons();
             });
 
-            // Docs Sync
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), s => {
-                const list = document.getElementById('list-docs'); list.innerHTML = "";
-                s.docs.forEach(d => {
-                    const div = document.createElement('div'); div.className = "bg-white p-4 rounded-2xl border flex justify-between items-center shadow-sm";
-                    div.innerHTML = `<div class="truncate flex-1 mr-4"><div class="font-bold text-xs uppercase truncate">${d.data().name}</div>
-                    <a href="${d.data().url}" target="_blank" class="text-indigo-600 text-[9px] font-black underline italic">VOIR LE COURS</a></div>
-                    <button onclick="window.del('docs', '${d.id}')" class="text-slate-200"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
-                    list.appendChild(div);
-                });
-                lucide.createIcons();
-            });
-
             // Projets Sync
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), s => {
                 const list = document.getElementById('list-projets'); list.innerHTML = "";
                 s.docs.forEach(d => {
                     const p = d.data();
+                    const status = p.status || 'À FAIRE';
+                    const colors = { 'À FAIRE': 'bg-slate-100 text-slate-600', 'EN COURS': 'bg-indigo-100 text-indigo-700', 'TERMINÉ': 'bg-emerald-100 text-emerald-700' };
+                    const initial = p.assignee ? p.assignee.charAt(0) : '?';
                     const div = document.createElement('div'); div.className = "bg-white p-5 rounded-3xl border border-slate-100 shadow-sm";
-                    div.innerHTML = `<div class="flex justify-between items-start mb-2">
-                        <div class="font-black text-sm uppercase tracking-tight text-emerald-700">${p.name}</div>
-                        <button onclick="window.del('projects', '${d.id}')" class="text-slate-200"><i data-lucide="x-circle" class="w-4 h-4"></i></button>
-                    </div>
-                    <p class="text-[10px] text-slate-500 italic mb-1">${p.desc || "Pas de description"}</p>
-                    <div class="text-[8px] font-bold text-slate-300 uppercase">Créé le ${new Date(p.date).toLocaleDateString()}</div>`;
+                    div.innerHTML = `
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex items-center gap-2">
+                                <div class="w-7 h-7 bg-slate-900 text-white rounded-full flex items-center justify-center text-[10px] font-black uppercase ring-2 ring-slate-100" title="${p.assignee || 'Non assigné'}">${initial}</div>
+                                <div class="font-black text-sm uppercase text-slate-800">${p.name}</div>
+                            </div>
+                            <button onclick="window.del('projects', '${d.id}')" class="text-slate-200"><i data-lucide="x-circle" class="w-4 h-4"></i></button>
+                        </div>
+                        <p class="text-[10px] text-slate-400 font-bold px-9 mb-3">${p.assignee ? 'Assigné à '+p.assignee : 'Libre'}</p>
+                        <div class="flex justify-between items-center pl-9">
+                            <button onclick="window.cycleProjectStatus('${d.id}', '${status}')" class="px-3 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest ${colors[status]} active:scale-95 transition-transform">${status}</button>
+                            <div class="text-[8px] font-bold text-slate-200 uppercase">${new Date(p.date).toLocaleDateString()}</div>
+                        </div>`;
                     list.appendChild(div);
                 });
                 lucide.createIcons();
             });
 
-            // Notes Sync avec Aperçu et Style Restauré
+            // Notes Sync
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'notes'), s => {
                 const list = document.getElementById('list-notes'); list.innerHTML = "";
                 s.docs.forEach(d => {
                     const data = d.data();
-                    const div = document.createElement('div'); 
-                    div.className = "bg-white p-5 rounded-3xl border border-slate-100 flex justify-between items-center shadow-sm active:bg-slate-50 transition-colors";
-                    div.innerHTML = `
-                        <div onclick="window.openNote('${d.id}')" class="flex-1 cursor-pointer pr-4 overflow-hidden">
-                            <div class="font-bold text-sm uppercase tracking-tighter truncate mb-1 text-slate-800">
-                                ${data.title || "FICHE SANS TITRE"}
-                            </div>
-                            <div class="text-[10px] text-slate-400 font-medium line-clamp-2 leading-relaxed">
-                                ${data.content || "Aucun contenu crousty..."}
-                            </div>
-                        </div>
-                        <button onclick="window.del('notes', '${d.id}')" class="text-slate-200 ml-4 shrink-0 hover:text-red-400 transition-colors">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    `;
+                    const div = document.createElement('div'); div.className = "bg-white p-5 rounded-3xl border border-slate-100 flex justify-between items-center shadow-sm active:bg-slate-50";
+                    div.innerHTML = `<div onclick="window.openNote('${d.id}')" class="flex-1 cursor-pointer pr-4 overflow-hidden"><div class="font-bold text-sm uppercase mb-1 text-slate-800">${data.title || "FICHE SANS TITRE"}</div><div class="text-[10px] text-slate-400 font-medium line-clamp-2">${data.content || "..." }</div></div>
+                        <button onclick="window.del('notes', '${d.id}')" class="text-slate-200 ml-4"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
                     list.appendChild(div);
                 });
                 lucide.createIcons();
@@ -340,5 +514,3 @@
     </script>
 </body>
 </html>
-
-
