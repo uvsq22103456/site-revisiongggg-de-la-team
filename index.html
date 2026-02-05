@@ -106,6 +106,12 @@
 
         <!-- VUE COURS -->
         <div id="view-docs" class="view-content hidden space-y-4">
+            <div class="bg-white p-5 rounded-3xl border border-slate-100 space-y-3">
+                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1">Partager un Cours</h3>
+                <input type="text" id="in-doc" placeholder="Nom du cours" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-indigo-500 transition-all">
+                <input type="text" id="in-url" placeholder="Lien URL (Drive, etc)" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-indigo-500 transition-all">
+                <button onclick="window.addLink()" class="w-full bg-indigo-900 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95 transition-all">PARTAGER LE LIEN</button>
+            </div>
             <div id="list-docs" class="grid gap-3"></div>
         </div>
 
@@ -119,11 +125,11 @@
                 <div class="space-y-2">
                     <p class="text-[9px] font-black text-slate-300 uppercase px-1">Assigner la Team :</p>
                     <div class="flex flex-wrap gap-2" id="assign-selector">
-                        <div class="relative"><input type="checkbox" id="user-Matthieu" value="Matthieu" class="assign-check hidden"><label for="user-Matthieu" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">Antoine</label></div>
-                        <div class="relative"><input type="checkbox" id="user-Antoine" value="Antoine" class="assign-check hidden"><label for="user-Antoine" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">Matthieu</label></div>
-                        <div class="relative"><input type="checkbox" id="user-Vincent" value="Vincent" class="assign-check hidden"><label for="user-Vincent" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">Vince</label></div>
-                        <div class="relative"><input type="checkbox" id="user-Samia" value="Samia" class="assign-check hidden"><label for="user-Samia" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">Samia</label></div>
-                        <div class="relative"><input type="checkbox" id="user-Sofian" value="Sofian" class="assign-check hidden"><label for="user-Sofian" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">Sofian</label></div>
+                        <div class="relative"><input type="checkbox" id="user-Matthieu" value="Matthieu" class="assign-check hidden"><label for="user-Matthieu" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">MAB</label></div>
+                        <div class="relative"><input type="checkbox" id="user-Antoine" value="Antoine" class="assign-check hidden"><label for="user-Antoine" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">MC</label></div>
+                        <div class="relative"><input type="checkbox" id="user-Vincent" value="Vincent" class="assign-check hidden"><label for="user-Vincent" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">VG</label></div>
+                        <div class="relative"><input type="checkbox" id="user-Samia" value="Samia" class="assign-check hidden"><label for="user-Samia" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">SA</label></div>
+                        <div class="relative"><input type="checkbox" id="user-Sofian" value="Sofian" class="assign-check hidden"><label for="user-Sofian" class="px-3 py-2 bg-slate-50 text-[10px] font-bold rounded-xl border border-slate-100 cursor-pointer block">SSH</label></div>
                     </div>
                 </div>
 
@@ -147,6 +153,7 @@
 
         <!-- VUE MOYENNES -->
         <div id="view-grades" class="view-content hidden space-y-6">
+            <!-- Sélecteur de Profil -->
             <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center font-black text-xs" id="user-avatar">?</div>
@@ -166,18 +173,12 @@
             </div>
 
             <div id="grade-dashboard" class="hidden space-y-6">
-                <!-- Info Importante -->
-                <div class="bg-amber-50 border border-amber-100 p-4 rounded-2xl flex gap-3 items-start">
-                    <i data-lucide="info" class="w-4 h-4 text-amber-500 shrink-0 mt-0.5"></i>
-                    <p class="text-[10px] text-amber-700 font-semibold leading-relaxed">Les 4 blocs ne se compensent pas. L'UE Alternance est non compensante.</p>
-                </div>
-
                 <!-- Recap Global -->
                 <div class="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-xl flex justify-between items-center relative overflow-hidden">
                     <div class="relative z-10">
                         <h2 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Note de l'Année</h2>
                         <div id="total-gpa" class="text-4xl font-black">--</div>
-                        <div id="total-status" class="text-[9px] mt-2 font-bold px-2 py-1 bg-white/10 rounded-lg inline-block uppercase">Calcul...</div>
+                        <div id="total-status" class="text-[9px] mt-2 font-bold px-2 py-1 bg-white/10 rounded-lg inline-block uppercase tracking-wider">Calcul en cours...</div>
                     </div>
                     <i data-lucide="graduation-cap" class="w-20 h-20 text-white/5 absolute -right-4 -bottom-4 rotate-12"></i>
                 </div>
@@ -225,7 +226,6 @@
         const auth = getAuth(app);
         const appId = 'bu-buddy-v-crousty';
 
-        // PROGRAMME M2 PR1232 RÉVISÉ (4 BLOCS)
         const PROGRAM = [
             {
                 bloc: "Savoirs spécialisés en statistique (BC00004225)",
@@ -275,6 +275,17 @@
             }
         });
 
+        // ACTIONS : COURS / DOCS
+        window.addLink = async () => {
+            const name = document.getElementById('in-doc').value;
+            const url = document.getElementById('in-url').value;
+            if(name && url) {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), { name, url });
+                document.getElementById('in-doc').value = "";
+                document.getElementById('in-url').value = "";
+            }
+        };
+
         // GESTION PROFIL GRADES
         let currentGradeUser = "";
         let userNotes = {};
@@ -315,7 +326,6 @@
             const container = document.getElementById('list-blocs-template');
             container.innerHTML = "";
             let totalWeighted = 0; let totalEcts = 0;
-
             PROGRAM.forEach(bloc => {
                 let blocWeighted = 0; let blocEcts = 0;
                 let itemsHtml = bloc.items.map(item => {
@@ -330,10 +340,8 @@
                         <input type="number" step="0.1" value="${val}" onchange="window.updateGrade('${item.name}', this.value)" class="grade-input w-16 p-2 bg-slate-50 border-none rounded-xl text-center text-xs font-black outline-none transition-all">
                     </div>`;
                 }).join('');
-
                 const blocAvg = blocEcts > 0 ? (blocWeighted / blocEcts).toFixed(2) : "--";
                 if(blocEcts > 0) { totalWeighted += blocWeighted; totalEcts += blocEcts; }
-
                 const div = document.createElement('div');
                 div.className = "bg-white rounded-[2rem] border border-slate-100 p-6 shadow-sm";
                 div.innerHTML = `<div class="flex justify-between items-start mb-4">
@@ -345,7 +353,6 @@
                     </div><div class="space-y-1">${itemsHtml}</div>`;
                 container.appendChild(div);
             });
-
             const totalGpa = totalEcts > 0 ? (totalWeighted / totalEcts).toFixed(2) : "--";
             document.getElementById('total-gpa').innerText = totalGpa;
             const status = document.getElementById('total-status');
@@ -404,7 +411,6 @@
                 }
             });
         };
-
         window.closeNote = () => { currentId = null; document.getElementById('editor-modal').classList.add('hidden'); };
         window.del = async (c, i) => { if(confirm("T'es un ouf tu veux S=supprimer définitivement t'es sah?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', c, i)); };
 
@@ -419,6 +425,7 @@
         document.getElementById('nt-body').oninput = e => { save(); document.getElementById('nt-preview').innerHTML = marked.parse(e.target.value); };
 
         function initSync() {
+            // Planning
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'planning'), s => {
                 const list = document.getElementById('list-planning'); list.innerHTML = "";
                 s.docs.map(d=>({id:d.id, ...d.data()})).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).forEach(ev => {
@@ -432,6 +439,25 @@
                 lucide.createIcons();
             });
 
+            // COURS / DOCS (RESTAURÉ)
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), s => {
+                const list = document.getElementById('list-docs'); list.innerHTML = "";
+                s.docs.forEach(d => {
+                    const docData = d.data();
+                    const div = document.createElement('div'); 
+                    div.className = "bg-white p-4 rounded-2xl border flex justify-between items-center shadow-sm";
+                    div.innerHTML = `
+                        <div class="truncate flex-1 mr-4">
+                            <div class="font-bold text-xs uppercase truncate">${docData.name}</div>
+                            <a href="${docData.url}" target="_blank" class="text-indigo-600 text-[9px] font-black underline italic">VOIR LE COURS</a>
+                        </div>
+                        <button onclick="window.del('docs', '${d.id}')" class="text-slate-200"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
+                    list.appendChild(div);
+                });
+                lucide.createIcons();
+            });
+
+            // Projets
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), s => {
                 const list = document.getElementById('list-projets'); list.innerHTML = "";
                 s.docs.forEach(d => {
@@ -446,6 +472,7 @@
                 lucide.createIcons();
             });
 
+            // Notes
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'notes'), s => {
                 const list = document.getElementById('list-notes'); list.innerHTML = "";
                 s.docs.forEach(d => {
