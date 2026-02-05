@@ -121,7 +121,7 @@
         <div id="view-projets" class="view-content hidden space-y-4">
             <div class="bg-white p-5 rounded-3xl border border-slate-100 space-y-3">
                 <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1">Nouveau Projet Groupe</h3>
-                <input type="text" id="in-proj-name" placeholder="Nom du projet (ex: Projet Tillilier)" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none">
+                <input type="text" id="in-proj-name" placeholder="Nom du projet (ex:Cours Tillilier)" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none">
                 <input type="text" id="in-proj-desc" placeholder="Objectif ou tâche" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none">
                 <button onclick="window.addProject()" class="w-full bg-emerald-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95">CRÉER LE PROJET</button>
             </div>
@@ -227,7 +227,7 @@
         };
 
         window.closeNote = () => { currentId = null; document.getElementById('editor-modal').classList.add('hidden'); };
-        window.del = async (c, i) => { if(confirm("Supprimer définitivement ?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', c, i)); };
+        window.del = async (c, i) => { if(confirm("T'es un ouf tu veux S=supprimer définitivement t'es sah?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', c, i)); };
 
         const save = () => {
             if(!currentId) return;
