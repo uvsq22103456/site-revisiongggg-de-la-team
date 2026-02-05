@@ -27,6 +27,11 @@
         
         .grade-input:focus { background: white; border-color: #4f46e5; }
         .assign-check:checked + label { background-color: #4f46e5; color: white; border-color: #4f46e5; }
+        
+        /* Bar chart styles */
+        .bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 4px; }
+        .bar-bg { width: 100%; background: rgba(255,255,255,0.05); border-radius: 4px 4px 0 0; height: 100%; position: relative; display: flex; align-items: flex-end; overflow: hidden; }
+        .bar-fill { width: 100%; border-radius: 2px 2px 0 0; transition: height 1s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
@@ -62,14 +67,14 @@
         <!-- VUE ACCUEIL -->
         <div id="view-home" class="view-content space-y-6">
             <!-- COUNTDOWN -->
-            <div id="countdown-banner" class="bg-slate-900 rounded-[2rem] p-6 text-white flex items-center justify-between overflow-hidden relative cursor-pointer active:scale-[0.98] transition-all">
+            <div id="countdown-banner" class="bg-slate-900 rounded-[2rem] p-6 text-white flex items-center justify-between overflow-hidden relative cursor-pointer active:scale-[0.98] transition-all shadow-xl">
                 <div class="relative z-10">
                     <p class="text-[10px] font-black uppercase text-indigo-400 tracking-widest mb-1 flex items-center gap-1.5">
-                        Compte à rebours examens <i data-lucide="edit-3" class="w-2.5 h-2.5"></i>
+                        Prochain CC <i data-lucide="edit-3" class="w-2.5 h-2.5"></i>
                     </p>
                     <div class="flex items-baseline gap-2">
                         <span id="countdown-days" class="text-4xl font-black">--</span>
-                        <span class="text-xs font-bold text-slate-400 uppercase">Jours restants</span>
+                        <span class="text-xs font-bold text-slate-400 uppercase">jours restants</span>
                     </div>
                 </div>
                 <i data-lucide="calendar-clock" class="w-16 h-16 text-indigo-500/20 absolute -right-2 rotate-12"></i>
@@ -115,20 +120,21 @@
             <div id="list-planning" class="space-y-4"></div>
         </div>
 
-        <!-- VUE COURS -->
+        <!-- VUE COURS (AVEC NOUVEAUX DOSSIERS) -->
         <div id="view-docs" class="view-content hidden space-y-4">
             <div class="bg-white p-5 rounded-3xl border border-slate-100 space-y-3 shadow-sm">
                 <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest px-1 text-center">Ajouter un cours</h3>
                 <input type="text" id="in-doc" placeholder="Nom du cours" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-indigo-500">
                 <input type="text" id="in-url" placeholder="Lien Drive" class="w-full p-4 bg-slate-50 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-indigo-500">
-                <select id="in-doc-folder" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold border-none appearance-none">
-                    <option value="Statistique & Savoirs">📁 Agnes</option>
-                    <option value="Actuariat">📁 Marianne</option>
-                    <option value="Etude de Marché">📁 Gildas</option>
-                    <option value="Alternance">📁 Tillier</option>
-                    <option value="Autres">📁 Worms</option>
+                <select id="in-doc-folder" class="w-full p-4 bg-slate-50 rounded-2xl text-xs font-bold border-none appearance-none text-slate-600">
+                    <option value="Agnes">📁 Agnes</option>
+                    <option value="Gildas">📁 Gildas</option>
+                    <option value="Tillier">📁 Tillier</option>
+                    <option value="Worms">📁 Worms</option>
+                    <option value="Marianne">📁 Marianne</option>
+                    <option value="Autres">📁 Divers</option>
                 </select>
-                <button id="btn-submit-link" class="w-full bg-indigo-900 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95">PARTAGER</button>
+                <button id="btn-submit-link" class="w-full bg-indigo-900 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95">PARTAGER LE LIEN</button>
             </div>
             <div id="list-docs" class="space-y-4"></div>
         </div>
@@ -156,7 +162,7 @@
                     <option value="EN COURS">🚀 EN COURS</option>
                     <option value="TERMINÉ">✅ TERMINÉ</option>
                 </select>
-                <button id="btn-submit-project" class="w-full bg-emerald-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95">CRÉER TICKET</button>
+                <button id="btn-submit-project" class="w-full bg-emerald-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95">LANCER LE TICKET</button>
             </div>
             <div id="list-projets" class="grid gap-3"></div>
         </div>
@@ -186,25 +192,26 @@
             </div>
 
             <div id="grade-dashboard" class="hidden space-y-6">
-                <div class="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-xl space-y-6 relative overflow-hidden">
-                    <div class="relative z-10">
+                <!-- DASHBOARD STATS -->
+                <div class="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-xl space-y-8 relative overflow-hidden">
+                    <div class="relative z-10 space-y-8">
                         <div class="flex justify-between items-center">
                             <div>
                                 <h2 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Moyenne de l'Année</h2>
-                                <div id="total-gpa" class="text-4xl font-black">--</div>
+                                <div id="total-gpa" class="text-5xl font-black">--</div>
+                                <div id="total-status" class="text-[9px] mt-2 font-bold px-2 py-1 bg-white/10 rounded-lg inline-block uppercase tracking-wider transition-all duration-300">Calcul...</div>
                             </div>
-                            <i data-lucide="graduation-cap" class="w-12 h-12 text-indigo-500"></i>
+                            <div class="w-40 h-28 flex items-end gap-2 px-3 border-l border-white/10" id="bloc-bar-chart"></div>
                         </div>
-                        <div class="space-y-2 mt-6">
+                        <div class="space-y-2">
                             <div class="flex justify-between text-[9px] font-black uppercase">
-                                <span>Progression Validation</span>
+                                <span>Validation (60 ECTS)</span>
                                 <span id="year-progress-text">0%</span>
                             </div>
                             <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden">
-                                <div id="year-progress-bar" class="h-full bg-indigo-500 transition-all duration-1000" style="width: 0%"></div>
+                                <div id="year-progress-bar" class="h-full bg-indigo-500 transition-all duration-1000 shadow-[0_0_15px_rgba(99,102,241,0.5)]" style="width: 0%"></div>
                             </div>
                         </div>
-                        <div id="total-status" class="text-[9px] mt-4 font-bold px-2 py-1 bg-white/10 rounded-lg inline-block uppercase tracking-wider">Calcul...</div>
                     </div>
                 </div>
                 <div id="list-blocs-template" class="space-y-6"></div>
@@ -212,15 +219,15 @@
 
             <div id="grade-empty" class="py-20 text-center space-y-4">
                 <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-300"><i data-lucide="user-check"></i></div>
-                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Sélectionne un prénom pour tes notes</p>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Sélectionne ton prénom pour tes notes</p>
             </div>
         </div>
     </main>
 
-    <!-- MODAL MODIF DATE (PLUS DE PROMPT BLOQUÉ) -->
+    <!-- MODAL MODIF DATE -->
     <div id="date-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-6">
         <div class="bg-white w-full max-w-sm rounded-[2.5rem] p-8 space-y-6 shadow-2xl">
-            <h3 class="text-sm font-black uppercase text-slate-800 text-center">Modifier la date des partiels</h3>
+            <h3 class="text-sm font-black uppercase text-slate-800 text-center">Date du prochain CC</h3>
             <input type="date" id="new-exam-date" class="w-full p-4 bg-slate-50 border-none rounded-2xl text-center font-bold outline-none ring-indigo-500 focus:ring-2">
             <div class="flex gap-2">
                 <button id="btn-save-date" class="flex-1 bg-indigo-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg">ENREGISTRER</button>
@@ -277,10 +284,10 @@
 
         const TEAM = ["Matt", "MAB", "Vince", "Sami", "Soso"];
         const PROGRAM = [
-            { bloc: "Savoirs spécialisés en statistique (BC00004225)", items: [{ name: "Statistique bayésienne", ects: 3 }, { name: "Statistique non paramétrique", ects: 5 }, { name: "Projet Master", ects: 3 }, { name: "Anglais", ects: 3 }, { name: "Techniques de prévision", ects: 4 }] },
-            { bloc: "Spécialisation en Actuariat (BC00004226)", items: [{ name: "Assurance vie", ects: 5 }, { name: "Assurance non vie", ects: 5 }, { name: "Analyse des risques", ects: 3 }] },
-            { bloc: "Spécialisation en Etude de Marché (BC00004227)", items: [{ name: "Méthodes de régression avancées", ects: 4 }, { name: "Apprentissage non supervisé", ects: 4 }, { name: "Applications marketing", ects: 3 }, { name: "Machine learning et incertitude", ects: 3 }] },
-            { bloc: "Mise en situation professionnelle (BC00004228)", items: [{ name: "Alternance", ects: 15 }] }
+            { id: "B1", short: "Savoirs", bloc: "Savoirs spécialisés en statistique (BC00004225)", items: [{ name: "Statistique bayésienne", ects: 3 }, { name: "Statistique non paramétrique", ects: 5 }, { name: "Projet Master", ects: 3 }, { name: "Anglais", ects: 3 }, { name: "Techniques de prévision", ects: 4 }] },
+            { id: "B2", short: "Actuariat", bloc: "Spécialisation en Actuariat (BC00004226)", items: [{ name: "Assurance vie", ects: 5 }, { name: "Assurance non vie", ects: 5 }, { name: "Analyse des risques", ects: 3 }] },
+            { id: "B3", short: "Marché", bloc: "Spécialisation en Etude de Marché (BC00004227)", items: [{ name: "Méthodes de régression avancées", ects: 4 }, { name: "Apprentissage non supervisé", ects: 4 }, { name: "Applications marketing", ects: 3 }, { name: "Machine learning et incertitude", ects: 3 }] },
+            { id: "B4", short: "Entrep.", bloc: "Mise en situation professionnelle (BC00004228)", items: [{ name: "Alternance", ects: 15 }] }
         ];
 
         let currentNoteId = null;
@@ -289,7 +296,7 @@
         let timerSeconds = 25 * 60;
         let timerInterval = null;
 
-        // --- AUTH & SYNC ---
+        // --- AUTH ---
         signInAnonymously(auth);
         onAuthStateChanged(auth, u => { 
             if(u) { 
@@ -319,7 +326,7 @@
         document.getElementById('quick-planning').addEventListener('click', () => setView('planning', document.getElementById('nav-planning')));
         document.getElementById('quick-grades').addEventListener('click', () => setView('grades', document.getElementById('nav-grades')));
 
-        // --- COUNTDOWN SYSTEM (NO PROMPT) ---
+        // --- COUNTDOWN SYSTEM ---
         function initCountdownSync() {
             onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'exams'), (d) => {
                 let targetDateStr = '2026-05-15';
@@ -332,20 +339,11 @@
             });
         }
 
-        document.getElementById('countdown-banner').addEventListener('click', () => {
-            document.getElementById('date-modal').classList.remove('hidden');
-        });
-
-        document.getElementById('btn-cancel-date').addEventListener('click', () => {
-            document.getElementById('date-modal').classList.add('hidden');
-        });
-
+        document.getElementById('countdown-banner').addEventListener('click', () => document.getElementById('date-modal').classList.remove('hidden'));
+        document.getElementById('btn-cancel-date').addEventListener('click', () => document.getElementById('date-modal').classList.add('hidden'));
         document.getElementById('btn-save-date').addEventListener('click', async () => {
             const val = document.getElementById('new-exam-date').value;
-            if(val) {
-                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'exams'), { date: val });
-                document.getElementById('date-modal').classList.add('hidden');
-            }
+            if(val) { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'exams'), { date: val }); document.getElementById('date-modal').classList.add('hidden'); }
         });
 
         // --- TIMER FOCUS ---
@@ -356,33 +354,18 @@
         document.getElementById('btn-timer-open-main').onclick = () => document.getElementById('timer-modal').classList.remove('hidden');
         document.getElementById('btn-timer-close').onclick = () => document.getElementById('timer-modal').classList.add('hidden');
         document.getElementById('btn-timer-play').onclick = () => {
-            if(timerInterval) {
-                clearInterval(timerInterval); timerInterval = null; document.getElementById('btn-timer-play').innerHTML = '<i data-lucide="play"></i>';
-            } else {
-                timerInterval = setInterval(() => {
-                    if(timerSeconds <= 0) { clearInterval(timerInterval); timerInterval = null; return; }
-                    timerSeconds--; updateTimerDisplay();
-                }, 1000);
-                document.getElementById('btn-timer-play').innerHTML = '<i data-lucide="pause"></i>';
-            }
+            if(timerInterval) { clearInterval(timerInterval); timerInterval = null; document.getElementById('btn-timer-play').innerHTML = '<i data-lucide="play"></i>'; }
+            else { timerInterval = setInterval(() => { if(timerSeconds <= 0) { clearInterval(timerInterval); timerInterval = null; return; } timerSeconds--; updateTimerDisplay(); }, 1000); document.getElementById('btn-timer-play').innerHTML = '<i data-lucide="pause"></i>'; }
             lucide.createIcons();
         };
-        document.getElementById('btn-timer-reset').onclick = () => {
-            timerSeconds = 25 * 60; updateTimerDisplay();
-            if(timerInterval) { clearInterval(timerInterval); timerInterval = null; document.getElementById('btn-timer-play').innerHTML = '<i data-lucide="play"></i>'; lucide.createIcons(); }
-        };
+        document.getElementById('btn-timer-reset').onclick = () => { timerSeconds = 25 * 60; updateTimerDisplay(); if(timerInterval) { clearInterval(timerInterval); timerInterval = null; document.getElementById('btn-timer-play').innerHTML = '<i data-lucide="play"></i>'; lucide.createIcons(); } };
 
-        // --- MOYENNES ---
+        // --- MOYENNES (TRONCATURE + MESSAGES PERSO) ---
         const truncate2 = (num) => { if(isNaN(num) || num === null) return "--"; return (Math.floor((num + 1e-11) * 100) / 100).toFixed(2); };
 
         const saveGrade = async (subject, val) => {
-            if (val === "") {
-                const ex = userNotes[subject];
-                if (ex) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_grades', ex.id));
-                return;
-            }
-            const note = parseFloat(val.replace(',', '.'));
-            if(isNaN(note)) return;
+            if (val === "") { const ex = userNotes[subject]; if (ex) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_grades', ex.id)); return; }
+            const note = parseFloat(val.replace(',', '.')); if(isNaN(note)) return;
             const ex = userNotes[subject];
             if(ex) await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_grades', ex.id), { note }, { merge: true });
             else await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'user_grades'), { user: currentGradeUser, subject, note });
@@ -390,38 +373,42 @@
 
         const renderGradesUI = () => {
             const container = document.getElementById('list-blocs-template'); container.innerHTML = "";
+            const chart = document.getElementById('bloc-bar-chart'); chart.innerHTML = "";
             let gWeight = 0; let gEcts = 0; let gAllOk = true;
+
             PROGRAM.forEach(bloc => {
                 let bWeight = 0; let bEcts = 0;
                 let html = bloc.items.map(item => {
                     const saved = userNotes[item.name]; const val = saved ? saved.note : "";
                     if(saved) { bWeight += (saved.note * item.ects); bEcts += item.ects; gWeight += (saved.note * item.ects); gEcts += item.ects; }
                     const idInp = `inp-${item.name.replace(/\s/g, '-')}`;
-                    return `<div class="flex justify-between items-center py-2 border-b border-slate-50 last:border-none">
-                        <div class="flex-1 text-[11px] font-bold text-slate-600 uppercase truncate pr-2">${item.name}</div>
-                        <input type="text" id="${idInp}" value="${val}" class="grade-input w-12 p-1.5 bg-slate-50 border-none rounded-lg text-center text-xs font-black outline-none">
-                    </div>`;
+                    return `<div class="flex justify-between items-center py-2 border-b border-slate-50 last:border-none"><div class="flex-1 text-[11px] font-bold text-slate-600 uppercase truncate pr-2">${item.name}</div><input type="text" id="${idInp}" value="${val}" class="grade-input w-12 p-1.5 bg-slate-50 border-none rounded-lg text-center text-xs font-black outline-none"></div>`;
                 }).join('');
+                
                 const avg = bEcts > 0 ? (bWeight / bEcts) : null;
                 if(avg !== null && avg < 10) gAllOk = false;
+                
+                // CHART BARS
+                const barHeight = avg !== null ? (avg / 20) * 100 : 0;
+                const barColor = avg >= 10 ? 'bg-indigo-500' : (avg === null ? 'bg-white/10' : 'bg-rose-500');
+                chart.innerHTML += `<div class="bar-wrapper group relative"><div class="absolute -top-7 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-white text-slate-900 text-[9px] font-black px-1.5 py-0.5 rounded transition-opacity pointer-events-none z-20">${avg !== null ? truncate2(avg) : '--'}</div><div class="bar-bg"><div class="bar-fill ${barColor}" style="height: ${barHeight}%"></div></div><div class="text-[6px] font-black text-slate-500 uppercase truncate w-full text-center mt-1">${bloc.short}</div></div>`;
+
                 const div = document.createElement('div'); div.className = "bg-white rounded-3xl border border-slate-100 p-6 shadow-sm";
                 div.innerHTML = `<div class="flex justify-between items-start mb-4"><h3 class="text-[9px] font-black text-slate-300 uppercase tracking-widest max-w-[60%]">${bloc.bloc}</h3><div class="text-right text-lg font-black ${avg >= 10 ? 'text-indigo-600' : 'text-rose-500'}">${avg !== null ? truncate2(avg) : "--"}</div></div><div class="space-y-1">${html}</div>`;
                 container.appendChild(div);
-                // Listeners
-                bloc.items.forEach(item => {
-                    const el = document.getElementById(`inp-${item.name.replace(/\s/g, '-')}`);
-                    el.onchange = (e) => saveGrade(item.name, e.target.value);
-                });
+                bloc.items.forEach(item => { const el = document.getElementById(`inp-${item.name.replace(/\s/g, '-')}`); if(el) el.onchange = (e) => saveGrade(item.name, e.target.value); });
             });
+
             const final = gEcts > 0 ? (gWeight / gEcts) : null;
             document.getElementById('total-gpa').innerText = final !== null ? truncate2(final) : "--";
-            const prog = (gEcts / 60) * 100;
-            document.getElementById('year-progress-bar').style.width = prog + "%";
-            document.getElementById('year-progress-text').innerText = Math.round(prog) + "%";
+            document.getElementById('year-progress-bar').style.width = ((gEcts / 60) * 100) + "%";
+            document.getElementById('year-progress-text').innerText = Math.round((gEcts / 60) * 100) + "%";
+            
             const stat = document.getElementById('total-status');
             if(final !== null) {
                 const ok = parseFloat(truncate2(final)) >= 10 && gAllOk;
-                stat.innerText = ok ? "Admis (Validé sah)" : "Ajourné (C'est chaud t'es sah?)";
+                // MESSAGES PERSONNALISÉS DEMANDÉS
+                stat.innerText = ok ? "Admis (ti es un tiigre)" : "Ajourné (courage go dead les rattrapages)";
                 stat.className = `text-[9px] font-bold px-2 py-1 rounded-lg inline-block uppercase ${ok ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`;
             }
         };
@@ -441,20 +428,20 @@
 
         // --- SUBMIT ACTIONS ---
         document.getElementById('btn-submit-session').onclick = async () => {
-            const subject = document.getElementById('in-title').value; const date = document.getElementById('in-date').value; const time = document.getElementById('in-time').value;
-            if(subject && date) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'planning'), { subject, date, time, participants: [] });
+            const s = document.getElementById('in-title').value; const d = document.getElementById('in-date').value; const t = document.getElementById('in-time').value;
+            if(s && d) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'planning'), { subject: s, date: d, time: t, participants: [] });
             document.getElementById('in-title').value = "";
         };
 
         document.getElementById('btn-submit-project').onclick = async () => {
-            const name = document.getElementById('in-proj-name').value; const desc = document.getElementById('in-proj-desc').value; const status = document.getElementById('in-proj-status').value;
-            const assignees = Array.from(document.querySelectorAll('.assign-check:checked')).map(cb => cb.value);
-            if(name) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), { name, desc, status, assignees, date: new Date().toISOString() }); document.getElementById('in-proj-name').value = ""; document.querySelectorAll('.assign-check').forEach(cb => cb.checked = false); }
+            const n = document.getElementById('in-proj-name').value; const d = document.getElementById('in-proj-desc').value; const s = document.getElementById('in-proj-status').value;
+            const ass = Array.from(document.querySelectorAll('.assign-check:checked')).map(cb => cb.value);
+            if(n) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), { name: n, desc: d, status: s, assignees: ass, date: new Date().toISOString() }); document.getElementById('in-proj-name').value = ""; document.querySelectorAll('.assign-check').forEach(cb => cb.checked = false); }
         };
 
         document.getElementById('btn-submit-link').onclick = async () => {
-            const name = document.getElementById('in-doc').value; const url = document.getElementById('in-url').value; const folder = document.getElementById('in-doc-folder').value;
-            if(name && url) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), { name, url, folder }); document.getElementById('in-doc').value = ""; document.getElementById('in-url').value = "";
+            const n = document.getElementById('in-doc').value; const u = document.getElementById('in-url').value; const f = document.getElementById('in-doc-folder').value;
+            if(n && u) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), { name: n, url: u, folder: f }); document.getElementById('in-doc').value = ""; document.getElementById('in-url').value = "";
         };
 
         // --- SYNC ENGINE ---
@@ -462,28 +449,16 @@
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'planning'), s => {
                 const list = document.getElementById('list-planning'); list.innerHTML = "";
                 s.docs.map(d=>({id:d.id, ...d.data()})).sort((a,b)=>a.date.localeCompare(b.date)).forEach(ev => {
-                    const d = new Date(ev.date); const fmt = d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+                    const dt = new Date(ev.date); const fmt = dt.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
                     const team = TEAM.map(n => {
                         const isP = (ev.participants || []).includes(n);
                         return `<button id="att-${ev.id}-${n}" class="w-8 h-8 rounded-full flex items-center justify-center text-[7px] font-black uppercase ring-2 ring-white -ml-2 first:ml-0 transition-all ${isP?'bg-indigo-600 text-white':'bg-slate-100 text-slate-300'}">${n}</button>`;
                     }).join('');
                     const div = document.createElement('div'); div.className = "bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm space-y-4";
-                    div.innerHTML = `<div class="flex justify-between items-start">
-                        <div class="flex gap-4 items-center">
-                            <div class="bg-indigo-50 text-indigo-700 w-12 h-12 rounded-2xl flex flex-col items-center justify-center font-black"><span class="text-[10px] uppercase">${fmt.split(' ')[0]}</span><span class="text-sm leading-tight">${d.getDate()}</span></div>
-                            <div><div class="font-black text-sm uppercase text-slate-800">${ev.subject}</div><div class="text-[9px] text-slate-400 font-bold uppercase">${ev.time}</div></div>
-                        </div>
-                        <button class="btn-del text-slate-200"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                    </div><div class="flex items-center justify-between pt-2 border-t border-slate-50"><span class="text-[8px] font-black text-slate-300 uppercase italic">Qui charbonne ?</span><div class="flex">${team}</div></div>`;
+                    div.innerHTML = `<div class="flex justify-between items-start"><div class="flex gap-4 items-center"><div class="bg-indigo-50 text-indigo-700 w-12 h-12 rounded-2xl flex flex-col items-center justify-center font-black"><span class="text-[10px] uppercase">${fmt.split(' ')[0]}</span><span class="text-sm leading-tight">${dt.getDate()}</span></div><div><div class="font-black text-sm uppercase text-slate-800">${ev.subject}</div><div class="text-[9px] text-slate-400 font-bold uppercase">${ev.time}</div></div></div><button class="btn-del text-slate-200"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div><div class="flex items-center justify-between pt-2 border-t border-slate-50"><span class="text-[8px] font-black text-slate-300 uppercase italic">Qui charbonne ?</span><div class="flex">${team}</div></div>`;
                     list.appendChild(div);
                     div.querySelector('.btn-del').onclick = async () => { if(confirm("Supprimer ?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'planning', ev.id)); };
-                    TEAM.forEach(n => {
-                        document.getElementById(`att-${ev.id}-${n}`).onclick = async () => {
-                            const ref = doc(db, 'artifacts', appId, 'public', 'data', 'planning', ev.id);
-                            if((ev.participants || []).includes(n)) await updateDoc(ref, { participants: arrayRemove(n) });
-                            else await updateDoc(ref, { participants: arrayUnion(n) });
-                        };
-                    });
+                    TEAM.forEach(n => { document.getElementById(`att-${ev.id}-${n}`).onclick = async () => { const ref = doc(db, 'artifacts', appId, 'public', 'data', 'planning', ev.id); if((ev.participants || []).includes(n)) await updateDoc(ref, { participants: arrayRemove(n) }); else await updateDoc(ref, { participants: arrayUnion(n) }); }; });
                 }); lucide.createIcons();
             });
 
@@ -494,12 +469,10 @@
                     const div = document.createElement('div'); div.className = "space-y-2";
                     div.innerHTML = `<h4 class="text-[10px] font-black text-slate-300 uppercase tracking-widest px-2 flex items-center gap-2"><div class="w-1.5 h-1.5 bg-indigo-200 rounded-full"></div> ${f}</h4>`;
                     groups[f].forEach(i => {
-                        const row = document.createElement('div'); row.className = "bg-white p-4 rounded-2xl border border-slate-50 flex justify-between items-center shadow-sm";
-                        row.innerHTML = `<div class="truncate flex-1 pr-4"><div class="font-bold text-xs uppercase truncate">${i.name}</div><a href="${i.url}" target="_blank" class="text-indigo-600 text-[8px] font-black underline italic">VOIR LE DRIVE</a></div><button class="btn-del text-slate-100 hover:text-red-400"><i data-lucide="x" class="w-4 h-4"></i></button>`;
-                        div.appendChild(row);
-                        row.querySelector('.btn-del').onclick = async () => { if(confirm("Supprimer ?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'docs', i.id)); };
-                    });
-                    list.appendChild(div);
+                        const row = document.createElement('div'); row.className = "bg-white p-4 rounded-2xl border border-slate-100 flex justify-between items-center shadow-sm";
+                        row.innerHTML = `<div class="truncate flex-1 pr-4"><div class="font-bold text-xs uppercase truncate text-slate-700">${i.name}</div><a href="${i.url}" target="_blank" class="text-indigo-600 text-[8px] font-black underline italic">VOIR DRIVE</a></div><button class="btn-del text-slate-100 hover:text-red-400"><i data-lucide="x" class="w-4 h-4"></i></button>`;
+                        div.appendChild(row); row.querySelector('.btn-del').onclick = async () => { if(confirm("Supprimer ?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'docs', i.id)); };
+                    }); list.appendChild(div);
                 }); lucide.createIcons();
             });
 
@@ -512,18 +485,14 @@
                     div.innerHTML = `<div class="flex justify-between items-start mb-3"><div class="flex items-center gap-2"><div><div class="flex">${divs || '?'}</div></div><div class="font-black text-sm uppercase">${p.name}</div></div><button class="btn-del text-slate-200"><i data-lucide="x-circle" class="w-4 h-4"></i></button></div><p class="text-[10px] text-slate-400 font-bold mb-4 px-2 italic">${p.assignees?.join(', ') || 'Libre'}</p><div class="flex justify-between items-center"><button class="btn-status px-3 py-1.5 rounded-full text-[8px] font-black uppercase ${cols[p.status||'À FAIRE']} active:scale-95">${p.status||'À FAIRE'}</button><span class="text-[8px] text-slate-300 font-bold">${new Date(p.date).toLocaleDateString()}</span></div>`;
                     list.appendChild(div);
                     div.querySelector('.btn-del').onclick = async () => { if(confirm("Supprimer ?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', d.id)); };
-                    div.querySelector('.btn-status').onclick = async () => { 
-                        const cur = p.status || 'À FAIRE';
-                        const next = cur==='À FAIRE'?'EN COURS':(cur==='EN COURS'?'TERMINÉ':'À FAIRE');
-                        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', d.id), { status: next }, { merge: true });
-                    };
+                    div.querySelector('.btn-status').onclick = async () => { const cur = p.status || 'À FAIRE'; const nxt = cur==='À FAIRE'?'EN COURS':(cur==='EN COURS'?'TERMINÉ':'À FAIRE'); await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', d.id), { status: nxt }, { merge: true }); };
                 }); lucide.createIcons();
             });
 
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'notes'), s => {
                 const list = document.getElementById('list-notes'); list.innerHTML = "";
                 s.docs.forEach(d => {
-                    const data = d.data(); const div = document.createElement('div'); div.className = "bg-white p-5 rounded-3xl border border-slate-100 flex justify-between items-center shadow-sm active:bg-slate-50 transition-colors cursor-pointer";
+                    const data = d.data(); const div = document.createElement('div'); div.className = "bg-white p-5 rounded-3xl border border-slate-100 flex justify-between items-center shadow-sm active:bg-slate-50 cursor-pointer";
                     div.innerHTML = `<div class="flex-1 overflow-hidden"><div class="font-bold text-sm uppercase mb-1 text-slate-800">${data.title || "Fiche sans titre"}</div><div class="text-[10px] text-slate-400 line-clamp-2">${data.content || "..." }</div></div><button class="btn-del text-slate-200 ml-4"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
                     list.appendChild(div);
                     div.onclick = (e) => { if(!e.target.closest('button')) openNote(d.id); };
@@ -532,27 +501,13 @@
             });
         }
 
-        // --- NOTE EDITOR ---
-        const openNote = (id) => { 
-            currentNoteId = id; document.getElementById('editor-modal').classList.remove('hidden'); 
-            onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'notes', id), d => { 
-                if(d.exists() && currentNoteId === id) { 
-                    const v = d.data(); 
-                    if(document.activeElement !== document.getElementById('nt-title')) document.getElementById('nt-title').value = v.title || ""; 
-                    if(document.activeElement !== document.getElementById('nt-body')) { 
-                        document.getElementById('nt-body').value = v.content || ""; 
-                        document.getElementById('nt-preview').innerHTML = marked.parse(v.content || ""); 
-                    } 
-                } 
-            }); 
-        };
+        const openNote = (id) => { currentNoteId = id; document.getElementById('editor-modal').classList.remove('hidden'); onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'notes', id), d => { if(d.exists() && currentNoteId === id) { const v = d.data(); if(document.activeElement !== document.getElementById('nt-title')) document.getElementById('nt-title').value = v.title || ""; if(document.activeElement !== document.getElementById('nt-body')) { document.getElementById('nt-body').value = v.content || ""; document.getElementById('nt-preview').innerHTML = marked.parse(v.content || ""); } } }); };
         document.getElementById('btn-new-note').onclick = async () => { const r = await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'notes'), {title: "", content: ""}); openNote(r.id); };
         document.getElementById('btn-note-close').onclick = () => { currentNoteId = null; document.getElementById('editor-modal').classList.add('hidden'); };
         document.getElementById('tab-edit').onclick = () => { document.getElementById('nt-body').classList.remove('hidden'); document.getElementById('nt-preview').classList.add('hidden'); document.getElementById('tab-edit').className = "px-4 py-1.5 text-[9px] font-bold rounded-lg bg-white shadow-sm"; document.getElementById('tab-view').className = "px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500"; };
         document.getElementById('tab-view').onclick = () => { document.getElementById('nt-body').classList.add('hidden'); document.getElementById('nt-preview').classList.remove('hidden'); document.getElementById('tab-view').className = "px-4 py-1.5 text-[9px] font-bold rounded-lg bg-white shadow-sm"; document.getElementById('tab-edit').className = "px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500"; };
         const saveN = () => { if(!currentNoteId) return; setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'notes', currentNoteId), { title: document.getElementById('nt-title').value, content: document.getElementById('nt-body').value }, {merge:true}); };
-        document.getElementById('nt-title').oninput = saveN;
-        document.getElementById('nt-body').oninput = (e) => { saveN(); document.getElementById('nt-preview').innerHTML = marked.parse(e.target.value); };
+        document.getElementById('nt-title').oninput = saveN; document.getElementById('nt-body').oninput = (e) => { saveN(); document.getElementById('nt-preview').innerHTML = marked.parse(e.target.value); };
 
         window.onload = () => lucide.createIcons();
     </script>
