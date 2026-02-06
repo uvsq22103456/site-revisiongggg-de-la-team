@@ -15,6 +15,14 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
         
@@ -37,7 +45,6 @@
         .crousty-card { background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* Correction visibilité des notes (Mode Light: texte noir / Mode Dark: texte blanc) */
         .grade-input { 
             background-color: #f1f5f9; 
             color: #0f172a !important; 
@@ -65,7 +72,6 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Header -->
     <header class="bg-card border-b sticky top-0 z-50 pt-[env(safe-area-inset-top)] shadow-sm">
         <div class="max-w-xl mx-auto px-5 py-4 flex justify-between items-center">
             <h1 class="text-lg font-extrabold tracking-tight flex items-center gap-2 cursor-pointer" id="logo-main-btn">
@@ -83,7 +89,6 @@
         </div>
     </header>
 
-    <!-- Navigation -->
     <nav class="bg-card border-b sticky top-[61px] z-40 overflow-x-auto no-scrollbar">
         <div class="max-w-xl mx-auto flex px-2 min-w-max">
             <button id="nav-home" class="nav-btn px-5 py-3 text-[10px] font-black uppercase tracking-widest tab-active">Accueil</button>
@@ -95,10 +100,8 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="flex-1 max-w-xl mx-auto w-full p-4 pb-32">
         
-        <!-- VUE ACCUEIL -->
         <div id="view-home" class="view-content space-y-6">
             <div id="countdown-banner" class="bg-slate-900 rounded-[2rem] p-6 text-white flex items-center justify-between overflow-hidden relative cursor-pointer active:scale-[0.98] transition-all shadow-xl">
                 <div class="relative z-10">
@@ -127,7 +130,6 @@
                 </button>
             </div>
 
-            <!-- CHOOSER FAIT MAISON -->
             <div class="bg-card rounded-[2rem] p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-5">
                 <div class="flex justify-between items-center">
                     <h3 class="text-[10px] font-black uppercase text-indigo-600 dark:text-indigo-400 tracking-widest text-slate-700 dark:text-slate-300">Chooser fait maison (Groupes)</h3>
@@ -172,7 +174,6 @@
             </div>
         </div>
 
-        <!-- VUE PLANNING -->
         <div id="view-planning" class="view-content hidden space-y-4">
             <div class="bg-card p-5 rounded-3xl border shadow-sm space-y-3">
                 <h3 class="text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest px-1">Nouvelle Session</h3>
@@ -186,7 +187,6 @@
             <div id="list-planning" class="space-y-4"></div>
         </div>
 
-        <!-- VUE COURS -->
         <div id="view-docs" class="view-content hidden space-y-4">
             <div class="bg-card p-5 rounded-3xl border shadow-sm space-y-3">
                 <h3 class="text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest px-1 text-center">Ajouter un cours</h3>
@@ -205,7 +205,6 @@
             <div id="list-docs" class="space-y-4"></div>
         </div>
 
-        <!-- VUE PROJETS -->
         <div id="view-projets" class="view-content hidden space-y-4">
             <div class="bg-card p-5 rounded-3xl border shadow-sm space-y-4">
                 <h3 class="text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest px-1 text-center">Nouveau Ticket Projet</h3>
@@ -231,7 +230,6 @@
             <div id="list-projets" class="grid gap-3"></div>
         </div>
 
-        <!-- VUE MOYENNES -->
         <div id="view-grades" class="view-content hidden space-y-6">
             <div class="bg-card p-5 rounded-3xl border shadow-sm flex items-center justify-between text-slate-700 dark:text-slate-300">
                 <div class="flex items-center gap-3">
@@ -278,7 +276,6 @@
             </div>
         </div>
 
-        <!-- VUE NOTES -->
         <div id="view-notes" class="view-content hidden space-y-4">
             <button id="btn-new-note" class="w-full p-8 bg-card border-2 border-dashed border-indigo-200 rounded-[2.5rem] text-indigo-600 font-extrabold flex items-center justify-center gap-2 active:bg-indigo-50 shadow-sm transition-all">
                 <i data-lucide="plus-circle"></i> NOUVELLE FICHE DE NOTE 
@@ -287,7 +284,6 @@
         </div>
     </main>
 
-    <!-- MODAL FOOD -->
     <div id="food-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-6 text-slate-700 dark:text-slate-300">
         <div class="bg-card w-full max-w-sm rounded-[3rem] p-8 space-y-6 shadow-2xl relative overflow-hidden border border-slate-100 dark:border-slate-800 text-center text-white">
             <h3 class="text-sm font-black uppercase text-center tracking-widest text-orange-600 dark:text-orange-400">On mange où gros ? 🍔</h3>
@@ -308,7 +304,6 @@
         </div>
     </div>
 
-    <!-- MODAL TIMER FOCUS -->
     <div id="timer-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[150] flex items-center justify-center p-6 text-center text-slate-700 dark:text-slate-300">
         <div class="bg-card w-full max-w-sm rounded-[3rem] p-8 text-center space-y-8 shadow-2xl border border-slate-100 dark:border-slate-800">
             <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-500">Timer Focus</h3>
@@ -330,7 +325,6 @@
         </div>
     </div>
 
-    <!-- MODAL DATE CC -->
     <div id="date-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-6 text-slate-700 dark:text-slate-300">
         <div class="bg-card w-full max-w-sm rounded-[2.5rem] p-8 space-y-6 shadow-2xl border border-slate-100 dark:border-slate-800">
             <h3 class="text-sm font-black uppercase text-center text-indigo-600 dark:text-indigo-400">Date du prochain CC</h3>
@@ -342,13 +336,20 @@
         </div>
     </div>
 
-    <!-- Modal Éditeur Notes -->
     <div id="editor-modal" class="hidden fixed inset-0 bg-card z-[110] flex flex-col pt-[env(safe-area-inset-top)] text-slate-700 dark:text-slate-300">
         <div class="p-4 border-b flex justify-between items-center text-slate-700 dark:text-slate-200">
             <button id="btn-note-close" class="text-[10px] font-black text-slate-400 p-2 uppercase">Fermer</button>
-            <div class="flex bg-slate-200 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 shadow-inner">
-                <button id="tab-edit" class="px-4 py-1.5 text-[9px] font-bold rounded-lg bg-card shadow-sm text-indigo-600 dark:text-indigo-400">ÉDITER</button>
-                <button id="tab-view" class="px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500">VOIR</button>
+            <div class="flex items-center gap-2">
+                <button id="btn-ai-summarize" class="px-3 py-1.5 bg-indigo-600 text-white text-[9px] font-black rounded-lg shadow-lg active:scale-95 flex items-center gap-1 uppercase tracking-widest">
+                    <i data-lucide="sparkles" class="w-3 h-3"></i> Résumer
+                </button>
+                <button id="btn-ai-quiz" class="px-3 py-1.5 bg-amber-500 text-white text-[9px] font-black rounded-lg shadow-lg active:scale-95 flex items-center gap-1 uppercase tracking-widest">
+                    <i data-lucide="layout-list" class="w-3 h-3"></i> Quiz 10Q
+                </button>
+                <div class="flex bg-slate-200 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 shadow-inner">
+                    <button id="tab-edit" class="px-4 py-1.5 text-[9px] font-bold rounded-lg bg-card shadow-sm text-indigo-600 dark:text-indigo-400">ÉDITER</button>
+                    <button id="tab-view" class="px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500">VOIR</button>
+                </div>
             </div>
         </div>
         <input type="text" id="nt-title" placeholder="Titre..." class="p-6 text-xl font-bold border-none outline-none bg-card text-slate-800 dark:text-white">
@@ -356,10 +357,22 @@
         <div id="nt-preview" class="hidden flex-1 p-6 overflow-y-auto prose max-w-none dark:prose-invert"></div>
     </div>
 
+    <div id="quiz-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-[250] flex items-center justify-center p-4">
+        <div class="bg-card w-full max-w-lg rounded-[2.5rem] p-8 overflow-y-auto max-h-[90vh] space-y-6 border border-indigo-500/30">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-black text-indigo-600 uppercase italic">🔥 Challenge Gemini (10 Qs)</h3>
+                <button id="close-quiz" class="text-slate-400 font-bold uppercase text-[10px]">Quitter</button>
+            </div>
+            <div id="quiz-container" class="space-y-8"></div>
+            <button id="check-quiz" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-black uppercase tracking-widest shadow-xl hidden">Vérifier mon score</button>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, doc, addDoc, setDoc, onSnapshot, deleteDoc, updateDoc, arrayUnion, arrayRemove, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { GoogleGenerativeAI } from "@google/generative-ai";
 
         const firebaseConfig = {
           apiKey: "AIzaSyBIHjJKZj_Bqw1XjHfJo4X3GWrA6GNLU8I",
@@ -374,6 +387,9 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
         const appId = 'bu-buddy-v-crousty';
+        
+        // Gemini Config
+        const genAI = new GoogleGenerativeAI("AIzaSyAKn87rAfnLrXBlvRKMDNqyX4eP_itscj0");
 
         const FULL_NAMES = ["Matthieu", "Antoine", "Vincent", "Samia", "Sofian"];
         const TEAM = ["Matt", "MAB", "Vince", "Sami", "Soso"];
@@ -418,6 +434,93 @@
         };
         startSync();
 
+        // --- GEMINI FUNCTIONS ---
+        
+        // 1. Résumé
+        document.getElementById('btn-ai-summarize').onclick = async () => {
+            const bodyInput = document.getElementById('nt-body');
+            const content = bodyInput.value;
+            const btn = document.getElementById('btn-ai-summarize');
+
+            if (!content || content.length < 10) return alert("Écris un peu plus Billy !");
+
+            try {
+                btn.innerHTML = '<i class="animate-spin" data-lucide="loader-2"></i>';
+                btn.disabled = true; lucide.createIcons();
+
+                const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+                const prompt = `Tu es l'assistant de BU-Buddy. Résume ce cours de Master Stats : "${content}". Fais un résumé "crousty" structuré avec des bullet points et les formules clés isolées. Réponds en Markdown.`;
+
+                const result = await model.generateContent(prompt);
+                const summary = result.response.text();
+
+                const newContent = `> ### 💡 CROUSTY-RÉSUMÉ\n>\n${summary.split('\n').map(l => '> ' + l).join('\n')}\n\n---\n\n` + content;
+                
+                bodyInput.value = newContent;
+                if (currentNoteId) await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'notes', currentNoteId), { content: newContent });
+                
+            } catch (e) { alert("Erreur IA"); }
+            finally { btn.innerHTML = '<i data-lucide="sparkles" class="w-3 h-3"></i> Résumer'; btn.disabled = false; lucide.createIcons(); }
+        };
+
+        // 2. Quiz 10 Questions
+        document.getElementById('btn-ai-quiz').onclick = async () => {
+            const content = document.getElementById('nt-body').value;
+            const container = document.getElementById('quiz-container');
+            const modal = document.getElementById('quiz-modal');
+            const checkBtn = document.getElementById('check-quiz');
+
+            if (!content) return alert("Pas de contenu, pas de quiz !");
+            
+            modal.classList.remove('hidden');
+            checkBtn.classList.add('hidden');
+            container.innerHTML = `<div class="text-center py-10"><i class="animate-spin text-indigo-500 mx-auto" data-lucide="loader-2"></i><p class="mt-4 font-black text-[10px] uppercase">Génération du quiz de 10 questions...</p></div>`;
+            lucide.createIcons();
+
+            try {
+                const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+                const prompt = `Génère un quiz de EXACTEMENT 10 questions à choix multiples basé sur : "${content}". Réponds UNIQUEMENT en JSON : [{"q":"Question?","o":["A","B","C","D"],"a":0}] (a est l'index 0-3 de la bonne réponse).`;
+
+                const result = await model.generateContent(prompt);
+                const jsonStr = result.response.text().replace(/```json|```/g, "").trim();
+                const questions = JSON.parse(jsonStr);
+
+                container.innerHTML = questions.map((item, i) => `
+                    <div class="quiz-item space-y-3" data-ans="${item.a}">
+                        <p class="font-bold text-sm text-slate-800 dark:text-white">${i+1}. ${item.q}</p>
+                        <div class="grid gap-2">
+                            ${item.o.map((opt, j) => `
+                                <button onclick="this.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('bg-indigo-600','text-white','selected')); this.classList.add('bg-indigo-600','text-white','selected')" 
+                                        class="opt-btn p-3 rounded-xl border border-slate-200 dark:border-slate-800 text-left text-xs font-medium transition-all" data-idx="${j}">
+                                    ${opt}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('');
+                checkBtn.classList.remove('hidden');
+            } catch (e) { container.innerHTML = "Erreur de génération."; }
+            lucide.createIcons();
+        };
+
+        document.getElementById('check-quiz').onclick = () => {
+            let score = 0;
+            document.querySelectorAll('.quiz-item').forEach(item => {
+                const correctIdx = parseInt(item.dataset.ans);
+                const selected = item.querySelector('.selected');
+                const selectedIdx = selected ? parseInt(selected.dataset.idx) : -1;
+                
+                item.querySelectorAll('.opt-btn').forEach((btn, idx) => {
+                    if (idx === correctIdx) btn.classList.add('border-emerald-500', 'bg-emerald-500/10');
+                    if (selectedIdx === idx && selectedIdx !== correctIdx) btn.classList.add('border-rose-500', 'bg-rose-500/10');
+                });
+                if (selectedIdx === correctIdx) score++;
+            });
+            alert(`Score final : ${score}/10 ! ${score >= 7 ? "Bien joué Billy !" : "Va réviser gros !"}`);
+        };
+
+        document.getElementById('close-quiz').onclick = () => document.getElementById('quiz-modal').classList.add('hidden');
+
         // --- CHOOSER ENGINE ---
         document.getElementById('btn-chooser-run').onclick = () => {
             const countInput = document.getElementById('chooser-count');
@@ -457,12 +560,12 @@
             lucide.createIcons();
         };
 
-        document.getElementById('nav-home').addEventListener('click', (e) => setView('home', e.currentTarget));
-        document.getElementById('nav-planning').addEventListener('click', (e) => setView('planning', e.currentTarget));
-        document.getElementById('nav-docs').addEventListener('click', (e) => setView('docs', e.currentTarget));
-        document.getElementById('nav-projets').addEventListener('click', (e) => setView('projets', e.currentTarget));
-        document.getElementById('nav-notes').addEventListener('click', (e) => setView('notes', e.currentTarget));
-        document.getElementById('nav-grades').addEventListener('click', (e) => setView('grades', e.currentTarget));
+        document.getElementById('nav-home').onclick = (e) => setView('home', e.currentTarget);
+        document.getElementById('nav-planning').onclick = (e) => setView('planning', e.currentTarget);
+        document.getElementById('nav-docs').onclick = (e) => setView('docs', e.currentTarget);
+        document.getElementById('nav-projets').onclick = (e) => setView('projets', e.currentTarget);
+        document.getElementById('nav-notes').onclick = (e) => setView('notes', e.currentTarget);
+        document.getElementById('nav-grades').onclick = (e) => setView('grades', e.currentTarget);
         document.getElementById('logo-main-btn').onclick = () => setView('home', document.getElementById('nav-home'));
         document.getElementById('quick-planning').onclick = () => setView('planning', document.getElementById('nav-planning'));
         document.getElementById('quick-grades').onclick = () => setView('grades', document.getElementById('nav-grades'));
@@ -536,7 +639,6 @@
 
         // --- SYNC ENGINE ---
         function initSync() {
-            // PLANNING
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'planning'), s => {
                 const list = document.getElementById('list-planning'); if(!list) return; list.innerHTML = "";
                 s.docs.map(d=>({id:d.id, ...d.data()})).sort((a,b)=>a.date.localeCompare(b.date)).forEach(ev => {
@@ -553,14 +655,12 @@
                 }); lucide.createIcons();
             });
 
-            // MOYENNES
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'user_grades'), s => {
                 if(!currentGradeUser) return;
                 userNotes = {}; s.docs.forEach(d => { if(d.data().user === currentGradeUser) userNotes[d.data().subject] = { id: d.id, note: d.data().note }; });
                 renderGradesUI();
             });
 
-            // DOCS SYNC
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), s => {
                 const list = document.getElementById('list-docs'); if(!list) return; list.innerHTML = "";
                 const groups = {}; s.docs.forEach(d => { const f = d.data().folder || "Autres"; if(!groups[f]) groups[f] = []; groups[f].push({id: d.id, ...d.data()}); });
@@ -575,7 +675,6 @@
                 }); lucide.createIcons();
             });
             
-            // PROJETS SYNC
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), s => {
                 const list = document.getElementById('list-projets'); if(!list) return; list.innerHTML = "";
                 s.docs.forEach(d => {
@@ -589,7 +688,6 @@
                 }); lucide.createIcons();
             });
 
-            // NOTES SYNC (Simple List)
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'notes'), s => {
                 const list = document.getElementById('list-notes'); if(!list) return; list.innerHTML = "";
                 s.docs.forEach(d => {
@@ -611,6 +709,12 @@
         document.getElementById('btn-submit-link').onclick = async () => {
             const n = document.getElementById('in-doc').value; const u = document.getElementById('in-url').value; const f = document.getElementById('in-doc-folder').value;
             if(n && u) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), { name: n, url: u, folder: f }); document.getElementById('in-doc').value = ""; document.getElementById('in-url').value = "";
+        };
+        document.getElementById('btn-submit-project').onclick = async () => {
+            const n = document.getElementById('in-proj-name').value; const d = document.getElementById('in-proj-desc').value; const s = document.getElementById('in-proj-status').value;
+            const ass = Array.from(document.querySelectorAll('.assign-check:checked')).map(i => i.value);
+            if(n) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), { name: n, desc: d, status: s, assignees: ass });
+            document.getElementById('in-proj-name').value = ""; document.querySelectorAll('.assign-check').forEach(c => c.checked = false);
         };
 
         // MOYENNES SELECT HANDLER
@@ -642,6 +746,33 @@
         document.getElementById('btn-new-note').onclick = async () => { const r = await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'notes'), {title: "", content: ""}); openNote(r.id); };
         document.getElementById('btn-note-close').onclick = () => { currentNoteId = null; document.getElementById('editor-modal').classList.add('hidden'); };
 
+        // EDIT vs PREVIEW
+        document.getElementById('tab-edit').onclick = () => {
+            document.getElementById('nt-body').classList.remove('hidden');
+            document.getElementById('nt-preview').classList.add('hidden');
+            document.getElementById('tab-edit').classList.add('bg-card', 'text-indigo-600');
+            document.getElementById('tab-view').classList.remove('bg-card', 'text-indigo-600');
+        };
+        document.getElementById('tab-view').onclick = () => {
+            document.getElementById('nt-body').classList.add('hidden');
+            document.getElementById('nt-preview').classList.remove('hidden');
+            document.getElementById('nt-preview').innerHTML = marked.parse(document.getElementById('nt-body').value);
+            document.getElementById('tab-view').classList.add('bg-card', 'text-indigo-600');
+            document.getElementById('tab-edit').classList.remove('bg-card', 'text-indigo-600');
+        };
+
+        // SAVE NOTE ON CHANGE
+        const saveNote = async () => {
+            if(currentNoteId) {
+                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'notes', currentNoteId), {
+                    title: document.getElementById('nt-title').value,
+                    content: document.getElementById('nt-body').value
+                });
+            }
+        };
+        document.getElementById('nt-title').oninput = saveNote;
+        document.getElementById('nt-body').oninput = saveNote;
+
         // TIMER UI
         const updateTimerDisplayUI = () => {
             const m = Math.floor(timerSeconds / 60); const s = timerSeconds % 60;
@@ -661,6 +792,12 @@
             const btn = document.getElementById('btn-timer-play');
             if(timerInterval) { clearInterval(timerInterval); timerInterval = null; btn.innerHTML = '<i data-lucide="play" class="text-white"></i>'; }
             else { timerInterval = setInterval(() => { if(timerSeconds <= 0) { clearInterval(timerInterval); timerInterval = null; alert("Session terminée !"); return; } timerSeconds--; updateTimerDisplayUI(); }, 1000); btn.innerHTML = '<i data-lucide="pause" class="text-white"></i>'; }
+            lucide.createIcons();
+        };
+        document.getElementById('btn-timer-reset').onclick = () => {
+            clearInterval(timerInterval); timerInterval = null;
+            timerSeconds = setMinutes * 60; updateTimerDisplayUI();
+            document.getElementById('btn-timer-play').innerHTML = '<i data-lucide="play" class="text-white"></i>';
             lucide.createIcons();
         };
 
