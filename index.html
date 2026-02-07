@@ -14,7 +14,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked-katex-extension/lib/index.umd.js"></script>
@@ -29,23 +29,36 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        
         :root { --app-bg: #f8fafc; --card-bg: #ffffff; --text-main: #0f172a; --border-color: #e2e8f0; }
         .dark-mode { --app-bg: #020617; --card-bg: #0f172a; --text-main: #f1f5f9; --border-color: #1e293b; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; overscroll-behavior-y: contain; background-color: var(--app-bg); color: var(--text-main); transition: background-color 0.3s ease; }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            -webkit-tap-highlight-color: transparent; 
+            overscroll-behavior-y: contain;
+            background-color: var(--app-bg);
+            color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
         .bg-card { background-color: var(--card-bg); border-color: var(--border-color); border-width: 1px; }
         .tab-active { color: #4f46e5 !important; border-bottom: 3px solid #4f46e5 !important; opacity: 1 !important; }
         .view-content { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .crousty-card { background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        
         .grade-input { background-color: #f1f5f9; color: #0f172a !important; border: 1px solid #cbd5e1; font-weight: 900; }
         .dark-mode .grade-input { background-color: #1e293b; color: #ffffff !important; border: 1px solid #334155; }
         .assign-check:checked + label { background-color: #4f46e5; color: white; border-color: #4f46e5; }
-        .bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 4px; }
-        .bar-bg { width: 100%; background: rgba(255,255,255,0.05); border-radius: 4px 4px 0 0; height: 100%; position: relative; display: flex; align-items: flex-end; overflow: hidden; }
+        
+        .bar-bg { width: 100%; background: rgba(255,255,255,0.05); border-radius: 4px; height: 100%; display: flex; align-items: flex-end; overflow: hidden; }
         .bar-fill { width: 100%; border-radius: 2px 2px 0 0; transition: height 1s cubic-bezier(0.4, 0, 0.2, 1); }
-        .timer-opt-active { background-color: #4f46e5 !important; color: white !important; border-color: #4f46e5 !important; }
-        #nt-preview img { border-radius: 1rem; margin: 1rem 0; max-width: 100%; }
+        .timer-opt-active { background-color: #4f46e5 !important; color: white !important; }
+
+        #nt-preview { white-space: pre-wrap; word-wrap: break-word; }
+        #nt-preview img { max-width: 100%; border-radius: 1rem; margin: 1rem 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid #e2e8f0; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -61,7 +74,7 @@
                 </button>
                 <div id="status-chip" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-full border border-slate-200">
                     <div id="status-dot" class="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>
-                    <span id="status-text" class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Connexion...</span>
+                    <span id="status-text" class="text-[9px] font-black uppercase tracking-widest">Connexion...</span>
                 </div>
             </div>
         </div>
@@ -81,7 +94,7 @@
     <main class="flex-1 max-w-xl mx-auto w-full p-4 pb-32">
         
         <div id="view-home" class="view-content space-y-6">
-            <div id="countdown-banner" class="bg-slate-900 rounded-[2rem] p-6 text-white flex items-center justify-between relative cursor-pointer active:scale-[0.98] transition-all shadow-xl">
+            <div id="countdown-banner" class="bg-slate-900 rounded-[2rem] p-6 text-white flex items-center justify-between relative cursor-pointer active:scale-95 transition-all shadow-xl">
                 <div class="relative z-10">
                     <p class="text-[10px] font-black uppercase text-indigo-400 tracking-widest mb-1 flex items-center gap-1.5">Prochain CC <i data-lucide="edit-3" class="w-2.5 h-2.5"></i></p>
                     <div class="flex items-baseline gap-2">
@@ -93,23 +106,20 @@
             </div>
 
             <div class="crousty-card p-8 rounded-[2.5rem] text-white shadow-2xl">
-                <h2 class="text-2xl font-black mb-2 leading-tight uppercase">Sabaidi Billys !🚀</h2>
-                <p class="text-indigo-100 text-sm font-medium leading-relaxed">Matt, MAB, Soso, Vince, Sami : Votre espace pour les <span class="text-white font-bold">crousty révisions</span>.</p>
-                <button id="btn-timer-open-main" class="mt-6 bg-white/20 hover:bg-white/30 p-4 rounded-2xl flex items-center gap-3 transition-all active:scale-95 w-full text-left">
+                <h2 class="text-2xl font-black mb-2 leading-tight uppercase italic">Sabaidi Billys !🚀</h2>
+                <button id="btn-timer-open-main" class="mt-6 bg-white/20 p-4 rounded-2xl flex items-center gap-3 transition-all active:scale-95 w-full text-left">
                     <div class="bg-white text-indigo-600 p-2 rounded-xl"><i data-lucide="timer"></i></div>
-                    <div><div class="text-xs font-black uppercase">Timer Focus</div><div class="text-[10px] opacity-90 font-bold uppercase">Mode Pomodoro</div></div>
+                    <div><div class="text-xs font-black uppercase text-white">Timer Focus</div><div class="text-[10px] opacity-90 font-bold uppercase text-white">Mode Pomodoro</div></div>
                 </button>
             </div>
 
             <div class="bg-card rounded-[2rem] p-6 shadow-sm border border-slate-200 space-y-5">
                 <div class="flex justify-between items-center">
-                    <h3 class="text-[10px] font-black uppercase text-indigo-600 tracking-widest">Chooser de Groupes</h3>
+                    <h3 class="text-[10px] font-black uppercase text-indigo-600 tracking-widest">Chooser de Team</h3>
                     <input type="number" id="chooser-count" value="2" min="1" max="5" class="w-12 text-center text-sm font-black rounded-lg py-1 border outline-none">
                 </div>
-                <div id="chooser-result" class="min-h-[70px] flex flex-wrap justify-center gap-2 items-center bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 border border-dashed border-indigo-200 text-slate-400 italic text-[10px]">tirage au soooort</div>
-                <button id="btn-chooser-run" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-black text-xs uppercase shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2">
-                    <i data-lucide="sparkles" class="w-4 h-4 text-white"></i> Générer le groupe
-                </button>
+                <div id="chooser-result" class="min-h-[70px] flex flex-wrap justify-center gap-2 items-center bg-slate-50 rounded-2xl p-4 border border-dashed border-indigo-200 text-slate-400 italic text-[10px]">tirage au soooort</div>
+                <button id="btn-chooser-run" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-black text-xs uppercase shadow-lg active:scale-95 transition-all">Générer le groupe</button>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
@@ -129,46 +139,39 @@
                     <i data-lucide="utensils" class="mx-auto mb-1 text-orange-500"></i>
                     <span class="block text-xs font-bold uppercase text-orange-600">On mange où gros ?</span>
                 </button>
-                <a href="https://affluences.com/sites/bu-st-quentin/reservation?type=575" target="_blank" class="bg-card p-6 rounded-[2rem] border shadow-sm text-center col-span-2">
-                    <i data-lucide="map-pin" class="mx-auto mb-1 text-emerald-500"></i>
-                    <span class="block text-xs font-bold uppercase text-emerald-700">Réserver une salle (Affluences)</span>
-                </a>
             </div>
         </div>
 
         <div id="view-planning" class="view-content hidden space-y-4">
             <div class="bg-card p-5 rounded-3xl border shadow-sm space-y-3">
-                <h3 class="text-xs font-black text-indigo-600 uppercase tracking-widest">Nouvelle Session</h3>
-                <input type="text" id="in-title" placeholder="Matière" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-indigo-500 text-slate-800 dark:text-white">
-                <div class="flex gap-2">
-                    <input type="date" id="in-date" class="flex-1 p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none text-slate-800 dark:text-white">
-                    <input type="time" id="in-time" class="w-24 p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none text-slate-800 dark:text-white">
-                </div>
-                <button id="btn-submit-session" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95 uppercase">AJOUTER</button>
+                <h3 class="text-xs font-black text-indigo-600 uppercase">Nouvelle Session</h3>
+                <input type="text" id="in-title" placeholder="Matière" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none outline-none focus:ring-2 ring-indigo-500">
+                <div class="flex gap-2"><input type="date" id="in-date" class="flex-1 p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none"><input type="time" id="in-time" class="w-24 p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm border-none"></div>
+                <button id="btn-submit-session" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg uppercase">AJOUTER</button>
             </div>
             <div id="list-planning" class="space-y-4"></div>
         </div>
 
         <div id="view-docs" class="view-content hidden space-y-4">
             <div class="bg-card p-5 rounded-3xl border shadow-sm space-y-3">
-                <h3 class="text-xs font-black text-indigo-600 uppercase tracking-widest text-center">Ajouter un cours</h3>
-                <input type="text" id="in-doc" placeholder="Nom du cours" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm outline-none text-slate-800 dark:text-white border-none">
-                <input type="text" id="in-url" placeholder="Lien Drive" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm outline-none text-slate-800 dark:text-white border-none">
-                <select id="in-doc-folder" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-xs font-bold appearance-none text-slate-800 dark:text-white border-none">
+                <h3 class="text-xs font-black text-indigo-600 uppercase text-center">Ajouter un cours</h3>
+                <input type="text" id="in-doc" placeholder="Nom du cours" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm outline-none border-none">
+                <input type="text" id="in-url" placeholder="Lien Drive" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm outline-none border-none">
+                <select id="in-doc-folder" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-xs font-bold appearance-none border-none">
                     <option value="Agnes">📁 Agnes</option><option value="Gildas">📁 Gildas</option><option value="Tillier">📁 Tillier</option><option value="Worms">📁 Worms</option><option value="Marianne">📁 Marianne</option><option value="Autres">📁 Divers</option>
                 </select>
-                <button id="btn-submit-link" class="w-full bg-indigo-900 text-white p-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95 uppercase">PARTAGER LE LIEN</button>
+                <button id="btn-submit-link" class="w-full bg-indigo-900 text-white p-4 rounded-2xl font-bold text-sm shadow-lg uppercase">PARTAGER LE LIEN</button>
             </div>
             <div id="list-docs" class="space-y-4"></div>
         </div>
 
         <div id="view-projets" class="view-content hidden space-y-4">
             <div class="bg-card p-5 rounded-3xl border shadow-sm space-y-4">
-                <h3 class="text-xs font-black text-emerald-600 uppercase tracking-widest text-center">Nouveau Ticket Projet</h3>
-                <input type="text" id="in-proj-name" placeholder="Nom du projet" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm outline-none text-slate-800 dark:text-white border-none">
+                <h3 class="text-xs font-black text-emerald-600 uppercase text-center">Nouveau Ticket Projet</h3>
+                <input type="text" id="in-proj-name" placeholder="Nom du projet" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm outline-none border-none">
                 <div class="space-y-2">
-                    <p class="text-[9px] font-black text-slate-400 uppercase">Assigner :</p>
-                    <div class="flex flex-wrap gap-2" id="assign-selector">
+                    <p class="text-[9px] font-black text-slate-400 uppercase">Assigner Team :</p>
+                    <div class="flex flex-wrap gap-2">
                         <input type="checkbox" id="u-Matt" value="Matt" class="assign-check hidden"><label for="u-Matt" class="px-3 py-2 bg-slate-50 dark:bg-slate-800 text-[10px] font-bold rounded-xl border cursor-pointer">Matt</label>
                         <input type="checkbox" id="u-MAB" value="MAB" class="assign-check hidden"><label for="u-MAB" class="px-3 py-2 bg-slate-50 dark:bg-slate-800 text-[10px] font-bold rounded-xl border cursor-pointer">MAB</label>
                         <input type="checkbox" id="u-Vince" value="Vince" class="assign-check hidden"><label for="u-Vince" class="px-3 py-2 bg-slate-50 dark:bg-slate-800 text-[10px] font-bold rounded-xl border cursor-pointer">Vince</label>
@@ -176,7 +179,7 @@
                         <input type="checkbox" id="u-Soso" value="Soso" class="assign-check hidden"><label for="u-Soso" class="px-3 py-2 bg-slate-50 dark:bg-slate-800 text-[10px] font-bold rounded-xl border cursor-pointer">Soso</label>
                     </div>
                 </div>
-                <select id="in-proj-status" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-xs font-bold border-none appearance-none text-slate-800 dark:text-white">
+                <select id="in-proj-status" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-xs font-bold border-none appearance-none">
                     <option value="À FAIRE">📝 À FAIRE</option><option value="EN COURS">🚀 EN COURS</option><option value="TERMINÉ">✅ TERMINÉ</option>
                 </select>
                 <button id="btn-submit-project" class="w-full bg-emerald-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg uppercase">Lancer le ticket</button>
@@ -192,23 +195,16 @@
         </div>
 
         <div id="view-grades" class="view-content hidden space-y-6">
-            <div class="bg-card p-5 rounded-3xl border shadow-sm flex items-center justify-between">
-                <select id="grade-user-select" class="font-bold text-sm bg-transparent border-none outline-none text-indigo-600 cursor-pointer">
-                    <option value="">Choisir ton prénom...</option>
+            <div class="bg-card p-5 rounded-3xl border shadow-sm">
+                <select id="grade-user-select" class="w-full font-bold text-sm bg-transparent border-none outline-none appearance-none text-indigo-600 cursor-pointer">
+                    <option value="">Qui es-tu ?</option>
                     <option value="Matthieu">Matthieu</option><option value="Antoine">Antoine</option><option value="Vincent">Vincent</option><option value="Samia">Samia</option><option value="Sofian">Sofian</option>
                 </select>
             </div>
             <div id="grade-dashboard" class="hidden space-y-6">
-                <div class="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-xl space-y-8 relative overflow-hidden">
-                    <div class="relative z-10 space-y-8">
-                        <div>
-                            <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-400">Score Annuel</h2>
-                            <div id="total-gpa" class="text-5xl font-black">--</div>
-                        </div>
-                        <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden">
-                            <div id="year-progress-bar" class="h-full bg-indigo-500 transition-all duration-1000" style="width: 0%"></div>
-                        </div>
-                    </div>
+                <div class="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-xl space-y-8">
+                    <div><h2 class="text-[10px] font-black uppercase text-slate-400">Score Annuel</h2><div id="total-gpa" class="text-5xl font-black">--</div></div>
+                    <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden"><div id="year-progress-bar" class="h-full bg-indigo-500 transition-all duration-1000" style="width: 0%"></div></div>
                 </div>
                 <div id="list-blocs-template" class="space-y-6"></div>
             </div>
@@ -219,16 +215,16 @@
         <div class="bg-card w-full max-w-sm rounded-[3rem] p-8 space-y-6 shadow-2xl relative border border-slate-100 dark:border-slate-800">
             <h3 class="text-sm font-black uppercase text-center text-orange-600 dark:text-orange-400">La Roulette de la Bouffe 🍔</h3>
             <div id="food-final-result" class="bg-slate-50 dark:bg-slate-900/50 rounded-[2rem] p-6 border-2 border-dashed border-orange-200 min-h-[140px] flex flex-col items-center justify-center text-center">
-                <p class="text-[10px] font-black text-slate-400 uppercase italic">Tirage au sort du menu...</p>
+                <p class="text-[10px] font-black text-slate-400 uppercase italic">Tirage...</p>
             </div>
             <button id="btn-food-random" class="w-full bg-orange-600 text-white p-4 rounded-2xl font-black text-xs shadow-lg uppercase active:scale-95 transition-all">Générer mon menu</button>
             <button id="btn-food-close" class="w-full text-[10px] font-black text-slate-400 uppercase pt-2">Fermer</button>
         </div>
     </div>
 
-    <div id="timer-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[150] flex items-center justify-center p-6">
+    <div id="timer-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[150] flex items-center justify-center p-6 text-slate-700 dark:text-slate-300">
         <div class="bg-card w-full max-w-sm rounded-[3rem] p-8 text-center space-y-8 shadow-2xl border border-slate-100 dark:border-slate-800">
-            <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-500">Timer Focus</h3>
+            <h3 class="text-[10px] font-black uppercase text-indigo-500">Timer Focus</h3>
             <div id="timer-display" class="text-7xl font-black text-indigo-600 tracking-tighter">25:00</div>
             <div class="flex justify-center gap-2">
                 <button class="timer-opt px-3 py-2 bg-slate-50 rounded-xl text-[10px] font-black border" data-mins="15">15</button>
@@ -236,8 +232,8 @@
                 <button class="timer-opt px-3 py-2 bg-slate-50 rounded-xl text-[10px] font-black border" data-mins="45">45</button>
             </div>
             <div class="flex gap-4 justify-center">
-                <button id="btn-timer-play" class="bg-indigo-600 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-all"><i data-lucide="play"></i></button>
-                <button id="btn-timer-reset" class="bg-slate-100 text-indigo-500 w-16 h-16 rounded-full flex items-center justify-center active:scale-90 transition-all border shadow-sm"><i data-lucide="rotate-ccw"></i></button>
+                <button id="btn-timer-play" class="bg-indigo-600 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-all"><i data-lucide="play" class="text-white"></i></button>
+                <button id="btn-timer-reset" class="bg-slate-100 text-indigo-500 w-16 h-16 rounded-full flex items-center justify-center border shadow-sm"><i data-lucide="rotate-ccw"></i></button>
             </div>
             <button id="btn-timer-close" class="text-[10px] font-black uppercase text-slate-400 pt-4">Fermer</button>
         </div>
@@ -248,27 +244,16 @@
             <button id="btn-note-close" class="text-[10px] font-black text-slate-400 uppercase p-2">Fermer</button>
             <div class="flex items-center gap-2">
                 <button id="btn-add-img" class="p-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 active:scale-90 transition-all"><i data-lucide="image" class="w-4 h-4"></i></button>
-                <div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+                <div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl shadow-inner">
                     <button id="tab-edit" class="px-4 py-1.5 text-[9px] font-bold rounded-lg bg-white dark:bg-slate-700 text-indigo-600 shadow-sm">ÉDITER</button>
                     <button id="tab-view" class="px-4 py-1.5 text-[9px] font-bold rounded-lg text-slate-500">VOIR</button>
                 </div>
             </div>
         </div>
         <input type="text" id="nt-title" placeholder="Titre..." class="p-6 text-xl font-bold border-none outline-none bg-card text-slate-800 dark:text-white">
-        <textarea id="nt-body" class="flex-1 p-6 text-sm outline-none resize-none bg-card text-slate-800 dark:text-white" placeholder="$$ \bar{x} = \frac{1}{n} \sum x_i $$... Écris ici !"></textarea>
+        <textarea id="nt-body" class="flex-1 p-6 text-sm outline-none resize-none bg-card text-slate-800 dark:text-white" placeholder="$$ \mu = 0 $$... Écris tes notes ici !"></textarea>
         <div id="nt-preview" class="hidden flex-1 p-6 overflow-y-auto prose dark:prose-invert max-w-none text-slate-800 dark:text-white"></div>
         <input type="file" id="note-img-input" accept="image/*" class="hidden">
-    </div>
-
-    <div id="date-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-6 text-slate-700 dark:text-slate-300">
-        <div class="bg-card w-full max-w-sm rounded-[2.5rem] p-8 space-y-6 shadow-2xl border border-slate-100 dark:border-slate-800 text-center">
-            <h3 class="text-sm font-black uppercase text-indigo-600">Date du prochain CC</h3>
-            <input type="date" id="new-exam-date" class="w-full p-4 bg-slate-50 rounded-2xl text-center font-bold outline-none text-slate-800">
-            <div class="flex gap-2">
-                <button id="btn-save-date" class="flex-1 bg-indigo-600 text-white p-4 rounded-2xl font-bold text-sm uppercase">Save</button>
-                <button id="btn-cancel-date" class="px-6 bg-slate-100 text-slate-400 rounded-2xl font-bold text-sm uppercase">Exit</button>
-            </div>
-        </div>
     </div>
 
     <script type="module">
@@ -284,26 +269,26 @@
 
         const TEAM = ["Matt", "MAB", "Vince", "Sami", "Soso"];
         const FULL_NAMES = ["Matthieu", "Antoine", "Vincent", "Samia", "Sofian"];
+        
         const MENU_DATA = {
             "Crousty Game": { plats: ["L'Original", "Le Spicy", "Le Frenchy", "Le Crousty Mix", "Le Bourguir", "Le Gratiné Raclette", "Le Gratiné Mozza"], supps: ["Tenders x3", "Hot Wings x3", "Bouchées Camembert", "Mozza Sticks", "Rondelles d'Oignons", "Frites Crousty"] },
-            "Maacburger": { plats: ["Menu Tower (2-5 étages)", "Extreme Tower", "Mac Poutine Poulet", "Menu Wings Solo", "Menu Dips Solo", "Menu 280", "Le Giant Mac"], supps: ["Frites XL", "Potatoes", "Tiramisu Daim", "Bucket Appetizers Mix", "Hot-dog Solo"] },
-            "O'Tacos": { plats: ["Tacos L", "Tacos XL", "Le Gigatacos"], supps: ["Extra Sauce Fromagère", "Supplément Lardons", "Tiramisu Maison"] },
-            "Antalya": { plats: ["Grec Complet", "Assiette Kebab", "Libanais Poulet"], supps: ["Supplément Viande", "Grande Frite", "Canette 33cl"] }
+            "Maacburger": { plats: ["Menu Tower (2-5 étages)", "Extreme Tower", "Mac Poutine Poulet", "Menu 280", "Le Giant Mac"], supps: ["Frites XL", "Potatoes", "Tiramisu Daim", "Bucket Appetizers Mix"] },
+            "O'Tacos": { plats: ["Tacos L (2 viandes)", "Tacos XL (3 viandes)", "Le Gigatacos"], supps: ["Supplément Lardons", "Extra Sauce Fromagère"] }
         };
 
         const PROGRAM = [
             { id: "B1", short: "Savoirs", bloc: "Savoirs spécialisés en statistique (BC00004225)", items: [{ name: "Statistique bayésienne", ects: 3 }, { name: "Statistique non paramétrique", ects: 5 }, { name: "Projet Master", ects: 3 }, { name: "Anglais", ects: 3 }, { name: "Techniques de prévision", ects: 4 }] },
             { id: "B2", short: "Actuariat", bloc: "Spécialisation en Actuariat (BC00004226)", items: [{ name: "Assurance vie", ects: 5 }, { name: "Assurance non vie", ects: 5 }, { name: "Analyse des risques", ects: 3 }] },
-            { id: "B3", short: "Marché", bloc: "Spécialisation en Etude de Marché (BC00004227)", items: [{ name: "Méthodes de régression avancées", ects: 4 }, { name: "Apprentissage non supervisé", ects: 4 }, { name: "Applications marketing", ects: 3 }, { name: "Machine learning et incertitude", ects: 3 }] },
-            { id: "B4", short: "Entrep.", bloc: "Mise en situation professionnelle (BC00004228)", items: [{ name: "Alternance", ects: 15 }] }
+            { id: "B3", short: "Marché", bloc: "Spécialisation en Etude de Marché (BC00004227)", items: [{ name: "Méthodes de régression avancées", ects: 4 }, { name: "Apprentissage non supervisé", ects: 4 }, { name: "Applications marketing", ects: 3 }, { name: "Machine learning et incertitude", ects: 3 }] }
         ];
 
         let currentGradeUser = ""; let userNotes = {};
 
-        // NAVIGATION
+        // NAVIGATION LOGIC RESTAURÉE
         const setView = (id, btn) => {
             document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
-            document.getElementById('view-' + id).classList.remove('hidden');
+            const target = document.getElementById('view-' + id);
+            if(target) target.classList.remove('hidden');
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('tab-active', 'text-indigo-600'));
             if(btn) btn.classList.add('tab-active', 'text-indigo-600');
             lucide.createIcons();
@@ -331,11 +316,18 @@
                     div.innerHTML = `<div class="flex justify-between items-center"><div class="font-black text-sm uppercase">${ev.subject}</div><button class="btn-del text-slate-200"><i data-lucide="x"></i></button></div><div class="text-[10px] opacity-40 font-bold">${ev.date} à ${ev.time}</div><div class="flex">${TEAM.map(n => `<button class="w-8 h-8 rounded-full text-[7px] font-black -ml-2 first:ml-0 border-2 border-white ${(ev.participants||[]).includes(n)?'bg-indigo-600 text-white':'bg-slate-100 text-slate-400'}" id="p-${d.id}-${n}">${n}</button>`).join('')}</div>`;
                     list.appendChild(div);
                     div.querySelector('.btn-del').onclick = () => deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'planning', d.id));
-                    TEAM.forEach(n => { const b = document.getElementById(`p-${d.id}-${n}`); if(b) b.onclick = () => { const ref = doc(db, 'artifacts', appId, 'public', 'data', 'planning', d.id); if((ev.participants||[]).includes(n)) updateDoc(ref, { participants: arrayRemove(n) }); else updateDoc(ref, { participants: arrayUnion(n) }); }; });
+                    TEAM.forEach(n => {
+                        const btn = document.getElementById(`p-${d.id}-${n}`);
+                        if(btn) btn.onclick = () => {
+                            const ref = doc(db, 'artifacts', appId, 'public', 'data', 'planning', d.id);
+                            if((ev.participants||[]).includes(n)) updateDoc(ref, { participants: arrayRemove(n) });
+                            else updateDoc(ref, { participants: arrayUnion(n) });
+                        };
+                    });
                 }); lucide.createIcons();
             });
 
-            // Docs Sync
+            // Documents Sync
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), s => {
                 const list = document.getElementById('list-docs'); list.innerHTML = "";
                 s.docs.forEach(d => {
@@ -343,17 +335,6 @@
                     div.innerHTML = `<div class="font-bold text-xs uppercase">${i.name}</div><div class="flex gap-2"><a href="${i.url}" target="_blank" class="text-indigo-600 text-[9px] font-black underline">OPEN</a><button class="btn-del text-slate-200"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`;
                     list.appendChild(div);
                     div.querySelector('.btn-del').onclick = () => deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'docs', d.id));
-                }); lucide.createIcons();
-            });
-
-            // Projects Sync
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), s => {
-                const list = document.getElementById('list-projets'); list.innerHTML = "";
-                s.docs.forEach(d => {
-                    const p = d.data(); const div = document.createElement('div'); div.className = "bg-card p-5 rounded-3xl border shadow-sm space-y-3";
-                    div.innerHTML = `<div class="flex justify-between items-center"><div class="font-black text-sm uppercase">${p.name}</div><button class="btn-del text-slate-200"><i data-lucide="x"></i></button></div><div class="flex justify-between items-center"><div class="flex">${(p.assignees||[]).map(n=>`<div class="px-2 py-1 bg-slate-900 text-white text-[7px] font-black rounded-lg -ml-1">${n}</div>`).join('')}</div><button class="btn-status px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-[8px] font-black">${p.status||'À FAIRE'}</button></div>`;
-                    list.appendChild(div);
-                    div.querySelector('.btn-status').onclick = () => { const nxt = p.status==='À FAIRE'?'EN COURS':(p.status==='EN COURS'?'TERMINÉ':'À FAIRE'); updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', d.id), {status:nxt}); };
                 }); lucide.createIcons();
             });
 
@@ -369,13 +350,6 @@
                 }); lucide.createIcons();
             });
 
-            // Grades Sync
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'user_grades'), s => {
-                if(!currentGradeUser) return;
-                userNotes = {}; s.docs.forEach(d => { if(d.data().user === currentGradeUser) userNotes[d.data().subject] = { id: d.id, note: d.data().note }; });
-                renderGradesUI();
-            });
-
             // Countdown Sync
             onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'exams'), (d) => {
                 let targetStr = d.exists() ? d.data().date : '2026-05-15';
@@ -387,21 +361,6 @@
             document.getElementById('status-text').innerText = "Synchro ACTIVE";
         };
 
-        // SUBMITS
-        document.getElementById('btn-submit-session').onclick = () => {
-            const s = document.getElementById('in-title').value; const d = document.getElementById('in-date').value; const t = document.getElementById('in-time').value;
-            if(s && d) addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'planning'), { subject: s, date: d, time: t, participants: [] });
-        };
-        document.getElementById('btn-submit-link').onclick = () => {
-            const n = document.getElementById('in-doc').value; const u = document.getElementById('in-url').value; const f = document.getElementById('in-doc-folder').value;
-            if(n && u) addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), { name: n, url: u, folder: f });
-        };
-        document.getElementById('btn-submit-project').onclick = () => {
-            const n = document.getElementById('in-proj-name').value; const s = document.getElementById('in-proj-status').value;
-            const ass = Array.from(document.querySelectorAll('.assign-check:checked')).map(i => i.value);
-            if(n) addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'projects'), { name: n, status: s, assignees: ass });
-        };
-
         // CHOOSER
         document.getElementById('btn-chooser-run').onclick = () => {
             const count = parseInt(document.getElementById('chooser-count').value) || 2;
@@ -409,7 +368,7 @@
             document.getElementById('chooser-result').innerHTML = shuffled.map(n => `<span class="px-3 py-1 bg-blue-600 text-white rounded-full font-black text-[10px] uppercase">${n}</span>`).join(' ');
         };
 
-        // FOOD ROULETTE
+        // FOOD LOGIC
         document.getElementById('btn-food-open').onclick = () => document.getElementById('food-modal').classList.remove('hidden');
         document.getElementById('btn-food-close').onclick = () => document.getElementById('food-modal').classList.add('hidden');
         document.getElementById('btn-food-random').onclick = () => {
@@ -421,11 +380,11 @@
                 const resto = restos[Math.floor(Math.random() * restos.length)];
                 const plat = MENU_DATA[resto].plats[Math.floor(Math.random() * MENU_DATA[resto].plats.length)];
                 const supp = MENU_DATA[resto].supps[Math.floor(Math.random() * MENU_DATA[resto].supps.length)];
-                res.innerHTML = `<div class="mb-2"><span class="bg-orange-600 text-white px-3 py-1 rounded-full text-[9px] font-black uppercase">${resto}</span></div><div class="text-indigo-600 font-black text-sm uppercase">${plat}</div><div class="text-slate-400 font-bold text-[9px] uppercase italic">+ ${supp}</div>`;
+                res.innerHTML = `<div class="mb-2"><span class="bg-orange-600 text-white px-3 py-1 rounded-full text-[9px] font-black uppercase">${resto}</span></div><div class="text-indigo-600 font-black text-sm uppercase leading-tight mb-1">${plat}</div><div class="text-slate-400 font-bold text-[9px] uppercase italic">+ ${supp}</div>`;
             }, 600);
         };
 
-        // TIMER
+        // TIMER LOGIC
         let timerSec = 25 * 60; let timerInt = null;
         document.getElementById('btn-timer-open-main').onclick = () => document.getElementById('timer-modal').classList.remove('hidden');
         document.getElementById('btn-timer-close').onclick = () => document.getElementById('timer-modal').classList.add('hidden');
@@ -439,9 +398,11 @@
             else { timerInt = setInterval(() => { if(timerSec > 0) { timerSec--; const m = Math.floor(timerSec / 60); const s = timerSec % 60; document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0'+s : s}`; } }, 1000); }
         };
 
-        // NOTES (LaTeX + IMAGES)
+        // NOTE EDITOR (MATHS + IMAGES + LINEBREAKS)
         let currentNoteId = null;
         marked.use(markedKatex({ throwOnError: false }));
+        marked.setOptions({ breaks: true, gfm: true });
+
         const openNote = (id) => {
             currentNoteId = id; document.getElementById('editor-modal').classList.remove('hidden');
             onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'notes', id), d => {
@@ -461,16 +422,18 @@
         document.getElementById('note-img-input').onchange = (e) => {
             const f = e.target.files[0]; if(f) {
                 const r = new FileReader(); r.onloadend = () => {
-                    const body = document.getElementById('nt-body'); body.value += `\n![image](${r.result})\n`;
+                    const body = document.getElementById('nt-body');
+                    body.value += `\n\n![image](${r.result})\n\n`;
                     updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'notes', currentNoteId), { content: body.value });
                 }; r.readAsDataURL(f);
             }
         };
-        document.getElementById('nt-body').oninput = () => updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'notes', currentNoteId), { content: document.getElementById('nt-body').value });
-        document.getElementById('nt-title').oninput = () => updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'notes', currentNoteId), { title: document.getElementById('nt-title').value });
-        document.getElementById('btn-note-close').onclick = () => { currentNoteId = null; document.getElementById('editor-modal').classList.add('hidden'); };
+        const saveNote = () => { if(currentNoteId) updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'notes', currentNoteId), { title: document.getElementById('nt-title').value, content: document.getElementById('nt-body').value }); };
+        document.getElementById('nt-title').oninput = saveNote;
+        document.getElementById('nt-body').oninput = saveNote;
+        document.getElementById('btn-note-close').onclick = () => document.getElementById('editor-modal').classList.add('hidden');
 
-        // MOYENNES LOGIC (700+ lines restored)
+        // MOYENNES LOGIC RESTAURÉE (700+)
         const renderGradesUI = () => {
             const container = document.getElementById('list-blocs-template'); container.innerHTML = "";
             let gWeight = 0, gEcts = 0;
@@ -479,14 +442,15 @@
                 let html = bloc.items.map(item => {
                     const saved = userNotes[item.name]; const val = saved ? saved.note : "";
                     if(saved) { bWeight += (saved.note * item.ects); bEcts += item.ects; gWeight += (saved.note * item.ects); gEcts += item.ects; }
-                    return `<div class="flex justify-between items-center py-2 border-b last:border-none"><div class="text-[10px] font-bold uppercase text-slate-500">${item.name}</div><input type="text" id="inp-${item.name.replace(/\s/g, '-')}" value="${val}" class="grade-input w-12 p-1.5 rounded-lg text-center text-xs font-black"></div>`;
+                    return `<div class="flex justify-between items-center py-2 border-b last:border-none"><div class="text-[10px] font-bold uppercase text-slate-500">${item.name}</div><input type="text" id="inp-${item.name.replace(/\s/g, '-')}" value="${val}" class="grade-input w-12 p-1.5 rounded-lg text-center text-xs font-black outline-none border-none"></div>`;
                 }).join('');
                 const avg = bEcts > 0 ? (bWeight / bEcts) : null;
                 const div = document.createElement('div'); div.className = "bg-card rounded-3xl border p-6 shadow-sm";
                 div.innerHTML = `<div class="flex justify-between mb-4"><h3 class="text-[9px] font-black uppercase text-slate-400">${bloc.bloc}</h3><div class="text-lg font-black">${avg !== null ? avg.toFixed(2) : "--"}</div></div><div class="space-y-1">${html}</div>`;
                 container.appendChild(div);
                 bloc.items.forEach(item => {
-                    document.getElementById(`inp-${item.name.replace(/\s/g, '-')}`).onchange = async (e) => {
+                    const el = document.getElementById(`inp-${item.name.replace(/\s/g, '-')}`);
+                    if(el) el.onchange = async (e) => {
                         const note = parseFloat(e.target.value.replace(',', '.'));
                         const ex = userNotes[item.name];
                         if(e.target.value === "") { if(ex) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_grades', ex.id)); }
@@ -501,11 +465,21 @@
             document.getElementById('total-gpa').innerText = final.toFixed(2);
             document.getElementById('year-progress-bar').style.width = ((gEcts / 60) * 100) + "%";
         };
-        document.getElementById('grade-user-select').onchange = (e) => { currentGradeUser = e.target.value; if(currentGradeUser) { document.getElementById('grade-dashboard').classList.remove('hidden'); } };
+        document.getElementById('grade-user-select').onchange = (e) => { 
+            currentGradeUser = e.target.value; 
+            if(currentGradeUser) {
+                document.getElementById('grade-dashboard').classList.remove('hidden');
+                onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'user_grades'), s => {
+                    userNotes = {}; s.docs.forEach(d => { if(d.data().user === currentGradeUser) userNotes[d.data().subject] = { id: d.id, note: d.data().note }; });
+                    renderGradesUI();
+                });
+            }
+        };
 
-        // THEME & BOOT
-        document.getElementById('theme-toggle').onclick = () => { document.body.classList.toggle('dark-mode'); lucide.createIcons(); };
-        window.onload = () => { startSync(); lucide.createIcons(); };
+        // INIT
+        startSync();
+        document.getElementById('theme-toggle').onclick = () => document.body.classList.toggle('dark-mode');
+        lucide.createIcons();
     </script>
 </body>
 </html>
