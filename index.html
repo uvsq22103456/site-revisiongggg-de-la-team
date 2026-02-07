@@ -14,7 +14,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked-katex-extension/lib/index.umd.js"></script>
@@ -29,34 +29,21 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-        
         :root { --app-bg: #f8fafc; --card-bg: #ffffff; --text-main: #0f172a; --border-color: #e2e8f0; }
         .dark-mode { --app-bg: #020617; --card-bg: #0f172a; --text-main: #f1f5f9; --border-color: #1e293b; }
-
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            -webkit-tap-highlight-color: transparent; 
-            overscroll-behavior-y: contain;
-            background-color: var(--app-bg);
-            color: var(--text-main);
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
+        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; overscroll-behavior-y: contain; background-color: var(--app-bg); color: var(--text-main); transition: background-color 0.3s ease; }
         .bg-card { background-color: var(--card-bg); border-color: var(--border-color); border-width: 1px; }
         .tab-active { color: #4f46e5 !important; border-bottom: 3px solid #4f46e5 !important; opacity: 1 !important; }
         .view-content { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .crousty-card { background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        
         .grade-input { background-color: #f1f5f9; color: #0f172a !important; border: 1px solid #cbd5e1; font-weight: 900; }
         .dark-mode .grade-input { background-color: #1e293b; color: #ffffff !important; border: 1px solid #334155; }
         .assign-check:checked + label { background-color: #4f46e5; color: white; border-color: #4f46e5; }
-        
         .bar-bg { width: 100%; background: rgba(255,255,255,0.05); border-radius: 4px; height: 100%; display: flex; align-items: flex-end; overflow: hidden; }
         .bar-fill { width: 100%; border-radius: 2px 2px 0 0; transition: height 1s cubic-bezier(0.4, 0, 0.2, 1); }
         .timer-opt-active { background-color: #4f46e5 !important; color: white !important; }
-
         #nt-preview { white-space: pre-wrap; word-wrap: break-word; }
         #nt-preview img { max-width: 100%; border-radius: 1rem; margin: 1rem 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid #e2e8f0; }
     </style>
@@ -106,7 +93,7 @@
             </div>
 
             <div class="crousty-card p-8 rounded-[2.5rem] text-white shadow-2xl">
-                <h2 class="text-2xl font-black mb-2 leading-tight uppercase italic">Sabaidi Billys !🚀</h2>
+                <h2 class="text-2xl font-black mb-2 uppercase italic">Sabaidi Billys !🚀</h2>
                 <button id="btn-timer-open-main" class="mt-6 bg-white/20 p-4 rounded-2xl flex items-center gap-3 transition-all active:scale-95 w-full text-left">
                     <div class="bg-white text-indigo-600 p-2 rounded-xl"><i data-lucide="timer"></i></div>
                     <div><div class="text-xs font-black uppercase text-white">Timer Focus</div><div class="text-[10px] opacity-90 font-bold uppercase text-white">Mode Pomodoro</div></div>
@@ -135,6 +122,10 @@
                     <i data-lucide="clock" class="text-indigo-600 mb-1"></i>
                     <span class="text-xs font-bold uppercase text-indigo-700">Emploi du temps</span>
                 </a>
+                <a href="https://affluences.com/sites/bu-st-quentin/reservation?type=575" target="_blank" class="bg-card p-6 rounded-[2rem] border shadow-sm text-center col-span-2 flex flex-col items-center">
+                    <i data-lucide="map-pin" class="text-emerald-500 mb-1"></i>
+                    <span class="text-xs font-bold uppercase text-emerald-700">Réserver une salle (Affluences BU)</span>
+                </a>
                 <button id="btn-food-open" class="bg-card p-6 rounded-[2rem] border shadow-sm text-center col-span-2">
                     <i data-lucide="utensils" class="mx-auto mb-1 text-orange-500"></i>
                     <span class="block text-xs font-bold uppercase text-orange-600">On mange où gros ?</span>
@@ -155,9 +146,9 @@
         <div id="view-docs" class="view-content hidden space-y-4">
             <div class="bg-card p-5 rounded-3xl border shadow-sm space-y-3">
                 <h3 class="text-xs font-black text-indigo-600 uppercase text-center">Ajouter un cours</h3>
-                <input type="text" id="in-doc" placeholder="Nom du cours" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm outline-none border-none">
-                <input type="text" id="in-url" placeholder="Lien Drive" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm outline-none border-none">
-                <select id="in-doc-folder" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-xs font-bold appearance-none border-none">
+                <input type="text" id="in-doc" placeholder="Nom du cours" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm outline-none border-none text-slate-800 dark:text-white">
+                <input type="text" id="in-url" placeholder="Lien Drive" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm outline-none border-none text-slate-800 dark:text-white">
+                <select id="in-doc-folder" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-xs font-bold appearance-none border-none text-slate-800 dark:text-white">
                     <option value="Agnes">📁 Agnes</option><option value="Gildas">📁 Gildas</option><option value="Tillier">📁 Tillier</option><option value="Worms">📁 Worms</option><option value="Marianne">📁 Marianne</option><option value="Autres">📁 Divers</option>
                 </select>
                 <button id="btn-submit-link" class="w-full bg-indigo-900 text-white p-4 rounded-2xl font-bold text-sm shadow-lg uppercase">PARTAGER LE LIEN</button>
@@ -168,7 +159,7 @@
         <div id="view-projets" class="view-content hidden space-y-4">
             <div class="bg-card p-5 rounded-3xl border shadow-sm space-y-4">
                 <h3 class="text-xs font-black text-emerald-600 uppercase text-center">Nouveau Ticket Projet</h3>
-                <input type="text" id="in-proj-name" placeholder="Nom du projet" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm outline-none border-none">
+                <input type="text" id="in-proj-name" placeholder="Nom du projet" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-sm outline-none border-none text-slate-800 dark:text-white">
                 <div class="space-y-2">
                     <p class="text-[9px] font-black text-slate-400 uppercase">Assigner Team :</p>
                     <div class="flex flex-wrap gap-2">
@@ -179,7 +170,7 @@
                         <input type="checkbox" id="u-Soso" value="Soso" class="assign-check hidden"><label for="u-Soso" class="px-3 py-2 bg-slate-50 dark:bg-slate-800 text-[10px] font-bold rounded-xl border cursor-pointer">Soso</label>
                     </div>
                 </div>
-                <select id="in-proj-status" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-xs font-bold border-none appearance-none">
+                <select id="in-proj-status" class="w-full p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-xs font-bold border-none appearance-none text-slate-800 dark:text-white">
                     <option value="À FAIRE">📝 À FAIRE</option><option value="EN COURS">🚀 EN COURS</option><option value="TERMINÉ">✅ TERMINÉ</option>
                 </select>
                 <button id="btn-submit-project" class="w-full bg-emerald-600 text-white p-4 rounded-2xl font-bold text-sm shadow-lg uppercase">Lancer le ticket</button>
@@ -195,7 +186,7 @@
         </div>
 
         <div id="view-grades" class="view-content hidden space-y-6">
-            <div class="bg-card p-5 rounded-3xl border shadow-sm">
+            <div class="bg-card p-5 rounded-3xl border shadow-sm flex items-center justify-between">
                 <select id="grade-user-select" class="w-full font-bold text-sm bg-transparent border-none outline-none appearance-none text-indigo-600 cursor-pointer">
                     <option value="">Qui es-tu ?</option>
                     <option value="Matthieu">Matthieu</option><option value="Antoine">Antoine</option><option value="Vincent">Vincent</option><option value="Samia">Samia</option><option value="Sofian">Sofian</option>
@@ -269,11 +260,9 @@
 
         const TEAM = ["Matt", "MAB", "Vince", "Sami", "Soso"];
         const FULL_NAMES = ["Matthieu", "Antoine", "Vincent", "Samia", "Sofian"];
-        
         const MENU_DATA = {
             "Crousty Game": { plats: ["L'Original", "Le Spicy", "Le Frenchy", "Le Crousty Mix", "Le Bourguir", "Le Gratiné Raclette", "Le Gratiné Mozza"], supps: ["Tenders x3", "Hot Wings x3", "Bouchées Camembert", "Mozza Sticks", "Rondelles d'Oignons", "Frites Crousty"] },
-            "Maacburger": { plats: ["Menu Tower (2-5 étages)", "Extreme Tower", "Mac Poutine Poulet", "Menu 280", "Le Giant Mac"], supps: ["Frites XL", "Potatoes", "Tiramisu Daim", "Bucket Appetizers Mix"] },
-            "O'Tacos": { plats: ["Tacos L (2 viandes)", "Tacos XL (3 viandes)", "Le Gigatacos"], supps: ["Supplément Lardons", "Extra Sauce Fromagère"] }
+            "Maacburger": { plats: ["Menu Tower", "Extreme Tower", "Mac Poutine", "Menu 280", "Giant Mac"], supps: ["Frites XL", "Potatoes", "Tiramisu Daim", "Bucket Appetizers"] }
         };
 
         const PROGRAM = [
@@ -284,7 +273,7 @@
 
         let currentGradeUser = ""; let userNotes = {};
 
-        // NAVIGATION LOGIC RESTAURÉE
+        // NAVIGATION LOGIC
         const setView = (id, btn) => {
             document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
             const target = document.getElementById('view-' + id);
@@ -304,30 +293,23 @@
         document.getElementById('quick-grades').onclick = () => setView('grades', document.getElementById('nav-grades'));
         document.getElementById('logo-main-btn').onclick = () => setView('home', document.getElementById('nav-home'));
 
-        // SYNC FIREBASE INTEGRALE
+        // FIREBASE SYNC
         const startSync = async () => {
             await signInAnonymously(auth);
             
-            // Planning Sync
+            // Planning
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'planning'), s => {
                 const list = document.getElementById('list-planning'); list.innerHTML = "";
                 s.docs.forEach(d => {
                     const ev = d.data(); const div = document.createElement('div'); div.className = "bg-card p-5 rounded-3xl border shadow-sm space-y-4";
-                    div.innerHTML = `<div class="flex justify-between items-center"><div class="font-black text-sm uppercase">${ev.subject}</div><button class="btn-del text-slate-200"><i data-lucide="x"></i></button></div><div class="text-[10px] opacity-40 font-bold">${ev.date} à ${ev.time}</div><div class="flex">${TEAM.map(n => `<button class="w-8 h-8 rounded-full text-[7px] font-black -ml-2 first:ml-0 border-2 border-white ${(ev.participants||[]).includes(n)?'bg-indigo-600 text-white':'bg-slate-100 text-slate-400'}" id="p-${d.id}-${n}">${n}</button>`).join('')}</div>`;
+                    div.innerHTML = `<div class="flex justify-between items-center font-black text-sm uppercase"><span>${ev.subject}</span><button class="btn-del text-slate-200"><i data-lucide="x"></i></button></div><div class="text-[10px] opacity-40 font-bold">${ev.date} à ${ev.time}</div><div class="flex">${TEAM.map(n => `<button class="w-8 h-8 rounded-full text-[7px] font-black -ml-2 first:ml-0 border-2 border-white ${(ev.participants||[]).includes(n)?'bg-indigo-600 text-white':'bg-slate-100 text-slate-400'}" id="p-${d.id}-${n}">${n}</button>`).join('')}</div>`;
                     list.appendChild(div);
                     div.querySelector('.btn-del').onclick = () => deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'planning', d.id));
-                    TEAM.forEach(n => {
-                        const btn = document.getElementById(`p-${d.id}-${n}`);
-                        if(btn) btn.onclick = () => {
-                            const ref = doc(db, 'artifacts', appId, 'public', 'data', 'planning', d.id);
-                            if((ev.participants||[]).includes(n)) updateDoc(ref, { participants: arrayRemove(n) });
-                            else updateDoc(ref, { participants: arrayUnion(n) });
-                        };
-                    });
+                    TEAM.forEach(n => { const b = document.getElementById(`p-${d.id}-${n}`); if(b) b.onclick = () => { const ref = doc(db, 'artifacts', appId, 'public', 'data', 'planning', d.id); if((ev.participants||[]).includes(n)) updateDoc(ref, { participants: arrayRemove(n) }); else updateDoc(ref, { participants: arrayUnion(n) }); }; });
                 }); lucide.createIcons();
             });
 
-            // Documents Sync
+            // Documents
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), s => {
                 const list = document.getElementById('list-docs'); list.innerHTML = "";
                 s.docs.forEach(d => {
@@ -338,7 +320,7 @@
                 }); lucide.createIcons();
             });
 
-            // Notes Sync
+            // Notes
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'notes'), s => {
                 const list = document.getElementById('list-notes'); list.innerHTML = "";
                 s.docs.forEach(d => {
@@ -350,7 +332,14 @@
                 }); lucide.createIcons();
             });
 
-            // Countdown Sync
+            // Grades Sync
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'user_grades'), s => {
+                if(!currentGradeUser) return;
+                userNotes = {}; s.docs.forEach(d => { if(d.data().user === currentGradeUser) userNotes[d.data().subject] = { id: d.id, note: d.data().note }; });
+                renderGradesUI();
+            });
+
+            // Countdown
             onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'exams'), (d) => {
                 let targetStr = d.exists() ? d.data().date : '2026-05-15';
                 const diff = new Date(targetStr) - new Date();
@@ -361,14 +350,22 @@
             document.getElementById('status-text').innerText = "Synchro ACTIVE";
         };
 
-        // CHOOSER
+        // ACTIONS
+        document.getElementById('btn-submit-session').onclick = () => {
+            const s = document.getElementById('in-title').value; const d = document.getElementById('in-date').value; const t = document.getElementById('in-time').value;
+            if(s && d) addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'planning'), { subject: s, date: d, time: t, participants: [] });
+        };
+        document.getElementById('btn-submit-link').onclick = () => {
+            const n = document.getElementById('in-doc').value; const u = document.getElementById('in-url').value;
+            if(n && u) addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'docs'), { name: n, url: u });
+        };
         document.getElementById('btn-chooser-run').onclick = () => {
             const count = parseInt(document.getElementById('chooser-count').value) || 2;
             const shuffled = [...FULL_NAMES].sort(() => 0.5 - Math.random()).slice(0, count);
             document.getElementById('chooser-result').innerHTML = shuffled.map(n => `<span class="px-3 py-1 bg-blue-600 text-white rounded-full font-black text-[10px] uppercase">${n}</span>`).join(' ');
         };
 
-        // FOOD LOGIC
+        // FOOD
         document.getElementById('btn-food-open').onclick = () => document.getElementById('food-modal').classList.remove('hidden');
         document.getElementById('btn-food-close').onclick = () => document.getElementById('food-modal').classList.add('hidden');
         document.getElementById('btn-food-random').onclick = () => {
@@ -384,7 +381,7 @@
             }, 600);
         };
 
-        // TIMER LOGIC
+        // TIMER
         let timerSec = 25 * 60; let timerInt = null;
         document.getElementById('btn-timer-open-main').onclick = () => document.getElementById('timer-modal').classList.remove('hidden');
         document.getElementById('btn-timer-close').onclick = () => document.getElementById('timer-modal').classList.add('hidden');
@@ -398,11 +395,10 @@
             else { timerInt = setInterval(() => { if(timerSec > 0) { timerSec--; const m = Math.floor(timerSec / 60); const s = timerSec % 60; document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0'+s : s}`; } }, 1000); }
         };
 
-        // NOTE EDITOR (MATHS + IMAGES + LINEBREAKS)
+        // NOTES (LaTeX + IMAGES + LINEBREAKS)
         let currentNoteId = null;
         marked.use(markedKatex({ throwOnError: false }));
         marked.setOptions({ breaks: true, gfm: true });
-
         const openNote = (id) => {
             currentNoteId = id; document.getElementById('editor-modal').classList.remove('hidden');
             onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'notes', id), d => {
@@ -414,26 +410,25 @@
         };
         document.getElementById('tab-view').onclick = () => {
             document.getElementById('nt-body').classList.add('hidden');
-            const preview = document.getElementById('nt-preview'); preview.classList.remove('hidden');
-            preview.innerHTML = marked.parse(document.getElementById('nt-body').value);
+            const p = document.getElementById('nt-preview'); p.classList.remove('hidden');
+            p.innerHTML = marked.parse(document.getElementById('nt-body').value);
         };
         document.getElementById('tab-edit').onclick = () => { document.getElementById('nt-body').classList.remove('hidden'); document.getElementById('nt-preview').classList.add('hidden'); };
         document.getElementById('btn-add-img').onclick = () => document.getElementById('note-img-input').click();
         document.getElementById('note-img-input').onchange = (e) => {
             const f = e.target.files[0]; if(f) {
                 const r = new FileReader(); r.onloadend = () => {
-                    const body = document.getElementById('nt-body');
-                    body.value += `\n\n![image](${r.result})\n\n`;
-                    updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'notes', currentNoteId), { content: body.value });
+                    const b = document.getElementById('nt-body'); b.value += `\n\n![image](${r.result})\n\n`;
+                    updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'notes', currentNoteId), { content: b.value });
                 }; r.readAsDataURL(f);
             }
         };
         const saveNote = () => { if(currentNoteId) updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'notes', currentNoteId), { title: document.getElementById('nt-title').value, content: document.getElementById('nt-body').value }); };
         document.getElementById('nt-title').oninput = saveNote;
         document.getElementById('nt-body').oninput = saveNote;
-        document.getElementById('btn-note-close').onclick = () => document.getElementById('editor-modal').classList.add('hidden');
+        document.getElementById('btn-note-close').onclick = () => { currentNoteId = null; document.getElementById('editor-modal').classList.add('hidden'); };
 
-        // MOYENNES LOGIC RESTAURÉE (700+)
+        // MOYENNES
         const renderGradesUI = () => {
             const container = document.getElementById('list-blocs-template'); container.innerHTML = "";
             let gWeight = 0, gEcts = 0;
@@ -446,7 +441,7 @@
                 }).join('');
                 const avg = bEcts > 0 ? (bWeight / bEcts) : null;
                 const div = document.createElement('div'); div.className = "bg-card rounded-3xl border p-6 shadow-sm";
-                div.innerHTML = `<div class="flex justify-between mb-4"><h3 class="text-[9px] font-black uppercase text-slate-400">${bloc.bloc}</h3><div class="text-lg font-black">${avg !== null ? avg.toFixed(2) : "--"}</div></div><div class="space-y-1">${html}</div>`;
+                div.innerHTML = `<div class="flex justify-between mb-4"><h3 class="text-[9px] font-black uppercase text-slate-400">${bloc.short}</h3><div class="text-lg font-black">${avg !== null ? avg.toFixed(2) : "--"}</div></div><div class="space-y-1">${html}</div>`;
                 container.appendChild(div);
                 bloc.items.forEach(item => {
                     const el = document.getElementById(`inp-${item.name.replace(/\s/g, '-')}`);
@@ -465,21 +460,11 @@
             document.getElementById('total-gpa').innerText = final.toFixed(2);
             document.getElementById('year-progress-bar').style.width = ((gEcts / 60) * 100) + "%";
         };
-        document.getElementById('grade-user-select').onchange = (e) => { 
-            currentGradeUser = e.target.value; 
-            if(currentGradeUser) {
-                document.getElementById('grade-dashboard').classList.remove('hidden');
-                onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'user_grades'), s => {
-                    userNotes = {}; s.docs.forEach(d => { if(d.data().user === currentGradeUser) userNotes[d.data().subject] = { id: d.id, note: d.data().note }; });
-                    renderGradesUI();
-                });
-            }
-        };
+        document.getElementById('grade-user-select').onchange = (e) => { currentGradeUser = e.target.value; if(currentGradeUser) { document.getElementById('grade-dashboard').classList.remove('hidden'); renderGradesUI(); } };
 
-        // INIT
-        startSync();
+        // BOOT
         document.getElementById('theme-toggle').onclick = () => document.body.classList.toggle('dark-mode');
-        lucide.createIcons();
+        window.onload = () => { startSync(); lucide.createIcons(); };
     </script>
 </body>
 </html>
