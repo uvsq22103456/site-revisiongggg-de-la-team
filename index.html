@@ -12,12 +12,11 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-    <!-- Support Mathématiques -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked-katex-extension/lib/index.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
@@ -92,12 +91,16 @@
         /* Fix Images & Lignes Notes */
         #nt-preview { white-space: pre-wrap; word-wrap: break-word; color: var(--text-main); line-height: 1.6; }
         #nt-preview img { max-width: 100%; border-radius: 1rem; margin: 1.5rem 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid var(--border-color); }
-        
+        /* Style LaTeX */
+        .katex { font-size: 1.1em; }
+
         .nt-toolbar-btn { padding: 8px 12px; border-radius: 8px; background: rgba(0,0,0,0.05); font-weight: 900; font-size: 12px; }
-        .timer-opt-active { background-color: #4f46e5 !important; color: white !important; }
         
         /* Correction tactile boutons accueil */
         .btn-home-fix { position: relative; z-index: 30; pointer-events: auto; }
+
+        /* Timer Circle Animation */
+        .timer-circle-svg circle { transition: stroke-dashoffset 1s linear; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -132,7 +135,6 @@
 
     <main class="flex-1 max-w-xl mx-auto w-full p-4 pb-32 relative z-10">
         
-        <!-- VUE ACCUEIL -->
         <div id="view-home" class="view-content space-y-6">
             <div id="countdown-banner" class="bg-slate-900 rounded-[2rem] p-6 text-white flex items-center justify-between overflow-hidden relative cursor-pointer active:scale-95 shadow-xl">
                 <div class="relative z-10 text-white">
@@ -147,14 +149,13 @@
 
             <div class="crousty-card p-8 rounded-[2.5rem] text-white shadow-2xl">
                 <h2 class="text-2xl font-black mb-2 leading-tight uppercase italic text-white">Sabaidi les Billy Boys et les Billy Girls🚀</h2>
-                <p class="text-indigo-100 text-sm font-medium leading-relaxed italic">Matt, MAB, Soso, Vince, Sami : Votre espace Hub.</p>
+                <p class="text-indigo-100 text-sm font-medium leading-relaxed italic">Matt, MAB, Soso, Vince, Sami : L'appli pour booster tes crousty révisions.</p>
                 <button id="btn-timer-open-main" class="mt-6 bg-white/20 hover:bg-white/30 p-4 rounded-2xl flex items-center gap-3 transition-all active:scale-95 w-full text-left text-white font-bold">
                     <div class="bg-white text-indigo-600 p-2 rounded-xl"><i data-lucide="timer"></i></div>
                     <div><div class="text-xs uppercase">Timer Focus</div><div class="text-[10px] opacity-90 uppercase tracking-tight">Mode Pomodoro</div></div>
                 </button>
             </div>
 
-            <!-- CHOOSER -->
             <div class="bg-card rounded-[2rem] p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-5">
                 <div class="flex justify-between items-center">
                     <h3 class="text-[10px] font-black uppercase text-indigo-600 dark:text-indigo-400 tracking-widest font-bold">Chooser fait maison (Groupes)</h3>
@@ -166,7 +167,6 @@
                 <button id="btn-chooser-run" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-black text-xs shadow-lg active:scale-95 transition-all uppercase">Générer le groupe</button>
             </div>
 
-            <!-- GRILLE BOUTONS -->
             <div class="grid grid-cols-2 gap-4 font-bold uppercase text-xs">
                 <button id="quick-planning" class="bg-card p-6 rounded-[2.2rem] border shadow-sm text-center space-y-2 active:scale-95 transition-all btn-home-fix">
                     <div class="w-12 h-8 flex items-center justify-center mx-auto text-amber-500"><i data-lucide="calendar"></i></div>
@@ -194,7 +194,6 @@
             </div>
         </div>
 
-        <!-- REVISIONS -->
         <div id="view-planning" class="view-content hidden space-y-4">
             <div class="bg-card p-5 rounded-3xl border shadow-sm space-y-3">
                 <h3 class="text-xs font-black text-indigo-600 uppercase tracking-widest font-bold">Nouvelle Session</h3>
@@ -208,7 +207,6 @@
             <div id="list-planning" class="space-y-4"></div>
         </div>
 
-        <!-- COURS -->
         <div id="view-docs" class="view-content hidden space-y-4">
             <div class="bg-card p-5 rounded-3xl border shadow-sm space-y-3">
                 <h3 class="text-xs font-black text-indigo-600 uppercase text-center font-bold uppercase">Nouveau Cours</h3>
@@ -219,7 +217,6 @@
             <div id="list-docs" class="space-y-4"></div>
         </div>
 
-        <!-- PROJETS -->
         <div id="view-projets" class="view-content hidden space-y-4">
             <div class="bg-card p-5 rounded-3xl border shadow-sm space-y-4">
                 <h3 class="text-xs font-black text-emerald-600 uppercase text-center font-bold tracking-widest">Nouveau Ticket</h3>
@@ -239,7 +236,6 @@
             <div id="list-projets" class="grid gap-3 font-bold"></div>
         </div>
 
-        <!-- MOYENNES -->
         <div id="view-grades" class="view-content hidden space-y-6">
             <div class="bg-card p-5 rounded-3xl border shadow-sm flex items-center justify-between">
                 <div class="flex items-center gap-3 w-full">
@@ -263,7 +259,6 @@
                             <div id="total-gpa" class="text-6xl font-black">--</div>
                             <div id="total-status" class="mt-3 inline-block px-3 py-1 bg-white/10 rounded-full text-[9px] font-black uppercase tracking-widest text-indigo-300">Calcul...</div>
                         </div>
-                        <!-- LE GRAPHIQUE -->
                         <div class="w-32 h-24 flex items-end gap-1.5 px-2 border-l border-white/5" id="bloc-bar-chart"></div>
                     </div>
                     <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden relative z-10">
@@ -279,7 +274,6 @@
             <div id="grade-empty" class="py-20 text-center text-slate-400 uppercase text-[10px] tracking-widest font-black italic">Choisis ton profil Billy</div>
         </div>
 
-        <!-- NOTES -->
         <div id="view-notes" class="view-content hidden space-y-4">
             <button id="btn-new-note" class="w-full p-8 bg-card border-2 border-dashed border-indigo-200 rounded-[2.5rem] text-indigo-600 font-extrabold flex items-center justify-center gap-2 active:bg-indigo-50 shadow-sm transition-all text-sm uppercase">
                 <i data-lucide="plus-circle"></i> NOUVELLE FICHE
@@ -288,7 +282,6 @@
         </div>
     </main>
 
-    <!-- MODALES -->
     <div id="food-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-6 text-center">
         <div class="bg-card w-full max-w-sm rounded-[3rem] p-8 space-y-6 shadow-2xl relative border border-slate-100 dark:border-slate-800">
             <h3 class="text-sm font-black uppercase text-orange-600 font-bold">La Roulette de la Bouffe 🍔</h3>
@@ -300,7 +293,32 @@
         </div>
     </div>
 
-    <!-- ÉDITEUR NOTES -->
+    <div id="timer-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] flex items-center justify-center p-6 text-center">
+        <div class="bg-card w-full max-w-xs rounded-[3rem] p-8 space-y-6 shadow-2xl relative border border-slate-100 dark:border-slate-800">
+            <h3 class="text-sm font-black uppercase text-indigo-600 font-bold">Focus Mode ⏱️</h3>
+            
+            <div class="relative w-48 h-48 mx-auto flex items-center justify-center">
+                <div class="absolute inset-0 rounded-full border-[6px] border-slate-100 dark:border-slate-800"></div>
+                <svg class="absolute inset-0 w-full h-full transform -rotate-90 timer-circle-svg" viewBox="0 0 100 100">
+                    <circle id="timer-circle" cx="50" cy="50" r="46" fill="none" stroke="#4f46e5" stroke-width="6" stroke-dasharray="289" stroke-dashoffset="0" stroke-linecap="round"></circle>
+                </svg>
+                <div id="timer-display" class="text-5xl font-black text-main tracking-tighter relative z-10">25:00</div>
+            </div>
+
+            <div class="flex justify-center gap-2">
+                <button id="btn-timer-25" class="px-3 py-2 bg-indigo-50 dark:bg-slate-800 rounded-xl text-xs font-bold text-indigo-600 active:scale-95 transition-all">25m</button>
+                <button id="btn-timer-5" class="px-3 py-2 bg-emerald-50 dark:bg-slate-800 rounded-xl text-xs font-bold text-emerald-600 active:scale-95 transition-all">5m</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <button id="btn-timer-toggle" class="bg-indigo-600 text-white p-4 rounded-2xl font-black text-xs shadow-lg uppercase active:scale-95 transition-all">START</button>
+                <button id="btn-timer-reset" class="bg-slate-200 dark:bg-slate-800 text-slate-500 p-4 rounded-2xl font-black text-xs shadow-lg uppercase active:scale-95 transition-all">RESET</button>
+            </div>
+
+            <button id="btn-timer-close" class="w-full text-[10px] font-black text-slate-400 uppercase pt-2 active:scale-90">Fermer & Continuer</button>
+        </div>
+    </div>
+
     <div id="editor-modal" class="hidden fixed inset-0 bg-card z-[200] flex flex-col pt-[env(safe-area-inset-top)]">
         <div class="p-4 border-b flex justify-between items-center bg-card">
             <button id="btn-note-close" class="text-[10px] font-black text-slate-400 uppercase p-2">Fermer</button>
@@ -315,9 +333,10 @@
         <div class="px-4 py-2 border-b bg-slate-50 dark:bg-slate-900 flex gap-2 overflow-x-auto no-scrollbar">
             <button class="nt-toolbar-btn" onclick="fmt('**','**')">B</button>
             <button class="nt-toolbar-btn underline" onclick="fmt('<u>','</u>')">U</button>
+            <button class="nt-toolbar-btn" onclick="fmt('$$ ',' $$')">LaTeX</button>
         </div>
         <input type="text" id="nt-title" placeholder="Titre..." class="p-6 text-xl font-bold border-none outline-none bg-card">
-        <textarea id="nt-body" class="flex-1 p-6 text-base outline-none resize-none bg-card" placeholder="LaTeX : $$\mu$$... Images OK ! Touche Entrée pour les lignes."></textarea>
+        <textarea id="nt-body" class="flex-1 p-6 text-base outline-none resize-none bg-card" placeholder="LaTeX fonctionne ! Essayez $$ \mu = 0 $$ ou $x^2$ ..."></textarea>
         <div id="nt-preview" class="hidden flex-1 p-6 overflow-y-auto prose dark:prose-invert max-w-none"></div>
         <input type="file" id="note-img-input" accept="image/*" class="hidden">
     </div>
@@ -509,6 +528,63 @@
             }, 600);
         };
 
+        // --- TIMER LOGIC ---
+        let timerInterval;
+        let timeLeft = 25 * 60;
+        let totalTime = 25 * 60;
+        let isTimerRunning = false;
+
+        const updateTimerDisplay = () => {
+            const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+            const s = (timeLeft % 60).toString().padStart(2, '0');
+            document.getElementById('timer-display').innerText = `${m}:${s}`;
+            const circle = document.getElementById('timer-circle');
+            const offset = 289 - (timeLeft / totalTime) * 289;
+            circle.style.strokeDashoffset = offset;
+        };
+
+        const toggleTimer = () => {
+            const btn = document.getElementById('btn-timer-toggle');
+            if (isTimerRunning) {
+                clearInterval(timerInterval);
+                isTimerRunning = false;
+                btn.innerText = "REPRENDRE";
+                btn.classList.replace('bg-rose-500', 'bg-indigo-600');
+            } else {
+                isTimerRunning = true;
+                btn.innerText = "PAUSE";
+                btn.classList.replace('bg-indigo-600', 'bg-rose-500');
+                timerInterval = setInterval(() => {
+                    if (timeLeft > 0) {
+                        timeLeft--;
+                        updateTimerDisplay();
+                    } else {
+                        clearInterval(timerInterval);
+                        isTimerRunning = false;
+                        btn.innerText = "FINI !";
+                    }
+                }, 1000);
+            }
+        };
+
+        const setTimer = (min) => {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            totalTime = min * 60;
+            timeLeft = totalTime;
+            updateTimerDisplay();
+            const btn = document.getElementById('btn-timer-toggle');
+            btn.innerText = "START";
+            btn.className = "bg-indigo-600 text-white p-4 rounded-2xl font-black text-xs shadow-lg uppercase active:scale-95 transition-all";
+        };
+
+        document.getElementById('btn-timer-open-main').onclick = () => document.getElementById('timer-modal').classList.remove('hidden');
+        document.getElementById('btn-timer-close').onclick = () => document.getElementById('timer-modal').classList.add('hidden');
+        document.getElementById('btn-timer-toggle').onclick = toggleTimer;
+        document.getElementById('btn-timer-reset').onclick = () => setTimer(Math.floor(totalTime / 60));
+        document.getElementById('btn-timer-25').onclick = () => setTimer(25);
+        document.getElementById('btn-timer-5').onclick = () => setTimer(5);
+
         // SUBMITS
         document.getElementById('btn-submit-session').onclick = () => {
             const s = document.getElementById('in-title').value; const d = document.getElementById('in-date').value; const t = document.getElementById('in-time').value;
@@ -527,16 +603,44 @@
             document.getElementById('in-proj-name').value = ""; document.querySelectorAll('.assign-check').forEach(c => c.checked = false);
         };
 
-        // NOTES
+        // NOTES (ROBUST KATEX AUTO-RENDER)
         let currentNoteId = null;
-        marked.use(markedKatex({ throwOnError: false }));
-        marked.setOptions({ breaks: true, gfm: true });
+        marked.setOptions({ breaks: true, gfm: true }); // Removed extension, using auto-render
+        
         const saveDeb = debounce((id, data) => { updateDoc(doc(db,'artifacts',appId,'public','data','notes',id), data); }, 800);
+        
         const openNote = (id) => {
             currentNoteId = id; document.getElementById('editor-modal').classList.remove('hidden');
             onSnapshot(doc(db,'artifacts',appId,'public','data','notes',id), d => { if(d.exists() && currentNoteId === id && document.activeElement !== document.getElementById('nt-body')) { document.getElementById('nt-title').value = d.data().title || ""; document.getElementById('nt-body').value = d.data().content || ""; } });
         };
-        document.getElementById('tab-view').onclick = () => { document.getElementById('nt-body').classList.add('hidden'); const p = document.getElementById('nt-preview'); p.classList.remove('hidden'); p.innerHTML = marked.parse(document.getElementById('nt-body').value); };
+        
+        document.getElementById('tab-view').onclick = () => {
+            document.getElementById('nt-body').classList.add('hidden');
+            const p = document.getElementById('nt-preview');
+            p.classList.remove('hidden');
+            
+            // 1. Get Text
+            let raw = document.getElementById('nt-body').value;
+            
+            // 2. Protect Math (Simple Hack to avoid Markdown eating Underscores)
+            // Replaces _ with \_ inside $...$
+            const protectedRaw = raw.replace(/(\$\$[\s\S]*?\$\$)|(\$[^\$\n]*?\$)/g, (match) => {
+                return match.replace(/_/g, '\\_'); 
+            });
+
+            // 3. Render Markdown
+            p.innerHTML = marked.parse(protectedRaw);
+            
+            // 4. Render KaTeX
+            renderMathInElement(p, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        };
+        
         document.getElementById('tab-edit').onclick = () => { document.getElementById('nt-body').classList.remove('hidden'); document.getElementById('nt-preview').classList.add('hidden'); };
         window.fmt = (s, e = "") => {
             const a = document.getElementById('nt-body');
@@ -555,4 +659,3 @@
     </script>
 </body>
 </html>
-
